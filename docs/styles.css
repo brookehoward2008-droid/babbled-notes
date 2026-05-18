@@ -374,21 +374,21 @@ select:focus-visible {
 
 .record-visual-shell {
   position: relative;
-  min-height: 14rem;
+  min-height: 16rem;
   margin: 1rem 0 0;
   overflow: hidden;
-  border: 2px solid rgba(99, 199, 188, 0.3);
+  border: 2px solid rgba(126, 169, 94, 0.42);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 52% 50%, rgba(99, 199, 188, 0.18), transparent 36%),
-    radial-gradient(circle at 20% 20%, rgba(240, 123, 77, 0.12), transparent 32%),
-    #080b0a;
+    radial-gradient(circle at 52% 42%, rgba(190, 242, 100, 0.18), transparent 36%),
+    radial-gradient(circle at 20% 20%, rgba(125, 211, 252, 0.22), transparent 34%),
+    #0a1208;
 }
 
 #record-visualizer {
   display: block;
   width: 100%;
-  height: 14rem;
+  height: 16rem;
 }
 
 .record-visual-copy {
@@ -403,7 +403,7 @@ select:focus-visible {
 }
 
 .record-visual-copy span {
-  color: #63c7bc;
+  color: #bef264;
   font-size: 0.76rem;
   font-weight: 750;
   text-transform: uppercase;
