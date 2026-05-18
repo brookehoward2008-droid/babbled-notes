@@ -82,6 +82,7 @@
     } catch (e) {
       setStatus("Microphone permission was not granted.");
       setVisualText("Mic not available", "The visualizer needs microphone permission.");
+      window.dispatchEvent(new CustomEvent("babbled-recording-denied"));
       return;
     }
 
@@ -96,6 +97,7 @@
     });
     mediaRecorder.addEventListener("stop", finishRecording);
     mediaRecorder.start();
+    window.dispatchEvent(new CustomEvent("babbled-recording-start", { detail: { stream } }));
     startRecordVisualizer(stream);
     setRecording(true);
     setStatus("Recording. Stop when the idea is captured.");
@@ -110,6 +112,7 @@
       stopTimer = null;
     }
     setRecording(false);
+    window.dispatchEvent(new CustomEvent("babbled-recording-stop"));
     stopRecordVisualizer("Building sound map", "The meadow is being turned into a digest.");
     setStatus("Building digest...");
   }
