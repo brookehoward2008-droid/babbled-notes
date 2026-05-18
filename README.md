@@ -43,6 +43,25 @@ For non-speaking users, the browser demo also includes a tap-to-melody path:
 notes can be placed with touch, keyboard focus, or switch-style controls without
 recording a voice.
 
+## Sound alphabet
+
+Lilt uses a small input alphabet so the model knows how to map human sound and
+gesture into editable music code:
+
+| Input | Meaning | Lilt output |
+|---|---|---|
+| hum or sung tone | pitched note | `C4 ! mf` |
+| longer hum | held note | `G4 hold` |
+| pause | rest | `rest 1` |
+| tap, clap, or click | drum hit | `x` |
+| soft breath or soft click | ghost/soft hit | `o` |
+| rising pitch | glide or melodic rise | `C4 ~ E4` |
+| loud sound | louder dynamic | `! loud` |
+| short clipped sound | articulation | `/ staccato` |
+
+The same alphabet can also be driven by tap buttons or assisted selection, so
+the system does not depend on speech.
+
 ## Gemma path
 
 The contest allows Gemma 4 through several paths. This repo supports:

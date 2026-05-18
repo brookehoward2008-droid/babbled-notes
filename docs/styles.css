@@ -292,7 +292,8 @@ section.about p {
 }
 
 .digest-panel p,
-.why-panel p {
+.why-panel p,
+.alphabet-panel p {
   margin: 0 0 0.75rem;
   color: var(--muted);
 }
@@ -304,6 +305,40 @@ section.about p {
 
 .plain-list li {
   margin: 0.35rem 0;
+}
+
+.alphabet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.85rem 0 1rem;
+}
+
+.alphabet-grid div {
+  min-height: 4.25rem;
+  padding: 0.7rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.alphabet-grid span {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.alphabet-grid code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 430px) {
+  .alphabet-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 section.about a {

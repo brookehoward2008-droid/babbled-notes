@@ -67,6 +67,25 @@ Voice is not required. The same musical pipeline must accept:
 This is the Stephen Hawking test for the product: if a user can make a small,
 intentional selection, Lilt should let that selection become music.
 
+### 5c. The sound alphabet stays small
+
+The first version should not ask users to learn a full symbolic language before
+they can make music. Lilt maps a few human gestures to a few musical meanings:
+
+| Gesture | Musical meaning |
+|---|---|
+| hum / sung tone | pitched note |
+| long hum | held note |
+| silence | rest |
+| tap / clap / click | drum hit |
+| soft breath / soft click | soft or ghost hit |
+| rising sound | glide or melodic rise |
+| loud / quiet | dynamic |
+| short / smooth | articulation |
+
+This alphabet can be produced by voice, breath, tapping, keyboard, switch
+control, or another assistive input device.
+
 ### 6. No color-only meaning
 
 All semantic information is conveyed by text or shape as well as color. The UI works in high-contrast and grayscale. Color reinforces; it never carries unique meaning.
