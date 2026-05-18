@@ -11,6 +11,7 @@ Lilt turns a short hum, sung phrase, beatbox pattern, or played line into:
 
 Built for the DEV Gemma 4 Challenge, May 6-24, 2026.
 Submission materials: see [SUBMISSION.md](SUBMISSION.md).
+Presentation runbook: see [PRESENTATION.md](PRESENTATION.md).
 
 ## Why it exists
 
