@@ -45,6 +45,7 @@
     leaves: "assets/nature/leaf-canopy.png",
     bark: "assets/nature/bark-texture.png",
     flowers: "assets/nature/wildflower-detail.png",
+    hero: "assets/nature/meadow-hero.png",
   };
 
   const biomes = {
@@ -171,13 +172,17 @@
       speed: 0.25 + seeded(index, 41) * 0.85,
       color: ["#f97316", "#fde047", "#93c5fd", "#f0abfc"][index % 4],
     }));
-    creatures = Array.from({ length: 5 }, (_, index) => ({
-      x: width * (0.12 + seeded(index, 43) * 0.76),
-      y: height * (0.64 + seeded(index, 47) * 0.18),
-      type: ["deer", "rabbit", "squirrel", "bird", "rabbit"][index],
+    creatures = [
+      { x: width * 0.36, y: height * 0.7, type: "deer", phase: seeded(0, 53) * Math.PI * 2, direction: 1, scale: 1.18 },
+      { x: width * 0.2, y: height * 0.84, type: "rabbit", phase: seeded(1, 53) * Math.PI * 2, direction: 1, scale: 0.85 },
+      { x: width * 0.76, y: height * 0.72, type: "rabbit", phase: seeded(2, 53) * Math.PI * 2, direction: -1, scale: 0.72 },
+      { x: width * 0.84, y: height * 0.84, type: "bird", phase: seeded(3, 53) * Math.PI * 2, direction: -1, scale: 0.82 },
+      { x: width * 0.58, y: height * 0.67, type: "squirrel", phase: seeded(4, 53) * Math.PI * 2, direction: -1, scale: 0.7 },
+    ].map((creature, index) => ({
+      ...creature,
       phase: seeded(index, 53) * Math.PI * 2,
-      direction: seeded(index, 59) > 0.5 ? 1 : -1,
-      scale: 0.7 + seeded(index, 61) * 0.55,
+      baseX: creature.x,
+      baseY: creature.y,
     }));
     motes = Array.from({ length: Math.max(36, Math.floor(width / 18)) }, (_, index) => ({
       x: width * seeded(index, 67),
@@ -246,10 +251,14 @@
       lastNoteBeat = noteBeat;
     }
 
-    drawMountains();
+    if (drawHeroBackdrop()) {
+      drawSunBloom();
+    } else {
+      drawMountains();
+      drawTrees();
+      drawMeadow();
+    }
     drawLightRibbons();
-    drawTrees();
-    drawMeadow();
     drawBrook();
     drawFlowers();
     drawCreatures();
@@ -259,6 +268,30 @@
     drawGlow();
     updateUi();
     requestAnimationFrame(draw);
+  }
+
+  function drawHeroBackdrop() {
+    const image = natureAssets.hero;
+    if (!image || !image.complete || !image.naturalWidth) return false;
+    const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+    const drawWidth = image.naturalWidth * scale;
+    const drawHeight = image.naturalHeight * scale;
+    const offsetX = (width - drawWidth) / 2;
+    const offsetY = (height - drawHeight) / 2;
+    ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+    return true;
+  }
+
+  function drawSunBloom() {
+    const bloom = ctx.createRadialGradient(width * 0.47, height * 0.22, 0, width * 0.47, height * 0.22, width * 0.42);
+    bloom.addColorStop(0, `rgba(255,246,210,${0.18 + smoothed * 0.12})`);
+    bloom.addColorStop(0.34, "rgba(255,246,210,0.08)");
+    bloom.addColorStop(1, "rgba(255,246,210,0)");
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.fillStyle = bloom;
+    ctx.fillRect(0, 0, width, height);
+    ctx.restore();
   }
 
   function drawMountains() {
@@ -645,8 +678,8 @@
     const animal = Number(elements.sliders.animal.value);
     creatures.forEach((creature, index) => {
       const active = listening ? 0.35 + voiceLevel / 80 + animal / 130 : 0.18;
-      creature.x += Math.sin(time + creature.phase) * active * creature.direction;
-      creature.y += Math.cos(time * 1.3 + creature.phase) * active * 0.25;
+      creature.x = creature.baseX + Math.sin(time + creature.phase) * active * creature.direction * 9;
+      creature.y = creature.baseY + Math.cos(time * 1.3 + creature.phase) * active * 1.4;
       if (creature.x < 30 || creature.x > width - 30) creature.direction *= -1;
       ctx.save();
       ctx.translate(creature.x, creature.y);
