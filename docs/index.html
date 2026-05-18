@@ -18,6 +18,10 @@
   <main>
     <section aria-labelledby="record-heading">
       <h2 id="record-heading">Record a hum</h2>
+      <p class="helper-text">
+        Tap Record, make a short sound, then play it back. The digest preview is
+        just a receipt for what the model would read; you do not need to use it.
+      </p>
       <div class="controls recorder-controls" role="group" aria-label="Recording">
         <button id="record" type="button" class="record-btn" aria-label="Start recording">Record</button>
         <button id="record-stop" type="button" class="stop-btn" aria-label="Stop recording">Stop</button>
@@ -51,8 +55,8 @@
     <section class="digest-panel" aria-labelledby="digest-heading">
       <h2 id="digest-heading">Audio digest</h2>
       <p>
-        The local build can turn a short WAV into the timing and pitch facts
-        Gemma receives before it writes the Lilt program.
+        This is the builder view: Lilt turns a short WAV into timing and pitch
+        facts, then Gemma uses those facts to write the Lilt program.
       </p>
       <pre><code>python -m lilt.cli digest clip.wav
 python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</code></pre>
@@ -61,9 +65,8 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
     <section class="feedback" aria-labelledby="feedback-heading">
       <h2 id="feedback-heading">Tell Brooke how it sounded</h2>
       <p class="feedback-intro">
-        Optional. Nothing leaves this page unless you tap one of the
-        buttons below. Your report is a small JSON file built from the
-        demos you played in this session. You can preview it first.
+        Optional. Pick one button and add one sentence if something felt odd.
+        The technical preview is only there for transparency.
       </p>
 
       <fieldset class="rating">
@@ -80,7 +83,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
                 placeholder="What surprised you? What broke? Skip if nothing."></textarea>
 
       <details class="report-preview">
-        <summary>See exactly what gets shared</summary>
+        <summary>Technical preview of what gets shared</summary>
         <pre id="report-preview"></pre>
       </details>
 

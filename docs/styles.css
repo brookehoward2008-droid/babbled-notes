@@ -130,6 +130,12 @@ h2 {
   color: var(--muted);
 }
 
+.helper-text {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
 pre {
   background: var(--code-bg);
   color: var(--code-fg);

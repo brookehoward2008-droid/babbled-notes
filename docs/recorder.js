@@ -38,7 +38,7 @@
     elements.actions.classList.add("is-ready");
     elements.digestPreview.classList.add("is-ready");
     elements.digestJson.textContent = JSON.stringify(digest, null, 2);
-    setStatus("Recording ready.");
+    setStatus("Recording ready. The preview below is for the model; you can ignore it.");
   }
 
   function setRecording(active) {
