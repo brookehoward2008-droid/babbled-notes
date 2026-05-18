@@ -9,11 +9,28 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="nav-placeholder"></div>
   <canvas id="neural-backdrop" aria-hidden="true"></canvas>
   <header>
-    <h1>Lilt</h1>
-    <p>Hum into readable music code.</p>
+    <nav class="quick-nav" aria-label="Demo sections">
+      <a href="#record-heading">Record</a>
+      <a href="#tap-heading">Tap</a>
+      <a href="#composer-heading">Compose</a>
+      <a href="#why-heading">Why</a>
+      <a href="#feedback-heading">Feedback</a>
+    </nav>
+    <div class="hero-copy">
+      <p class="eyebrow">Accessibility-first music making</p>
+      <h1>Lilt</h1>
+      <p class="tagline">Music heals. Lilt helps more people reach it.</p>
+      <p class="lede">
+        Turn a hum, tap, breath pattern, or simple choice into readable music
+        that can be played, edited, saved, and shared.
+      </p>
+    </div>
+    <div class="hero-actions" role="group" aria-label="Start the demo">
+      <a class="primary-link" href="#composer-heading">Open composer</a>
+      <a class="secondary-link" href="#record-heading">Record a hum</a>
+    </div>
   </header>
 
   <main>
@@ -34,6 +51,21 @@
       </div>
       <p id="record-status" class="status" role="status" aria-live="polite"></p>
       <pre id="digest-preview"><code id="digest-json"></code></pre>
+    </section>
+
+    <section class="healing-panel" aria-labelledby="healing-heading">
+      <h2 id="healing-heading">Music as access</h2>
+      <p>
+        Some people have songs inside but no easy way to get them out. Lilt is
+        for autistic users, non-speaking users, people with speech or motor
+        differences, and anyone who needs a gentler path into composing.
+      </p>
+      <div class="access-grid" aria-label="Ways to start a song">
+        <div><span>Voice</span><p>Hum one note or a short phrase.</p></div>
+        <div><span>Touch</span><p>Tap notes with large buttons.</p></div>
+        <div><span>Switch</span><p>Build music from one intentional choice.</p></div>
+        <div><span>Partner</span><p>Share readable text for another person to edit.</p></div>
+      </div>
     </section>
 
     <section aria-labelledby="tap-heading">
@@ -108,6 +140,17 @@ voice voice:
         Edit the Lilt text directly. Play it, save it as a `.lilt` file, or
         open a saved idea later.
       </p>
+      <div class="composer-toolbar" role="group" aria-label="Insert Lilt tokens">
+        <button type="button" data-insert="C4 ! mf ">C</button>
+        <button type="button" data-insert="D4 ! mf ">D</button>
+        <button type="button" data-insert="E4 ! mf ">E</button>
+        <button type="button" data-insert="G4 ! mf ">G</button>
+        <button type="button" data-insert="A4 ! mf ">A</button>
+        <button type="button" data-insert="rest 1 ">Rest</button>
+        <button type="button" data-insert="hold ">Hold</button>
+        <button type="button" data-insert="! soft ">Soft</button>
+        <button type="button" data-insert="! loud ">Loud</button>
+      </div>
       <label class="comment-label" for="composer-source">Lilt source</label>
       <textarea id="composer-source" spellcheck="false" rows="12"># Brooke's first idea
 tempo 86
@@ -143,6 +186,12 @@ voice bass:
         <button id="composer-open" type="button" class="stop-btn">Open .lilt</button>
       </div>
       <input id="composer-file" type="file" accept=".lilt,text/plain" />
+      <div class="composer-summary" aria-label="Composer summary">
+        <div><span id="composer-tempo">86</span><small>tempo</small></div>
+        <div><span id="composer-voices">3</span><small>voices</small></div>
+        <div><span id="composer-events">11</span><small>tokens</small></div>
+        <div><span id="composer-length">4s</span><small>rough length</small></div>
+      </div>
       <p id="composer-status" class="status" role="status" aria-live="polite"></p>
     </section>
 

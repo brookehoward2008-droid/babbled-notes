@@ -43,9 +43,9 @@ html, body {
 }
 
 body {
-  max-width: 38rem;
+  max-width: 48rem;
   margin: 0 auto;
-  padding: 1.25rem 1.25rem 4rem;
+  padding: 1rem 1.25rem 4rem;
   position: relative;
 }
 
@@ -67,7 +67,44 @@ footer {
 
 header {
   border-bottom: 1px solid var(--border);
-  padding: 1.15rem 0 1rem;
+  padding: 0.75rem 0 1.25rem;
+}
+
+.quick-nav {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding: 0 0 0.85rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.quick-nav a {
+  flex: 0 0 auto;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  color: var(--fg);
+  text-decoration: none;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-weight: 650;
+}
+
+.quick-nav a:focus-visible,
+.quick-nav a:hover {
+  outline: none;
+  border-color: var(--accent-2);
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--accent-2);
+  font-size: 0.9rem;
+  font-weight: 750;
+  text-transform: uppercase;
 }
 
 header h1 {
@@ -79,6 +116,54 @@ header p {
   margin: 0;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.tagline {
+  color: var(--fg);
+  font-size: 1.25rem;
+  font-weight: 750;
+}
+
+.lede {
+  max-width: 42rem;
+  margin-top: 0.55rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.primary-link,
+.secondary-link {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--accent);
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.primary-link {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.secondary-link {
+  color: var(--fg);
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+.primary-link:focus-visible,
+.secondary-link:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 h2 {
@@ -295,9 +380,36 @@ section.about p {
 .why-panel p,
 .song-build p,
 .collab-panel p,
-.alphabet-panel p {
+.alphabet-panel p,
+.healing-panel p {
   margin: 0 0 0.75rem;
   color: var(--muted);
+}
+
+.access-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.85rem 0 1rem;
+}
+
+.access-grid div {
+  min-height: 5.5rem;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.access-grid span {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 750;
+}
+
+.access-grid p {
+  margin: 0;
+  font-size: 0.94rem;
 }
 
 .plain-list {
@@ -374,7 +486,8 @@ section.about p {
 
 @media (max-width: 430px) {
   .alphabet-grid,
-  .collab-grid {
+  .collab-grid,
+  .access-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -463,6 +576,69 @@ textarea {
   min-height: 18rem;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   line-height: 1.55;
+}
+
+.composer-toolbar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.85rem 0 0.9rem;
+}
+
+.composer-toolbar button {
+  min-height: 44px;
+  padding: 0.45rem 0.35rem;
+  font: inherit;
+  font-weight: 750;
+  color: var(--fg);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.composer-toolbar button:hover,
+.composer-toolbar button:focus-visible {
+  border-color: var(--accent-2);
+  outline: none;
+}
+
+.composer-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.composer-summary div {
+  min-height: 4.5rem;
+  padding: 0.65rem 0.5rem;
+  text-align: center;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+}
+
+.composer-summary span {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.composer-summary small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 560px) {
+  .composer-toolbar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .composer-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 textarea:focus-visible {

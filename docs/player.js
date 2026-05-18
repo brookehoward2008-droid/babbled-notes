@@ -104,6 +104,8 @@
   let isPlaying = false;
   let playStartMs = 0;
   let currentExpectedMs = 0;
+  let studioChain = null;
+  const HUMANIZE_SECONDS = 0.018;
 
   function buildPicker() {
     elements.picker.innerHTML = "";
@@ -133,90 +135,158 @@
   function makeSynth(voice) {
     const selected = elements.demoInstrument ? elements.demoInstrument.value : "auto";
     if (voice.kind !== "drum" && selected !== "auto") {
-      return { synth: makePitchedSynth(selected).toDestination(), drumPitch: null };
+      return { synth: connectStudio(makePitchedSynth(selected), voice.name), drumPitch: null };
     }
 
     const hint = (voice.instrument_hint || "").toLowerCase();
     if (voice.kind === "drum") {
       if (hint.includes("kick") || hint.includes("bass-drum") || hint === "bd") {
-        const s = new Tone.MembraneSynth({ octaves: 4, pitchDecay: 0.05 });
-        s.volume.value = -4;
-        return { synth: s.toDestination(), drumPitch: "C2" };
+        const s = new Tone.MembraneSynth({
+          octaves: 5,
+          pitchDecay: 0.035,
+          envelope: { attack: 0.001, decay: 0.42, sustain: 0.01, release: 0.08 },
+        });
+        s.volume.value = -5;
+        return { synth: connectStudio(s, voice.name), drumPitch: "C2" };
       }
       if (hint.includes("snare") || hint.includes("clap")) {
-        const s = new Tone.NoiseSynth({
-          noise: { type: "white" },
-          envelope: { attack: 0.001, decay: 0.18, sustain: 0 },
+        const s = new Tone.MembraneSynth({
+          pitchDecay: 0.01,
+          octaves: 1.5,
+          oscillator: { type: "triangle" },
+          envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.03 },
         });
-        s.volume.value = -10;
-        return { synth: s.toDestination(), drumPitch: null };
+        s.volume.value = -16;
+        return { synth: connectStudio(s, voice.name), drumPitch: "D2" };
       }
       if (hint.includes("hat") || hint.includes("cymbal") || hint.includes("ride")) {
-        const s = new Tone.MetalSynth({
-          envelope: { attack: 0.001, decay: 0.08, release: 0.04 },
-          harmonicity: 5.1,
-          modulationIndex: 32,
-          resonance: 4000,
-          octaves: 1.5,
+        const s = new Tone.Synth({
+          oscillator: { type: "sine" },
+          envelope: { attack: 0.001, decay: 0.045, sustain: 0, release: 0.02 },
         });
-        s.volume.value = -22;
-        return { synth: s.toDestination(), drumPitch: "C5" };
+        s.volume.value = -20;
+        return { synth: connectStudio(s, voice.name), drumPitch: "F#5" };
       }
       const s = new Tone.MembraneSynth();
       s.volume.value = -6;
-      return { synth: s.toDestination(), drumPitch: "D2" };
+      return { synth: connectStudio(s, voice.name), drumPitch: "D2" };
     }
 
     if (hint.includes("pluck") || hint.includes("guitar")) {
-      return { synth: makePitchedSynth("pluck").toDestination(), drumPitch: null };
+      return { synth: connectStudio(makePitchedSynth("pluck"), voice.name), drumPitch: null };
     }
-    return { synth: makePitchedSynth("pad").toDestination(), drumPitch: null };
+    return { synth: connectStudio(makePitchedSynth("pad"), voice.name), drumPitch: null };
   }
 
   function makePitchedSynth(mode) {
     if (mode === "piano") {
       const s = new Tone.PolySynth(Tone.Synth, {
         oscillator: { type: "sine" },
-        envelope: { attack: 0.01, decay: 0.25, sustain: 0.12, release: 0.5 },
-      });
-      s.volume.value = -5;
-      return s;
-    }
-    if (mode === "pluck") {
-      const s = new Tone.PolySynth(Tone.PluckSynth);
-      s.volume.value = -6;
-      return s;
-    }
-    if (mode === "bell") {
-      const s = new Tone.PolySynth(Tone.FMSynth, {
-        harmonicity: 2.8,
-        modulationIndex: 8,
-        envelope: { attack: 0.01, decay: 0.2, sustain: 0.05, release: 0.9 },
-        modulationEnvelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.4 },
+        envelope: { attack: 0.012, decay: 0.28, sustain: 0.12, release: 0.85 },
       });
       s.volume.value = -8;
       return s;
     }
+    if (mode === "pluck") {
+      const s = new Tone.PolySynth(Tone.PluckSynth, {
+        attackNoise: 0.55,
+        dampening: 4600,
+        resonance: 0.78,
+      });
+      s.volume.value = -9;
+      return s;
+    }
+    if (mode === "bell") {
+      const s = new Tone.PolySynth(Tone.FMSynth, {
+        harmonicity: 2.4,
+        modulationIndex: 6,
+        envelope: { attack: 0.012, decay: 0.35, sustain: 0.04, release: 1.15 },
+        modulationEnvelope: { attack: 0.01, decay: 0.28, sustain: 0, release: 0.55 },
+      });
+      s.volume.value = -11;
+      return s;
+    }
     const s = new Tone.PolySynth(Tone.Synth, {
-      oscillator: { type: "triangle" },
-      envelope: { attack: 0.05, decay: 0.1, sustain: 0.55, release: 0.35 },
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.12, decay: 0.18, sustain: 0.62, release: 1.15 },
     });
-    s.volume.value = -6;
+    s.volume.value = -9;
     return s;
+  }
+
+  function studioDestination() {
+    if (studioChain) return studioChain.input;
+    Tone.getDestination().volume.value = -2;
+    const compressor = new Tone.Compressor({
+      threshold: -20,
+      ratio: 3,
+      attack: 0.004,
+      release: 0.22,
+    });
+    const toneFilter = new Tone.Filter({
+      frequency: 5200,
+      type: "lowpass",
+      rolloff: -12,
+    });
+    const delay = new Tone.FeedbackDelay({
+      delayTime: "8n",
+      feedback: 0.08,
+      wet: 0.045,
+    });
+    const reverb = new Tone.Reverb({
+      decay: 1.8,
+      preDelay: 0.025,
+      wet: 0.12,
+    });
+    const limiter = new Tone.Limiter(-1);
+    compressor.chain(toneFilter, delay, reverb, limiter, Tone.getDestination());
+    studioChain = { input: compressor, toneFilter, delay, reverb, limiter };
+    return studioChain.input;
+  }
+
+  function connectStudio(node, name) {
+    const pan = new Tone.Panner(stereoPosition(name || ""));
+    node.connect(pan);
+    pan.connect(studioDestination());
+    return node;
+  }
+
+  function stereoPosition(name) {
+    const lower = name.toLowerCase();
+    if (lower.includes("bass") || lower.includes("kick")) return 0;
+    if (lower.includes("pulse") || lower.includes("hat")) return 0.18;
+    if (lower.includes("melody") || lower.includes("voice")) return -0.12;
+    return 0.08;
   }
 
   window.LILT_SYNTHS = {
     makePitchedSynth: makePitchedSynth,
+    connectStudio: connectStudio,
+    humanizeTime: humanizeTime,
+    humanizeVelocity: humanizeVelocity,
   };
 
   function trigger(entry, ev, time) {
     const { synth, drumPitch } = entry;
     if (synth instanceof Tone.NoiseSynth) {
-      synth.triggerAttackRelease(ev.duration, time, ev.velocity);
+      synth.triggerAttackRelease(ev.duration, humanizeTime(time, 0.5), humanizeVelocity(ev.velocity, 0.06));
       return;
     }
     const note = drumPitch || ev.note;
-    synth.triggerAttackRelease(note, ev.duration, time, ev.velocity);
+    synth.triggerAttackRelease(note, softenDuration(ev.duration), humanizeTime(time, 1), humanizeVelocity(ev.velocity, 0.08));
+  }
+
+  function humanizeTime(time, amount) {
+    return Math.max(0, time + (Math.random() - 0.5) * HUMANIZE_SECONDS * amount);
+  }
+
+  function humanizeVelocity(velocity, amount) {
+    const next = velocity + (Math.random() - 0.5) * amount;
+    return Math.max(0.22, Math.min(0.92, next));
+  }
+
+  function softenDuration(duration) {
+    return Math.max(0.08, duration * 0.96);
   }
 
   function disposeAll() {

@@ -64,14 +64,22 @@
     dispose();
 
     const factory = window.LILT_SYNTHS && window.LILT_SYNTHS.makePitchedSynth;
-    synth = (factory ? factory(elements.instrument.value) : new Tone.PolySynth(Tone.Synth))
-      .toDestination();
+    const connector = window.LILT_SYNTHS && window.LILT_SYNTHS.connectStudio;
+    synth = factory ? factory(elements.instrument.value) : new Tone.PolySynth(Tone.Synth);
+    synth = connector ? connector(synth) : synth.toDestination();
     const toneEvents = events
       .map((note, idx) => ({ note, time: idx * 0.75 }))
       .filter((event) => event.note !== "rest");
 
     part = new Tone.Part((time, event) => {
-      synth.triggerAttackRelease(event.note, 0.65, time, 0.65);
+      const humanTime = window.LILT_SYNTHS && window.LILT_SYNTHS.humanizeTime;
+      const humanVelocity = window.LILT_SYNTHS && window.LILT_SYNTHS.humanizeVelocity;
+      synth.triggerAttackRelease(
+        event.note,
+        0.62,
+        humanTime ? humanTime(time, 1) : time,
+        humanVelocity ? humanVelocity(0.65, 0.08) : 0.65
+      );
     }, toneEvents.map((event) => [event.time, event]));
     part.start(0);
     Tone.getTransport().start();

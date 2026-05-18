@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Lilt Visualizer · voice becomes motion</title>
+  <meta name="description" content="A dark, fluid, audio-reactive visualizer concept for Lilt." />
+  <meta name="theme-color" content="#05060a" />
+  <link rel="stylesheet" href="visualizer.css" />
+</head>
+<body>
+  <canvas id="fluid-canvas" aria-hidden="true"></canvas>
+
+  <main class="shell" aria-label="Lilt audio reactive visualizer">
+    <header class="brand">
+      <a class="back-link" href="index.html">Lilt composer</a>
+      <p class="kicker">audio-reactive fluid visualizer</p>
+      <h1>Lilt</h1>
+      <p class="tagline">voice becomes motion</p>
+    </header>
+
+    <section class="listen-card" aria-labelledby="listen-heading">
+      <div>
+        <h2 id="listen-heading">Sound made visible</h2>
+        <p>
+          Speak, hum, tap, or play a sound. The canvas responds like ink moving
+          through dark water.
+        </p>
+      </div>
+      <div class="listen-actions">
+        <button id="listen-toggle" type="button">Start Listening</button>
+        <div class="listening-state" aria-live="polite">
+          <span id="pulse-dot" class="pulse-dot" aria-hidden="true"></span>
+          <span id="listen-status">Idle</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="controls-panel" aria-label="Visualizer controls">
+      <div class="panel-heading">
+        <span>Fluid controls</span>
+        <label class="mic-switch">
+          <span>Mic</span>
+          <input id="mic-toggle" type="checkbox" checked />
+        </label>
+      </div>
+
+      <label>
+        <span>Sensitivity</span>
+        <input id="sensitivity" type="range" min="0.5" max="3" value="1.45" step="0.05" />
+      </label>
+
+      <label>
+        <span>Fluid intensity</span>
+        <input id="intensity" type="range" min="0.2" max="2.4" value="1.15" step="0.05" />
+      </label>
+
+      <label>
+        <span>Glow</span>
+        <input id="glow" type="range" min="0.2" max="1.8" value="1" step="0.05" />
+      </label>
+
+      <label>
+        <span>Trail length</span>
+        <input id="trail" type="range" min="0.04" max="0.26" value="0.11" step="0.01" />
+      </label>
+
+      <label>
+        <span>Color mood</span>
+        <select id="mood">
+          <option value="violet">Violet glass</option>
+          <option value="cyan">Cyan bloom</option>
+          <option value="silver">Silver water</option>
+          <option value="lavender">Soft lavender</option>
+        </select>
+      </label>
+    </aside>
+  </main>
+
+  <script src="visualizer.js"></script>
+</body>
+</html>
