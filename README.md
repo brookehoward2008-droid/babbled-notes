@@ -62,6 +62,60 @@ gesture into editable music code:
 The same alphabet can also be driven by tap buttons or assisted selection, so
 the system does not depend on speech.
 
+## Full song build demo
+
+A complete Lilt workflow is intentionally small:
+
+1. Capture a hook with voice, tapping, keyboard, or assisted selection.
+2. Let Lilt/Gemma translate the gesture into validated Lilt JSON.
+3. Emit `.lilt`, `.mid`, and Tone.js playback.
+4. Edit the text to arrange the idea.
+5. Share the text or MIDI with collaborators.
+
+Example first build:
+
+```lilt
+# Brooke's first idea
+tempo 86
+feel straight
+key C major
+
+mood gentle, warm
+
+voice melody:
+  C4 ! soft E4 ! mf G4 hold ! mf
+
+voice pulse:
+  x . . . x . . .
+
+voice bass:
+  C2 hold ! soft
+```
+
+That output can become:
+
+- a playable browser demo
+- a MIDI import in a DAW
+- a pull request where someone edits one musical line
+- a text message to another musician
+- a screen-reader-friendly artifact for review
+
+## Collaboration workflow
+
+Lilt is built for collaboration because the song is plain text.
+
+```diff
+- voice bass:
+-   C2 hold ! soft
++ voice bass:
++   C2 ! soft G1 ! soft C2 hold ! mf
+```
+
+A collaborator can change the bass, instrument, tempo, drum pattern, or key and
+send back a tiny text diff. That keeps the workflow accessible to people who
+cannot operate a full DAW timeline but can read, listen, review, or approve
+small changes.
+
 ## Gemma path
 
 The contest allows Gemma 4 through several paths. This repo supports:

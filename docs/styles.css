@@ -293,6 +293,8 @@ section.about p {
 
 .digest-panel p,
 .why-panel p,
+.song-build p,
+.collab-panel p,
 .alphabet-panel p {
   margin: 0 0 0.75rem;
   color: var(--muted);
@@ -305,6 +307,41 @@ section.about p {
 
 .plain-list li {
   margin: 0.35rem 0;
+}
+
+.flow-list {
+  margin: 0.75rem 0 1rem;
+  padding-left: 1.35rem;
+}
+
+.flow-list li {
+  margin: 0.45rem 0;
+}
+
+.collab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.85rem 0 1rem;
+}
+
+.collab-grid div {
+  min-height: 6.25rem;
+  padding: 0.7rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.collab-grid span {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+}
+
+.collab-grid p {
+  margin: 0;
+  font-size: 0.94rem;
 }
 
 .alphabet-grid {
@@ -336,7 +373,8 @@ section.about p {
 }
 
 @media (max-width: 430px) {
-  .alphabet-grid {
+  .alphabet-grid,
+  .collab-grid {
     grid-template-columns: 1fr;
   }
 }

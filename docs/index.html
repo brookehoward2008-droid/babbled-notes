@@ -120,6 +120,65 @@ voice voice:
       </p>
     </section>
 
+    <section class="song-build" aria-labelledby="song-build-heading">
+      <h2 id="song-build-heading">Build a song</h2>
+      <p>
+        A full Lilt build starts with one small musical thought, then grows
+        through plain text. This is the submission workflow.
+      </p>
+      <ol class="flow-list">
+        <li><strong>Capture.</strong> Hum the hook, tap notes, or make a rhythm.</li>
+        <li><strong>Translate.</strong> Lilt turns the gesture into readable code.</li>
+        <li><strong>Arrange.</strong> Pick instruments and add voices for melody, bass, or drums.</li>
+        <li><strong>Share.</strong> Send the `.lilt` text or MIDI to another musician.</li>
+      </ol>
+      <pre><code># Brooke's first idea
+tempo 86
+feel straight
+key C major
+
+mood gentle, warm
+
+voice melody:
+  C4 ! soft E4 ! mf G4 hold ! mf
+
+voice pulse:
+  x . . . x . . .
+
+voice bass:
+  C2 hold ! soft</code></pre>
+    </section>
+
+    <section class="collab-panel" aria-labelledby="collab-heading">
+      <h2 id="collab-heading">Work with others</h2>
+      <p>
+        Lilt is collaboration-friendly because the song is text. A partner can
+        review the idea, change one line, and send it back without opening a DAW.
+      </p>
+      <div class="collab-grid">
+        <div>
+          <span>Vocal idea</span>
+          <p>Brooke records or taps the hook.</p>
+        </div>
+        <div>
+          <span>Readable file</span>
+          <p>Lilt creates `.lilt` text and MIDI.</p>
+        </div>
+        <div>
+          <span>Partner edit</span>
+          <p>A collaborator changes the bass, drums, key, or instrument.</p>
+        </div>
+        <div>
+          <span>Shared build</span>
+          <p>GitHub shows exactly what changed, line by line.</p>
+        </div>
+      </div>
+      <pre><code>- voice bass:
+-   C2 hold ! soft
++ voice bass:
++   C2 ! soft G1 ! soft C2 hold ! mf</code></pre>
+    </section>
+
     <section class="alphabet-panel" aria-labelledby="alphabet-heading">
       <h2 id="alphabet-heading">Sound alphabet</h2>
       <p>
