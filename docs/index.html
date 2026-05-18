@@ -16,6 +16,21 @@
   </header>
 
   <main>
+    <section aria-labelledby="record-heading">
+      <h2 id="record-heading">Record a hum</h2>
+      <div class="controls recorder-controls" role="group" aria-label="Recording">
+        <button id="record" type="button" class="record-btn" aria-label="Start recording">Record</button>
+        <button id="record-stop" type="button" class="stop-btn" aria-label="Stop recording">Stop</button>
+      </div>
+      <audio id="recording-player" controls></audio>
+      <div class="controls recorder-actions" role="group" aria-label="Recording actions">
+        <button id="record-play" type="button" class="play-btn" aria-label="Play recording">Play recording</button>
+        <button id="record-download" type="button" class="stop-btn" aria-label="Download recording">Download</button>
+      </div>
+      <p id="record-status" class="status" role="status" aria-live="polite"></p>
+      <pre id="digest-preview"><code id="digest-json"></code></pre>
+    </section>
+
     <section aria-labelledby="picker-heading">
       <h2 id="picker-heading">Try a demo</h2>
       <div id="picker" class="picker" role="group" aria-label="Pick a demo">
@@ -70,6 +85,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="https://unpkg.com/tone@15.0.4/build/Tone.js"></script>
   <script src="data.js"></script>
   <script src="player.js"></script>
+  <script src="recorder.js"></script>
   <script src="backdrop.js"></script>
 </body>
 </html>

@@ -169,6 +169,12 @@ pre {
   color: var(--accent-fg);
 }
 
+.record-btn {
+  flex: 1 1 auto;
+  background: var(--accent-2);
+  color: #ffffff;
+}
+
 .stop-btn {
   background: transparent;
   color: var(--fg);
@@ -190,6 +196,36 @@ pre {
   font-size: 0.95rem;
   color: var(--muted);
   min-height: 1.5rem;
+}
+
+#recording-player {
+  display: none;
+  width: 100%;
+  margin-top: 0.85rem;
+}
+
+#recording-player[src] {
+  display: block;
+}
+
+.recorder-actions {
+  display: none;
+}
+
+.recorder-actions.is-ready {
+  display: flex;
+}
+
+#digest-preview {
+  display: none;
+}
+
+#digest-preview.is-ready {
+  display: block;
+}
+
+.record-btn.is-recording {
+  background: #c32626;
 }
 
 section.about p {
