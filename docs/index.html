@@ -10,7 +10,118 @@
 </head>
 <body>
   <canvas id="neural-backdrop" aria-hidden="true"></canvas>
-  <header>
+
+  <section class="meadow-app" aria-label="Babbled Notes responsive world">
+    <aside class="meadow-left">
+      <div>
+        <div class="meadow-topline">
+          <span class="live-dot"></span>
+          <span>Live</span>
+        </div>
+        <h1>Babbled Notes</h1>
+        <p class="meadow-subtitle">Responsive World</p>
+        <p class="meadow-copy">Speak, sing, hum, or babble. The meadow listens and comes alive.</p>
+      </div>
+
+      <div class="meadow-mic-block">
+        <button id="world-record" type="button" class="world-record" aria-label="Start recording in Babbled Notes world">
+          <span class="mic-ring" aria-hidden="true"></span>
+          <span class="mic-icon" aria-hidden="true">🎙</span>
+        </button>
+        <p id="world-record-label">Start Recording</p>
+        <div id="world-waveform" class="world-waveform" aria-hidden="true"></div>
+      </div>
+
+      <div class="world-activity-card">
+        <div>
+          <span>World Activity</span>
+          <strong id="world-activity">72%</strong>
+        </div>
+        <div class="activity-meter"><span id="world-activity-bar"></span></div>
+        <small id="world-activity-state">Awakening</small>
+      </div>
+
+      <div class="world-icon-row" role="group" aria-label="World shortcuts">
+        <button type="button" aria-label="Morning">☀</button>
+        <button type="button" aria-label="Rain">☔</button>
+        <button type="button" aria-label="Dusk">☾</button>
+      </div>
+    </aside>
+
+    <section class="meadow-stage" aria-labelledby="world-heading">
+      <canvas id="meadow-world" aria-hidden="true"></canvas>
+      <div class="stage-shade" aria-hidden="true"></div>
+
+      <div class="world-message">
+        <span aria-hidden="true">🌿</span>
+        <div>
+          <h2 id="world-heading">The meadow is listening</h2>
+          <p id="world-message-text">Speak, hum, or record babbled notes.</p>
+        </div>
+        <div class="stage-meter"><span id="world-voice-meter"></span></div>
+      </div>
+
+      <div class="world-tip">
+        <span aria-hidden="true">✨</span>
+        <p>Higher pitch brings butterflies. Longer notes grow flowers. Softer sound draws the deer closer.</p>
+        <strong id="world-note-count">0 notes</strong>
+      </div>
+    </section>
+
+    <aside class="meadow-controls" aria-label="Babbled Notes world controls">
+      <div class="controls-title">
+        <span>World Controls</span>
+        <span aria-hidden="true">✿</span>
+      </div>
+      <label class="world-slider">
+        <span>Life intensity <strong id="life-value">80%</strong></span>
+        <input id="life-intensity" type="range" min="0" max="100" value="80" />
+      </label>
+      <label class="world-slider">
+        <span>Animal activity <strong id="animal-value">75%</strong></span>
+        <input id="animal-activity" type="range" min="0" max="100" value="75" />
+      </label>
+      <label class="world-slider">
+        <span>Plant growth <strong id="plant-value">85%</strong></span>
+        <input id="plant-growth" type="range" min="0" max="100" value="85" />
+      </label>
+      <label class="world-slider">
+        <span>Butterflies <strong id="butterfly-value">90%</strong></span>
+        <input id="butterfly-activity" type="range" min="0" max="100" value="90" />
+      </label>
+      <label class="world-slider">
+        <span>Brook flow <strong id="water-value">70%</strong></span>
+        <input id="water-flow" type="range" min="0" max="100" value="70" />
+      </label>
+
+      <div class="sound-sensitivity">
+        <span>Sound sensitivity</span>
+        <div><span>Voice level</span><strong id="voice-level">42%</strong></div>
+      </div>
+
+      <div class="biome-panel">
+        <p>Biome Mood</p>
+        <div class="biome-grid" role="group" aria-label="Biome mood">
+          <button type="button" data-biome="Meadow" aria-pressed="true"><span></span>Meadow</button>
+          <button type="button" data-biome="Forest"><span></span>Forest</button>
+          <button type="button" data-biome="Spring"><span></span>Spring</button>
+          <button type="button" data-biome="Autumn"><span></span>Autumn</button>
+          <button type="button" data-biome="Dusk"><span></span>Dusk</button>
+          <button type="button" data-biome="Winter"><span></span>Winter</button>
+        </div>
+      </div>
+    </aside>
+
+    <footer class="creature-strip" aria-label="Responsive creatures">
+      <div><span>⛰</span><strong>Deer</strong><small id="deer-state">Watching</small></div>
+      <div><span>◜</span><strong>Rabbit</strong><small id="rabbit-state">Hidden</small></div>
+      <div><span>♣</span><strong>Squirrel</strong><small id="squirrel-state">Still</small></div>
+      <div><span>♪</span><strong>Bird</strong><small id="bird-state">Perched</small></div>
+      <div><span>✦</span><strong>Butterfly</strong><small id="butterfly-state">Resting</small></div>
+    </footer>
+  </section>
+
+  <header class="classic-header">
     <nav class="quick-nav" aria-label="Demo sections">
       <a href="#record-heading">Record</a>
       <a href="#tap-heading">Tap</a>
@@ -18,20 +129,7 @@
       <a href="#why-heading">Why</a>
       <a href="#feedback-heading">Feedback</a>
     </nav>
-    <div class="hero-copy">
-      <p class="eyebrow">Accessibility-first music making</p>
-      <h1>Babbled Notes</h1>
-      <p class="tagline">Music heals. Babbled Notes helps more people reach it.</p>
-      <p class="lede">
-        Turn a hum, tap, breath pattern, or simple choice into readable music
-        that can be played, edited, saved, and shared.
-      </p>
-    </div>
-    <div class="hero-actions" role="group" aria-label="Start the demo">
-      <a class="primary-link" href="#composer-heading">Open composer</a>
-      <a class="secondary-link" href="#record-heading">Record a hum</a>
-      <a class="secondary-link" href="visualizer.html">Open visualizer</a>
-    </div>
+    <p class="helper-text">The classic composing tools are below the responsive world.</p>
   </header>
 
   <main>
@@ -370,6 +468,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="https://unpkg.com/tone@15.0.4/build/Tone.js"></script>
   <script src="data.js"></script>
   <script src="player.js"></script>
+  <script src="meadow.js"></script>
   <script src="recorder.js"></script>
   <script src="accessible.js"></script>
   <script src="composer.js"></script>
