@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Lilt &middot; hum into your code</title>
-  <meta name="description" content="A tiny programming language whose front-end is your voice. Built for the Gemma 4 challenge." />
+  <title>Babbled Notes &middot; sound into music</title>
+  <meta name="description" content="An accessibility-first composing tool that turns hums, taps, breath, and sound into editable music." />
   <meta name="theme-color" content="#b1380e" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -20,8 +20,8 @@
     </nav>
     <div class="hero-copy">
       <p class="eyebrow">Accessibility-first music making</p>
-      <h1>Lilt</h1>
-      <p class="tagline">Music heals. Lilt helps more people reach it.</p>
+      <h1>Babbled Notes</h1>
+      <p class="tagline">Music heals. Babbled Notes helps more people reach it.</p>
       <p class="lede">
         Turn a hum, tap, breath pattern, or simple choice into readable music
         that can be played, edited, saved, and shared.
@@ -41,6 +41,14 @@
         Tap Record, make a short sound, then play it back. The digest preview is
         just a receipt for what the model would read; you do not need to use it.
       </p>
+      <div class="record-visual-shell" aria-label="Live sound visualizer">
+        <canvas id="record-visualizer" aria-hidden="true"></canvas>
+        <div class="record-visual-copy">
+          <span>Babbled Notes</span>
+          <strong id="record-visual-title">Sound made visible</strong>
+          <small id="record-visual-status">The canvas will move when you record.</small>
+        </div>
+      </div>
       <div class="controls recorder-controls" role="group" aria-label="Recording">
         <button id="record" type="button" class="record-btn" aria-label="Start recording">Record</button>
         <button id="record-stop" type="button" class="stop-btn" aria-label="Stop recording">Stop</button>
@@ -57,7 +65,7 @@
     <section class="healing-panel" aria-labelledby="healing-heading">
       <h2 id="healing-heading">Music as access</h2>
       <p>
-        Some people have songs inside but no easy way to get them out. Lilt is
+        Some people have songs inside but no easy way to get them out. Babbled Notes is
         for autistic users, non-speaking users, people with speech or motor
         differences, and anyone who needs a gentler path into composing.
       </p>
@@ -121,7 +129,7 @@ voice voice:
       <div class="control-row">
         <label for="demo-instrument">Instrument</label>
         <select id="demo-instrument">
-          <option value="auto">From Lilt code</option>
+          <option value="auto">From .lilt code</option>
           <option value="pad">Warm pad</option>
           <option value="piano">Soft piano</option>
           <option value="pluck">Plucked string</option>
@@ -129,7 +137,7 @@ voice voice:
         </select>
       </div>
       <div class="controls" role="group" aria-label="Playback">
-        <button id="play" type="button" class="play-btn" aria-label="Play this Lilt program">Play</button>
+        <button id="play" type="button" class="play-btn" aria-label="Play this music program">Play</button>
         <button id="stop" type="button" class="stop-btn" aria-label="Stop playback">Stop</button>
       </div>
       <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -138,10 +146,10 @@ voice voice:
     <section class="composer-panel" aria-labelledby="composer-heading">
       <h2 id="composer-heading">Composer workspace</h2>
       <p class="helper-text">
-        Edit the Lilt text directly. Play it, save it as a `.lilt` file, or
+        Edit the music text directly. Play it, save it as a `.lilt` file, or
         open a saved idea later.
       </p>
-      <div class="composer-toolbar" role="group" aria-label="Insert Lilt tokens">
+      <div class="composer-toolbar" role="group" aria-label="Insert music tokens">
         <button type="button" data-insert="C4 ! mf ">C</button>
         <button type="button" data-insert="D4 ! mf ">D</button>
         <button type="button" data-insert="E4 ! mf ">E</button>
@@ -152,7 +160,7 @@ voice voice:
         <button type="button" data-insert="! soft ">Soft</button>
         <button type="button" data-insert="! loud ">Loud</button>
       </div>
-      <label class="comment-label" for="composer-source">Lilt source</label>
+      <label class="comment-label" for="composer-source">Babbled Notes source</label>
       <textarea id="composer-source" spellcheck="false" rows="12"># Brooke's first idea
 tempo 86
 feel straight
@@ -199,7 +207,7 @@ voice bass:
     <section class="why-panel" aria-labelledby="why-heading">
       <h2 id="why-heading">Why it is different</h2>
       <p>
-        Lilt is not a chatbot that talks about music. It turns a sound, a tap
+        Babbled Notes is not a chatbot that talks about music. It turns a sound, a tap
         pattern, or a simple gesture into a small music program that can be
         edited, replayed, exported, and shared.
       </p>
@@ -218,12 +226,12 @@ voice bass:
     <section class="song-build" aria-labelledby="song-build-heading">
       <h2 id="song-build-heading">Build a song</h2>
       <p>
-        A full Lilt build starts with one small musical thought, then grows
+        A full Babbled Notes build starts with one small musical thought, then grows
         through plain text. This is the submission workflow.
       </p>
       <ol class="flow-list">
         <li><strong>Capture.</strong> Hum the hook, tap notes, or make a rhythm.</li>
-        <li><strong>Translate.</strong> Lilt turns the gesture into readable code.</li>
+        <li><strong>Translate.</strong> Babbled Notes turns the gesture into readable code.</li>
         <li><strong>Arrange.</strong> Pick instruments and add voices for melody, bass, or drums.</li>
         <li><strong>Share.</strong> Send the `.lilt` text or MIDI to another musician.</li>
       </ol>
@@ -247,7 +255,7 @@ voice bass:
     <section class="collab-panel" aria-labelledby="collab-heading">
       <h2 id="collab-heading">Work with others</h2>
       <p>
-        Lilt is collaboration-friendly because the song is text. A partner can
+        Babbled Notes is collaboration-friendly because the song is text. A partner can
         review the idea, change one line, and send it back without opening a DAW.
       </p>
       <div class="collab-grid">
@@ -257,7 +265,7 @@ voice bass:
         </div>
         <div>
           <span>Readable file</span>
-          <p>Lilt creates `.lilt` text and MIDI.</p>
+          <p>Babbled Notes creates `.lilt` text and MIDI.</p>
         </div>
         <div>
           <span>Partner edit</span>
@@ -277,7 +285,7 @@ voice bass:
     <section class="alphabet-panel" aria-labelledby="alphabet-heading">
       <h2 id="alphabet-heading">Sound alphabet</h2>
       <p>
-        Lilt treats small sounds and gestures as musical letters. Speech is not
+        Babbled Notes treats small sounds and gestures as musical letters. Speech is not
         required; a hum, breath, tap, click, or switch press can be enough.
       </p>
       <div class="alphabet-grid">
@@ -295,8 +303,8 @@ voice bass:
     <section class="digest-panel" aria-labelledby="digest-heading">
       <h2 id="digest-heading">Audio digest</h2>
       <p>
-        This is the builder view: Lilt turns a short WAV into timing and pitch
-        facts, then Gemma uses those facts to write the Lilt program.
+        This is the builder view: Babbled Notes turns a short WAV into timing and pitch
+        facts, then Gemma uses those facts to write the music program.
       </p>
       <pre><code>python -m lilt.cli digest clip.wav
 python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</code></pre>
@@ -337,7 +345,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
     <section class="about" aria-labelledby="about-heading">
       <h2 id="about-heading">What is this?</h2>
       <p>
-        Hum, beatbox, whistle, or play a phrase. Lilt turns it into a short,
+        Hum, beatbox, whistle, or play a phrase. Babbled Notes turns it into a short,
         human-readable program. Edit the program. Hear the result. Share the
         text.
       </p>
@@ -353,7 +361,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
 
   <footer>
     <p>
-      Lilt is open source under Apache-2.0. No tracking, no analytics. Audio
+      Babbled Notes is open source under Apache-2.0. No tracking, no analytics. Audio
       stays in your browser unless you tap Download; feedback stays local unless
       you tap Send as GitHub Issue.
     </p>
