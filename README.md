@@ -10,6 +10,7 @@ Lilt turns a short hum, sung phrase, beatbox pattern, or played line into:
 - a Tone.js event file for browser playback
 
 Built for the DEV Gemma 4 Challenge, May 6-24, 2026.
+Submission materials: see [SUBMISSION.md](SUBMISSION.md).
 
 ## Why it exists
 
