@@ -243,6 +243,136 @@ section.about a {
   text-underline-offset: 3px;
 }
 
+section.feedback {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.feedback-intro {
+  color: var(--muted);
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+fieldset.rating {
+  border: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+fieldset.rating legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.rating-buttons button {
+  flex: 1 1 0;
+  min-height: 48px;
+  padding: 0.65rem 0.5rem;
+  font: inherit;
+  font-size: 0.95rem;
+  background: var(--bg);
+  color: var(--fg);
+  border: 2px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: border-color 80ms ease, background 80ms ease;
+}
+
+.rating-buttons button:hover,
+.rating-buttons button:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.rating-buttons button[aria-pressed="true"] {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+.comment-label {
+  display: block;
+  margin: 1rem 0 0.4rem;
+  font-weight: 600;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--fg);
+  border: 2px solid var(--border);
+  border-radius: 9px;
+  resize: vertical;
+  min-height: 4rem;
+}
+
+textarea:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+details.report-preview {
+  margin: 1rem 0;
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+}
+
+details.report-preview summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.25rem 0;
+}
+
+details.report-preview pre {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  background: transparent;
+  font-size: 0.85rem;
+  max-height: 24rem;
+  overflow: auto;
+}
+
+.feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.feedback-actions button {
+  flex: 1 1 12rem;
+  min-height: 56px;
+  padding: 0.85rem 1.2rem;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 11px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 60ms ease, opacity 80ms ease;
+}
+
+.feedback-actions button:active { transform: scale(0.98); }
+
+.feedback-actions button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
 footer {
   margin-top: 3rem;
   padding-top: 1.5rem;
