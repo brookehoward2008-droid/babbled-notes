@@ -9,11 +9,13 @@ Lilt is being designed so that accessibility is a property of the architecture, 
 - **No music-notation literacy required.** Lilt's keywords are English words. Dyslexia, learning differences, or simply not having had music education are not gating factors.
 - **Runs locally on cheap edge hardware.** Gemma 4 E4B on a Raspberry Pi 5, a phone, or an old laptop. No subscription, no cloud account, no internet dependency. Disproportionately important for users on fixed incomes and in low-connectivity contexts.
 - **MIDI is a first-class output.** Plugs into existing assistive music setups: eye-tracker MIDI controllers, breath controllers, sip-and-puff interfaces, single-switch scanning rigs.
+- **Tap and switch-style input are first-class paths.** A user who is non-speaking, unreliable with breath, or using assisted movement can place notes one at a time and still get the same readable Lilt source and MIDI output.
 
 ## Where Lilt does not reach (honest limits)
 
 - **Deaf and hard-of-hearing users** can author Lilt text directly and emit MIDI, but cannot audition outputs by ear. We can mitigate (see below) — we cannot solve this end-to-end.
 - **Users with severe voice/speech disability** cannot use the audio frontend. The text frontend still works: Lilt is small enough to write by hand. We will not require audio input.
+- **Users who cannot vocalize** can use tap-to-melody input in the browser demo. This is intentionally simpler than full composition software: one action places one note or rest, then the phrase can be played, edited, or exported later.
 - **Cognitive accessibility** is bounded by the DSL itself. The grammar is small, but it is still a grammar. Users with significant cognitive disability may need a second, simpler UI on top.
 
 ## Design commitments
@@ -51,6 +53,19 @@ A piano-roll-style preview rendered **from the Lilt program**, not the original 
 ### 5. Single-gesture input is valid
 
 One sustained tone or one breath compiles to a valid (tiny) Lilt program. No minimum-duration or minimum-content requirements. Users with very limited motor control or short breath capacity are first-class users, not edge cases.
+
+### 5b. Non-speaking input is valid
+
+Voice is not required. The same musical pipeline must accept:
+
+- one-button note placement
+- rest placement
+- switch/scanning-friendly controls
+- typed Lilt source
+- imported MIDI or JSON in later versions
+
+This is the Stephen Hawking test for the product: if a user can make a small,
+intentional selection, Lilt should let that selection become music.
 
 ### 6. No color-only meaning
 

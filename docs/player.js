@@ -17,6 +17,7 @@
     title: document.getElementById("now-title"),
     description: document.getElementById("now-description"),
     source: document.getElementById("now-source"),
+    demoInstrument: document.getElementById("demo-instrument"),
     play: document.getElementById("play"),
     stop: document.getElementById("stop"),
     status: document.getElementById("status"),
@@ -130,6 +131,11 @@
   }
 
   function makeSynth(voice) {
+    const selected = elements.demoInstrument ? elements.demoInstrument.value : "auto";
+    if (voice.kind !== "drum" && selected !== "auto") {
+      return { synth: makePitchedSynth(selected).toDestination(), drumPitch: null };
+    }
+
     const hint = (voice.instrument_hint || "").toLowerCase();
     if (voice.kind === "drum") {
       if (hint.includes("kick") || hint.includes("bass-drum") || hint === "bd") {
@@ -162,17 +168,46 @@
     }
 
     if (hint.includes("pluck") || hint.includes("guitar")) {
+      return { synth: makePitchedSynth("pluck").toDestination(), drumPitch: null };
+    }
+    return { synth: makePitchedSynth("pad").toDestination(), drumPitch: null };
+  }
+
+  function makePitchedSynth(mode) {
+    if (mode === "piano") {
+      const s = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.01, decay: 0.25, sustain: 0.12, release: 0.5 },
+      });
+      s.volume.value = -5;
+      return s;
+    }
+    if (mode === "pluck") {
       const s = new Tone.PolySynth(Tone.PluckSynth);
       s.volume.value = -6;
-      return { synth: s.toDestination(), drumPitch: null };
+      return s;
+    }
+    if (mode === "bell") {
+      const s = new Tone.PolySynth(Tone.FMSynth, {
+        harmonicity: 2.8,
+        modulationIndex: 8,
+        envelope: { attack: 0.01, decay: 0.2, sustain: 0.05, release: 0.9 },
+        modulationEnvelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.4 },
+      });
+      s.volume.value = -8;
+      return s;
     }
     const s = new Tone.PolySynth(Tone.Synth, {
       oscillator: { type: "triangle" },
       envelope: { attack: 0.05, decay: 0.1, sustain: 0.55, release: 0.35 },
     });
     s.volume.value = -6;
-    return { synth: s.toDestination(), drumPitch: null };
+    return s;
   }
+
+  window.LILT_SYNTHS = {
+    makePitchedSynth: makePitchedSynth,
+  };
 
   function trigger(entry, ev, time) {
     const { synth, drumPitch } = entry;
@@ -356,6 +391,11 @@
       stopPlayback(true);
       elements.status.textContent = "Stopped.";
     });
+    if (elements.demoInstrument) {
+      elements.demoInstrument.addEventListener("change", () => {
+        logEvent("instrument_changed", { value: elements.demoInstrument.value });
+      });
+    }
     elements.stop.disabled = true;
     bindRating();
     bindComment();

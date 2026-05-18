@@ -35,6 +35,45 @@
       <pre id="digest-preview"><code id="digest-json"></code></pre>
     </section>
 
+    <section aria-labelledby="tap-heading">
+      <h2 id="tap-heading">Tap a melody</h2>
+      <p class="helper-text">
+        No voice required. Use touch, keyboard focus, or a switch control to
+        place notes one at a time, then hear the phrase.
+      </p>
+      <div class="tap-grid" role="group" aria-label="Add notes">
+        <button type="button" data-note="C4">C</button>
+        <button type="button" data-note="D4">D</button>
+        <button type="button" data-note="E4">E</button>
+        <button type="button" data-note="G4">G</button>
+        <button type="button" data-note="A4">A</button>
+        <button type="button" data-note="rest">Rest</button>
+      </div>
+      <div class="control-row">
+        <label for="tap-instrument">Instrument</label>
+        <select id="tap-instrument">
+          <option value="pad">Warm pad</option>
+          <option value="piano">Soft piano</option>
+          <option value="pluck">Plucked string</option>
+          <option value="bell">Bell</option>
+        </select>
+      </div>
+      <pre><code id="tap-source">tempo 80
+feel straight
+key C major
+
+mood gentle
+
+voice voice:
+  rest 4
+</code></pre>
+      <div class="controls" role="group" aria-label="Tap melody playback">
+        <button id="tap-play" type="button" class="play-btn">Play taps</button>
+        <button id="tap-reset" type="button" class="stop-btn">Reset</button>
+      </div>
+      <p id="tap-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
     <section aria-labelledby="picker-heading">
       <h2 id="picker-heading">Try a demo</h2>
       <div id="picker" class="picker" role="group" aria-label="Pick a demo">
@@ -45,11 +84,40 @@
       <h2 id="now-heading"><span id="now-title">&nbsp;</span></h2>
       <p id="now-description" class="description"></p>
       <pre><code id="now-source"></code></pre>
+      <div class="control-row">
+        <label for="demo-instrument">Instrument</label>
+        <select id="demo-instrument">
+          <option value="auto">From Lilt code</option>
+          <option value="pad">Warm pad</option>
+          <option value="piano">Soft piano</option>
+          <option value="pluck">Plucked string</option>
+          <option value="bell">Bell</option>
+        </select>
+      </div>
       <div class="controls" role="group" aria-label="Playback">
         <button id="play" type="button" class="play-btn" aria-label="Play this Lilt program">Play</button>
         <button id="stop" type="button" class="stop-btn" aria-label="Stop playback">Stop</button>
       </div>
       <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="why-panel" aria-labelledby="why-heading">
+      <h2 id="why-heading">Why it is different</h2>
+      <p>
+        Lilt is not a chatbot that talks about music. It turns a sound, a tap
+        pattern, or a simple gesture into a small music program that can be
+        edited, replayed, exported, and shared.
+      </p>
+      <ul class="plain-list">
+        <li><strong>.lilt</strong> keeps the idea readable as text.</li>
+        <li><strong>MIDI</strong> moves the idea into GarageBand, Ableton, Logic, or MuseScore.</li>
+        <li><strong>Tone.js</strong> lets the idea play in a browser.</li>
+        <li><strong>Digest JSON</strong> shows the timing and pitch facts the model used.</li>
+      </ul>
+      <p>
+        The goal is musical agency for people who may hum, tap, use a switch,
+        use assisted speech, or communicate without speech at all.
+      </p>
     </section>
 
     <section class="digest-panel" aria-labelledby="digest-heading">
@@ -123,6 +191,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="data.js"></script>
   <script src="player.js"></script>
   <script src="recorder.js"></script>
+  <script src="accessible.js"></script>
   <script src="backdrop.js"></script>
 </body>
 </html>
