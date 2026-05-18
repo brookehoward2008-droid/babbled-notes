@@ -1,14 +1,16 @@
 /**
- * Lilt mobile demo player.
+ * Lilt mobile demo player + session reporter.
  *
- * Loads Tone.js, picks a synth per voice based on instrument_hint, schedules
- * all events on Tone.Transport, plays them, stops cleanly. iOS Safari and
- * mobile Chrome both require a user gesture before any audio is heard;
- * Tone.start() inside the Play tap handler satisfies that.
+ * - Loads Tone.js and plays the selected demo via per-voice synths.
+ * - Quietly logs the user's session (which demos played, did playback
+ *   start, did it run to completion) into a local report object.
+ * - Lets the user OPT IN to share the report: prefilled GitHub Issue
+ *   or downloadable JSON. Nothing is sent until the user taps a button.
  */
 
 (function () {
   const demos = window.LILT_DEMOS || [];
+  const REPO = "brookehoward2008-droid/lilt";
 
   const elements = {
     picker: document.getElementById("picker"),
@@ -18,13 +20,89 @@
     play: document.getElementById("play"),
     stop: document.getElementById("stop"),
     status: document.getElementById("status"),
+    ratingButtons: document.querySelectorAll(".rating-buttons button"),
+    comment: document.getElementById("comment"),
+    reportPreview: document.getElementById("report-preview"),
+    sendGithub: document.getElementById("send-github"),
+    downloadReport: document.getElementById("download-report"),
+    feedbackStatus: document.getElementById("feedback-status"),
   };
+
+  // ---------------------------------------------------------------
+  // Session report
+  // ---------------------------------------------------------------
+
+  const report = {
+    schema: "lilt-demo-report/v1",
+    session_id: makeSessionId(),
+    started_at: new Date().toISOString(),
+    page_url: location.href,
+    rating: null,
+    comment: "",
+    device: {
+      user_agent: navigator.userAgent,
+      language: navigator.language,
+      viewport: { w: window.innerWidth, h: window.innerHeight },
+      color_scheme: window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light",
+      reduced_motion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    },
+    events: [],
+    demos_played: {},
+  };
+
+  function makeSessionId() {
+    if (window.crypto && window.crypto.randomUUID) return crypto.randomUUID();
+    return "s_" + Math.random().toString(36).slice(2, 10);
+  }
+
+  function logEvent(type, data) {
+    const ev = Object.assign(
+      { t: new Date().toISOString(), type: type },
+      data || {}
+    );
+    report.events.push(ev);
+    renderReportPreview();
+  }
+
+  function recordPlayed(demoId, completed, audible_ms) {
+    const entry = report.demos_played[demoId] || {
+      plays: 0,
+      completed: 0,
+      audible_ms: 0,
+    };
+    entry.plays += 1;
+    if (completed) entry.completed += 1;
+    entry.audible_ms += Math.max(0, audible_ms | 0);
+    report.demos_played[demoId] = entry;
+  }
+
+  function renderReportPreview() {
+    const compact = compactReport();
+    elements.reportPreview.textContent = JSON.stringify(compact, null, 2);
+  }
+
+  function compactReport() {
+    // Mirror report; trim the user_agent for the preview but keep
+    // the full one in the actual submission.
+    const out = JSON.parse(JSON.stringify(report));
+    out.rating = report.rating;
+    out.comment = elements.comment.value.trim().slice(0, 280);
+    return out;
+  }
+
+  // ---------------------------------------------------------------
+  // Demo picker + playback
+  // ---------------------------------------------------------------
 
   let current = demos[0];
   let synths = [];
   let parts = [];
   let stopTimer = null;
   let isPlaying = false;
+  let playStartMs = 0;
+  let currentExpectedMs = 0;
 
   function buildPicker() {
     elements.picker.innerHTML = "";
@@ -39,7 +117,7 @@
   }
 
   function selectDemo(idx) {
-    stopPlayback();
+    stopPlayback(false);
     current = demos[idx];
     Array.from(elements.picker.children).forEach((btn, i) => {
       btn.setAttribute("aria-pressed", i === idx ? "true" : "false");
@@ -48,6 +126,7 @@
     elements.description.textContent = current.payload.description || "";
     elements.source.textContent = current.lilt_source;
     elements.status.textContent = "";
+    logEvent("select_demo", { demo_id: current.id });
   }
 
   function makeSynth(voice) {
@@ -113,7 +192,8 @@
     if (stopTimer) { clearTimeout(stopTimer); stopTimer = null; }
   }
 
-  function stopPlayback() {
+  function stopPlayback(logIt) {
+    const wasPlaying = isPlaying;
     Tone.getTransport().stop();
     Tone.getTransport().cancel();
     Tone.getTransport().position = 0;
@@ -121,17 +201,30 @@
     isPlaying = false;
     elements.play.disabled = false;
     elements.stop.disabled = true;
-    elements.status.textContent = "";
+    if (wasPlaying) {
+      const audible = Date.now() - playStartMs;
+      const completed = audible + 50 >= currentExpectedMs;
+      recordPlayed(current.id, completed, audible);
+      if (logIt) {
+        logEvent("play_ended", {
+          demo_id: current.id,
+          completed: completed,
+          audible_ms: audible,
+        });
+      }
+    }
   }
 
   async function play() {
     if (isPlaying) return;
     elements.play.disabled = true;
     elements.status.textContent = "Starting...";
+    logEvent("play_clicked", { demo_id: current.id });
 
     try {
       await Tone.start();
     } catch (e) {
+      logEvent("audio_unlock_failed", { demo_id: current.id, message: String(e) });
       elements.status.textContent = "Audio could not start. Tap Play again.";
       elements.play.disabled = false;
       return;
@@ -156,24 +249,118 @@
 
     Tone.getTransport().start();
     isPlaying = true;
+    playStartMs = Date.now();
+    currentExpectedMs = Math.ceil(payload.total_seconds * 1000);
     elements.stop.disabled = false;
     elements.status.textContent = "Playing...";
+    logEvent("play_started", { demo_id: current.id });
 
     const totalMs = Math.ceil((payload.total_seconds + 0.4) * 1000);
     stopTimer = setTimeout(() => {
-      stopPlayback();
+      stopPlayback(true);
       elements.status.textContent = "Done.";
     }, totalMs);
   }
+
+  // ---------------------------------------------------------------
+  // Feedback UI
+  // ---------------------------------------------------------------
+
+  function bindRating() {
+    elements.ratingButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const value = btn.dataset.rating;
+        report.rating = value;
+        elements.ratingButtons.forEach((b) => {
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+        });
+        logEvent("rating_set", { value: value });
+      });
+    });
+  }
+
+  function bindComment() {
+    elements.comment.addEventListener("input", () => {
+      // Update preview live so the user sees what they're sharing.
+      renderReportPreview();
+    });
+  }
+
+  function buildIssueUrl() {
+    report.comment = elements.comment.value.trim().slice(0, 280);
+    const body =
+      "Demo feedback from " +
+      report.session_id.slice(0, 8) +
+      ".\n\n" +
+      (report.comment ? "**Comment:** " + report.comment + "\n\n" : "") +
+      (report.rating ? "**Rating:** " + report.rating + "\n\n" : "") +
+      "---\n\n```json\n" +
+      JSON.stringify(report, null, 2) +
+      "\n```\n";
+    const titleBits = ["Demo feedback"];
+    if (report.rating) titleBits.push(report.rating);
+    const title = titleBits.join(": ");
+    const params = new URLSearchParams();
+    params.set("title", title);
+    params.set("body", body);
+    params.set("labels", "demo-feedback");
+    return (
+      "https://github.com/" + REPO + "/issues/new?" + params.toString()
+    );
+  }
+
+  function bindSendGithub() {
+    elements.sendGithub.addEventListener("click", () => {
+      const url = buildIssueUrl();
+      logEvent("send_github_clicked", {
+        url_length: url.length,
+        rating: report.rating,
+        comment_len: elements.comment.value.trim().length,
+      });
+      // Open in a new tab so the user can review the prefilled issue
+      // before clicking Submit on GitHub.
+      window.open(url, "_blank", "noopener");
+      elements.feedbackStatus.textContent =
+        "Opened a prefilled GitHub Issue in a new tab. Review and tap Submit there.";
+    });
+  }
+
+  function bindDownload() {
+    elements.downloadReport.addEventListener("click", () => {
+      report.comment = elements.comment.value.trim().slice(0, 280);
+      const text = JSON.stringify(report, null, 2);
+      const blob = new Blob([text], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "lilt-report-" + report.session_id.slice(0, 8) + ".json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      logEvent("download_report_clicked", {});
+      elements.feedbackStatus.textContent =
+        "Saved. The file is in your phone's Downloads.";
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // Boot
+  // ---------------------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
     buildPicker();
     selectDemo(0);
     elements.play.addEventListener("click", play);
     elements.stop.addEventListener("click", () => {
-      stopPlayback();
+      stopPlayback(true);
       elements.status.textContent = "Stopped.";
     });
     elements.stop.disabled = true;
+    bindRating();
+    bindComment();
+    bindSendGithub();
+    bindDownload();
+    renderReportPreview();
   });
 })();

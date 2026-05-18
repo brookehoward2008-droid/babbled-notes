@@ -32,6 +32,39 @@
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
 
+    <section class="feedback" aria-labelledby="feedback-heading">
+      <h2 id="feedback-heading">Tell Brooke how it sounded</h2>
+      <p class="feedback-intro">
+        Optional. Nothing leaves this page unless you tap one of the
+        buttons below. Your report is a small JSON file built from the
+        demos you played in this session. You can preview it first.
+      </p>
+
+      <fieldset class="rating">
+        <legend>How did it sound?</legend>
+        <div class="rating-buttons" role="radiogroup" aria-label="Rating">
+          <button type="button" data-rating="good"  aria-pressed="false">Worked</button>
+          <button type="button" data-rating="okay"  aria-pressed="false">Sort of</button>
+          <button type="button" data-rating="bad"   aria-pressed="false">Off</button>
+        </div>
+      </fieldset>
+
+      <label class="comment-label" for="comment">One line of feedback (optional)</label>
+      <textarea id="comment" maxlength="280" rows="3"
+                placeholder="What surprised you? What broke? Skip if nothing."></textarea>
+
+      <details class="report-preview">
+        <summary>See exactly what gets shared</summary>
+        <pre id="report-preview"></pre>
+      </details>
+
+      <div class="feedback-actions" role="group" aria-label="Submit feedback">
+        <button id="send-github" type="button" class="play-btn">Send as GitHub Issue</button>
+        <button id="download-report" type="button" class="stop-btn">Download report</button>
+      </div>
+      <p id="feedback-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
     <section class="about" aria-labelledby="about-heading">
       <h2 id="about-heading">What is this?</h2>
       <p>
@@ -51,8 +84,9 @@
 
   <footer>
     <p>
-      Lilt is open source under Apache-2.0. No tracking, no analytics, no
-      account. The audio plays locally in your browser.
+      Lilt is open source under Apache-2.0. The audio plays locally in your
+      browser. Nothing leaves the page unless you tap a Send or Download
+      button on the feedback section.
     </p>
   </footer>
 
