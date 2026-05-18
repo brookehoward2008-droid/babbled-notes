@@ -1,0 +1,121 @@
+{
+  "tempo": 96,
+  "feel": "swung-sixteenths",
+  "key": {
+    "root": "C",
+    "mode": "major"
+  },
+  "mood": [
+    "loose",
+    "playful"
+  ],
+  "total_seconds": 2.5,
+  "voices": [
+    {
+      "name": "kick",
+      "kind": "drum",
+      "instrument_hint": "kick",
+      "events": [
+        {
+          "time": 0.0,
+          "note": "kick",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 0.625,
+          "note": "kick",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 1.25,
+          "note": "kick",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 1.875,
+          "note": "kick",
+          "duration": 0.1,
+          "velocity": 0.65
+        }
+      ]
+    },
+    {
+      "name": "snare",
+      "kind": "drum",
+      "instrument_hint": "snare",
+      "events": [
+        {
+          "time": 0.625,
+          "note": "snare",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 1.875,
+          "note": "snare",
+          "duration": 0.1,
+          "velocity": 0.65
+        }
+      ]
+    },
+    {
+      "name": "hat",
+      "kind": "drum",
+      "instrument_hint": "closed-hat",
+      "events": [
+        {
+          "time": 0.15625,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 0.46875,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 0.78125,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 1.09375,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 1.40625,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 1.71875,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 2.03125,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        },
+        {
+          "time": 2.34375,
+          "note": "closed-hat",
+          "duration": 0.1,
+          "velocity": 0.65
+        }
+      ]
+    }
+  ],
+  "description": "a swung boots-cats groove on kick, snare, and closed hat"
+}

@@ -1,0 +1,101 @@
+{
+  "tempo": 78,
+  "feel": "straight",
+  "key": {
+    "root": "C",
+    "mode": "major"
+  },
+  "mood": [
+    "gentle",
+    "playful"
+  ],
+  "total_seconds": 12.307692,
+  "voices": [
+    {
+      "name": "voice",
+      "kind": "pitched",
+      "instrument_hint": "soft-vocal-pad",
+      "events": [
+        {
+          "time": 0.0,
+          "note": "E4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 0.769231,
+          "note": "D4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 1.538462,
+          "note": "C4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 2.307692,
+          "note": "D4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 3.076923,
+          "note": "E4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 3.846154,
+          "note": "E4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 4.615385,
+          "note": "E4",
+          "duration": 1.538462,
+          "velocity": 0.4
+        },
+        {
+          "time": 6.153846,
+          "note": "D4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 6.923077,
+          "note": "D4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 7.692308,
+          "note": "D4",
+          "duration": 1.538462,
+          "velocity": 0.4
+        },
+        {
+          "time": 9.230769,
+          "note": "E4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 10.0,
+          "note": "G4",
+          "duration": 0.769231,
+          "velocity": 0.4
+        },
+        {
+          "time": 10.769231,
+          "note": "G4",
+          "duration": 1.538462,
+          "velocity": 0.4
+        }
+      ]
+    }
+  ],
+  "description": "Mary Had a Little Lamb at a slow, walking tempo"
+}

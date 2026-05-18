@@ -1,0 +1,21 @@
+{
+  "tempo": 80,
+  "feel": "straight",
+  "key": {"root": "C", "mode": "major"},
+  "mood": ["gentle", "intimate"],
+  "description": "a slow, three-note ascending hum, gentle and intimate",
+  "voices": [
+    {
+      "name": "voice",
+      "kind": "pitched",
+      "instrument_hint": "soft-vocal-pad",
+      "bars": [
+        [
+          {"t": "note", "pitch": "C4", "beats": 1, "dynamic": "soft"},
+          {"t": "note", "pitch": "E4", "beats": 1, "dynamic": "soft"},
+          {"t": "note", "pitch": "G4", "beats": 1, "dynamic": "soft", "hold": true}
+        ]
+      ]
+    }
+  ]
+}

@@ -83,6 +83,25 @@ def test_compile_invalid_json_exits_nonzero(tmp_path, capsys):
     assert "json" in capsys.readouterr().err.lower()
 
 
+def test_tonejs_writes_event_file(tmp_path, canonical_example):
+    inp = _write_fixture(tmp_path, canonical_example)
+    code = cli.main(["tonejs", str(inp)])
+    assert code == 0
+    out = tmp_path / "input.tonejs.json"
+    assert out.exists()
+    payload = json.loads(out.read_text(encoding="utf-8"))
+    assert payload["tempo"] == 80
+    assert len(payload["voices"]) == 1
+
+
+def test_tonejs_with_explicit_output(tmp_path, canonical_example):
+    inp = _write_fixture(tmp_path, canonical_example)
+    out = tmp_path / "play.json"
+    code = cli.main(["tonejs", str(inp), "-o", str(out)])
+    assert code == 0
+    assert out.exists()
+
+
 def test_info_prints_summary(tmp_path, canonical_example, capsys):
     inp = _write_fixture(tmp_path, canonical_example)
     code = cli.main(["info", str(inp)])

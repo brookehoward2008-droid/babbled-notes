@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Lilt &middot; hum into your code</title>
+  <meta name="description" content="A tiny programming language whose front-end is your voice. Built for the Gemma 4 challenge." />
+  <meta name="theme-color" content="#b1380e" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Lilt</h1>
+    <p>A tiny programming language whose front-end is your voice.</p>
+  </header>
+
+  <main>
+    <section aria-labelledby="picker-heading">
+      <h2 id="picker-heading">Try a demo</h2>
+      <div id="picker" class="picker" role="group" aria-label="Pick a demo">
+      </div>
+    </section>
+
+    <section aria-labelledby="now-heading">
+      <h2 id="now-heading"><span id="now-title">&nbsp;</span></h2>
+      <p id="now-description" class="description"></p>
+      <pre><code id="now-source"></code></pre>
+      <div class="controls" role="group" aria-label="Playback">
+        <button id="play" type="button" class="play-btn" aria-label="Play this Lilt program">Play</button>
+        <button id="stop" type="button" class="stop-btn" aria-label="Stop playback">Stop</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="about" aria-labelledby="about-heading">
+      <h2 id="about-heading">What is this?</h2>
+      <p>
+        Hum, beatbox, whistle, or play a phrase. Lilt turns it into a short,
+        human-readable program. Edit the program. Hear the result. Share the
+        text.
+      </p>
+      <p>
+        Built for the Gemma 4 challenge by Brooke Chauntel. The model and
+        the audio pipeline live offline; this page is the in-browser preview.
+      </p>
+      <p>
+        <a href="https://github.com/brookehoward2008-droid/lilt" rel="noopener">See the code on GitHub &raquo;</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Lilt is open source under Apache-2.0. No tracking, no analytics, no
+      account. The audio plays locally in your browser.
+    </p>
+  </footer>
+
+  <script src="https://unpkg.com/tone@15.0.4/build/Tone.js"></script>
+  <script src="data.js"></script>
+  <script src="player.js"></script>
+</body>
+</html>

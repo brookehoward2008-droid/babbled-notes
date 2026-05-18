@@ -1,0 +1,10 @@
+# a slow, three-note ascending hum, gentle and intimate
+
+tempo 80
+feel straight
+key C major
+
+mood gentle, intimate
+
+voice voice:
+  C4 ! soft E4 ! soft G4 hold ! soft

@@ -16,7 +16,7 @@ from pathlib import Path
 
 import jsonschema
 
-from . import __version__, codegen, midi, schema
+from . import __version__, codegen, midi, schema, tonejs
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -42,12 +42,21 @@ def main(argv: list[str] | None = None) -> int:
     p_info = sub.add_parser("info", help="Print a short summary")
     p_info.add_argument("input", help="Path to a Lilt JSON file")
 
+    p_tonejs = sub.add_parser("tonejs", help="JSON -> Tone.js event file for browser playback")
+    p_tonejs.add_argument("input", help="Path to a Lilt JSON file")
+    p_tonejs.add_argument(
+        "-o", "--output",
+        help="Output path. Defaults to <input>.tonejs.json alongside the input.",
+    )
+
     args = parser.parse_args(raw)
 
     if args.cmd == "compile":
         return _cmd_compile(args.input, args.output)
     if args.cmd == "info":
         return _cmd_info(args.input)
+    if args.cmd == "tonejs":
+        return _cmd_tonejs(args.input, args.output)
 
     parser.print_help()
     return 0
@@ -84,6 +93,30 @@ def _cmd_compile(input_path: str, output_path: str | None) -> int:
         print(f"error: cannot infer format from extension {ext!r}; "
               "use .lilt or .mid", file=sys.stderr)
         return 4
+    print(f"wrote {out}")
+    return 0
+
+
+def _cmd_tonejs(input_path: str, output_path: str | None) -> int:
+    data = _load_json(input_path)
+    if data is None:
+        return 2
+    try:
+        schema.validate(data)
+    except jsonschema.ValidationError as e:
+        print(f"error: input does not match Lilt schema: {e.message}", file=sys.stderr)
+        return 3
+
+    payload = tonejs.emit(data)
+    if output_path is None:
+        out = Path(input_path).with_suffix("").with_suffix(".tonejs.json")
+    else:
+        out = Path(output_path)
+    out.write_text(
+        json.dumps(payload, indent=2, sort_keys=False),
+        encoding="utf-8",
+        newline="\n",
+    )
     print(f"wrote {out}")
     return 0
 
