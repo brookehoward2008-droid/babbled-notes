@@ -459,6 +459,12 @@ textarea {
   min-height: 4rem;
 }
 
+#composer-source {
+  min-height: 18rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  line-height: 1.55;
+}
+
 textarea:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
@@ -493,6 +499,22 @@ details.report-preview pre {
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 0.5rem;
+}
+
+#composer-file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.composer-actions {
+  flex-wrap: wrap;
+}
+
+.composer-actions button {
+  flex: 1 1 11rem;
 }
 
 .feedback-actions button {

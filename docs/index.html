@@ -102,6 +102,50 @@ voice voice:
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
 
+    <section class="composer-panel" aria-labelledby="composer-heading">
+      <h2 id="composer-heading">Composer workspace</h2>
+      <p class="helper-text">
+        Edit the Lilt text directly. Play it, save it as a `.lilt` file, or
+        open a saved idea later.
+      </p>
+      <label class="comment-label" for="composer-source">Lilt source</label>
+      <textarea id="composer-source" spellcheck="false" rows="12"># Brooke's first idea
+tempo 86
+feel straight
+key C major
+
+mood gentle, warm
+
+voice melody:
+  C4 ! soft E4 ! mf G4 hold ! mf
+
+voice pulse:
+  x . . . x . . .
+
+voice bass:
+  C2 hold ! soft</textarea>
+      <div class="control-row">
+        <label for="composer-instrument">Instrument</label>
+        <select id="composer-instrument">
+          <option value="pad">Warm pad</option>
+          <option value="piano">Soft piano</option>
+          <option value="pluck">Plucked string</option>
+          <option value="bell">Bell</option>
+        </select>
+      </div>
+      <div class="controls composer-actions" role="group" aria-label="Composer actions">
+        <button id="composer-play" type="button" class="play-btn">Play workspace</button>
+        <button id="composer-stop" type="button" class="stop-btn">Stop</button>
+      </div>
+      <div class="controls composer-actions" role="group" aria-label="File actions">
+        <button id="composer-load-demo" type="button" class="stop-btn">Load selected demo</button>
+        <button id="composer-save" type="button" class="stop-btn">Save .lilt</button>
+        <button id="composer-open" type="button" class="stop-btn">Open .lilt</button>
+      </div>
+      <input id="composer-file" type="file" accept=".lilt,text/plain" />
+      <p id="composer-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
     <section class="why-panel" aria-labelledby="why-heading">
       <h2 id="why-heading">Why it is different</h2>
       <p>
@@ -270,6 +314,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="player.js"></script>
   <script src="recorder.js"></script>
   <script src="accessible.js"></script>
+  <script src="composer.js"></script>
   <script src="backdrop.js"></script>
 </body>
 </html>

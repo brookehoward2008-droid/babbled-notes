@@ -45,6 +45,10 @@ For non-speaking users, the browser demo also includes a tap-to-melody path:
 notes can be placed with touch, keyboard focus, or switch-style controls without
 recording a voice.
 
+The browser tool also includes a Composer Workspace. Users can edit `.lilt`
+source directly, play the edited song, save it locally, open it again later, and
+load a demo into the workspace as a starting point.
+
 ## Sound alphabet
 
 Lilt uses a small input alphabet so the model knows how to map human sound and

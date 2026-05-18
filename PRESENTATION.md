@@ -37,7 +37,12 @@ Core line:
    - Melody + pulse + bass.
 8. Show **Work with others**.
    - The music can be reviewed as a text diff.
-9. Close:
+9. Show **Composer workspace**.
+   - Edit one note in the text.
+   - Play the edited workspace.
+   - Save the `.lilt` file.
+   - Explain that Open `.lilt` lets the user return to the idea later.
+10. Close:
    - "Gemma 4 is the interpretation layer between sound/gesture and structured music code."
 
 ## 30-Second Pitch
@@ -56,6 +61,7 @@ music schema. The result is portable, editable, and collaborative.
 - The public page does not expose an API key.
 - The repo contains the real backend path for Gemma.
 - The static demo is intentionally safe and quota-proof.
+- The composer workspace can edit, play, save, and open `.lilt` files.
 
 ## Questions And Answers
 
