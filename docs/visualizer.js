@@ -48,9 +48,9 @@
   function seedParticles() {
     const count = Math.max(80, Math.min(180, Math.floor((width * height) / 9000)));
     particles = Array.from({ length: count }, (_, i) => ({
-      x: width * (0.18 + 0.64 * seeded(i, 13)),
-      y: height * (0.18 + 0.64 * seeded(i, 29)),
-      r: 2 + seeded(i, 47) * 12,
+      x: width * (0.08 + 0.84 * seeded(i, 13)),
+      y: height * (0.08 + 0.84 * seeded(i, 29)),
+      r: 5 + seeded(i, 47) * 18,
       a: 0.2 + seeded(i, 71) * 0.42,
       drift: seeded(i, 97) * Math.PI * 2,
       speed: 0.2 + seeded(i, 111) * 0.7,
@@ -155,27 +155,40 @@
     const glow = Number(elements.glow.value);
     ctx.globalCompositeOperation = "lighter";
     particles.forEach((p, i) => {
-      const pull = 18 + smoothedLevel * 120 * intensity;
       const wave = phase * p.speed + p.drift;
-      p.x += Math.cos(wave + i * 0.07) * (0.18 + smoothedLevel * 1.9);
-      p.y += Math.sin(wave * 0.82 + i * 0.05) * (0.18 + smoothedLevel * 1.55);
-      p.x += (width / 2 - p.x) * 0.0008 * pull;
-      p.y += (height / 2 - p.y) * 0.0008 * pull;
+      const dx = p.x - width / 2;
+      const dy = p.y - height / 2;
+      const distance = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+      const orbit = 0.08 + smoothedLevel * 0.55 * intensity;
+      p.x += Math.cos(wave + i * 0.09) * (0.16 + smoothedLevel * 1.2);
+      p.y += Math.sin(wave * 0.76 + i * 0.04) * (0.16 + smoothedLevel * 1.05);
+      p.x += (-dy / distance) * orbit;
+      p.y += (dx / distance) * orbit;
+      p.x += (width / 2 - p.x) * 0.00045;
+      p.y += (height / 2 - p.y) * 0.00045;
 
       if (p.x < -80) p.x = width + 80;
       if (p.x > width + 80) p.x = -80;
       if (p.y < -80) p.y = height + 80;
       if (p.y > height + 80) p.y = -80;
 
-      const radius = p.r * (1 + smoothedLevel * 5.5 * intensity);
-      const alpha = Math.min(0.54, p.a * (0.24 + smoothedLevel * 1.6) * glow);
+      const radius = p.r * (1.2 + smoothedLevel * 4.2 * intensity);
+      const alpha = Math.min(0.34, p.a * (0.18 + smoothedLevel * 1.1) * glow);
       const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius);
       gradient.addColorStop(0, hexToRgba(palette[p.color], alpha));
-      gradient.addColorStop(0.45, hexToRgba(palette[(p.color + 1) % palette.length], alpha * 0.24));
+      gradient.addColorStop(0.5, hexToRgba(palette[(p.color + 1) % palette.length], alpha * 0.18));
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+      ctx.ellipse(
+        p.x,
+        p.y,
+        radius * (1.15 + seeded(i, 3) * 0.8),
+        radius * (0.68 + seeded(i, 5) * 0.45),
+        wave,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
     });
     ctx.globalCompositeOperation = "source-over";
