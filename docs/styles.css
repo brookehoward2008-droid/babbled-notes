@@ -574,7 +574,9 @@ body > footer {
   border-radius: 0.75rem;
   background:
     radial-gradient(circle at 72% 20%, rgba(255,255,255,.72), transparent 0.45rem),
-    linear-gradient(180deg, #a8cdd6 0 46%, #5f8957 47% 100%);
+    linear-gradient(180deg, #a8cdd6 0 46%, rgba(95, 137, 87, .86) 47% 100%),
+    url("assets/nature/grass-texture.png");
+  background-size: auto, auto, 7rem 7rem;
 }
 
 .biome-grid button[data-biome="Forest"] span { background: linear-gradient(180deg, #315441 0 44%, #0f3524 45% 100%); }
@@ -621,7 +623,9 @@ body > footer {
   background:
     radial-gradient(ellipse at 52% 62%, rgba(168, 121, 72, 0.96) 0 28%, transparent 29%),
     radial-gradient(ellipse at 70% 48%, rgba(120, 79, 42, 0.95) 0 12%, transparent 13%),
-    linear-gradient(180deg, rgba(159, 200, 216, 0.55) 0 48%, rgba(72, 116, 65, 0.92) 49% 100%);
+    linear-gradient(180deg, rgba(159, 200, 216, 0.55) 0 48%, rgba(72, 116, 65, 0.82) 49% 100%),
+    url("assets/nature/grass-texture.png");
+  background-size: auto, auto, auto, 6rem 6rem;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 22px rgba(0,0,0,.2);
 }
 
@@ -629,28 +633,36 @@ body > footer {
   background:
     radial-gradient(ellipse at 58% 60%, rgba(207, 190, 163, 0.98) 0 25%, transparent 26%),
     radial-gradient(ellipse at 70% 42%, rgba(170, 150, 124, 0.96) 0 12%, transparent 13%),
-    linear-gradient(180deg, rgba(202, 220, 214, 0.52) 0 48%, rgba(82, 125, 69, 0.94) 49% 100%);
+    linear-gradient(180deg, rgba(202, 220, 214, 0.52) 0 48%, rgba(82, 125, 69, 0.84) 49% 100%),
+    url("assets/nature/grass-texture.png");
+  background-size: auto, auto, auto, 6rem 6rem;
 }
 
 .creature-strip div:nth-child(3) span {
   background:
     radial-gradient(ellipse at 40% 44%, rgba(170, 100, 48, 0.98) 0 18%, transparent 19%),
     radial-gradient(ellipse at 55% 60%, rgba(106, 67, 33, 0.98) 0 18%, transparent 19%),
-    linear-gradient(180deg, rgba(158, 189, 156, 0.5) 0 48%, rgba(37, 82, 45, 0.94) 49% 100%);
+    linear-gradient(180deg, rgba(158, 189, 156, 0.5) 0 48%, rgba(37, 82, 45, 0.84) 49% 100%),
+    url("assets/nature/leaf-canopy.png");
+  background-size: auto, auto, auto, 5rem 5rem;
 }
 
 .creature-strip div:nth-child(4) span {
   background:
     radial-gradient(ellipse at 50% 50%, rgba(64, 101, 118, 0.98) 0 17%, transparent 18%),
     radial-gradient(ellipse at 64% 48%, rgba(150, 176, 180, 0.82) 0 8%, transparent 9%),
-    linear-gradient(180deg, rgba(150, 190, 205, 0.58) 0 56%, rgba(48, 86, 55, 0.94) 57% 100%);
+    linear-gradient(180deg, rgba(150, 190, 205, 0.58) 0 56%, rgba(48, 86, 55, 0.84) 57% 100%),
+    url("assets/nature/water-shimmer.png");
+  background-size: auto, auto, auto, 5rem 5rem;
 }
 
 .creature-strip div:nth-child(5) span {
   background:
     radial-gradient(ellipse at 40% 52%, rgba(190, 142, 92, 0.98) 0 17%, transparent 18%),
     radial-gradient(ellipse at 60% 52%, rgba(141, 169, 196, 0.98) 0 17%, transparent 18%),
-    linear-gradient(180deg, rgba(197, 215, 207, 0.56) 0 52%, rgba(83, 126, 66, 0.95) 53% 100%);
+    linear-gradient(180deg, rgba(197, 215, 207, 0.56) 0 52%, rgba(83, 126, 66, 0.84) 53% 100%),
+    url("assets/nature/wildflower-detail.png");
+  background-size: auto, auto, auto, 5rem 5rem;
 }
 
 .creature-strip small {

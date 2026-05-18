@@ -39,6 +39,14 @@
     biomeButtons: document.querySelectorAll("[data-biome]"),
   };
 
+  const natureAssetSources = {
+    grass: "assets/nature/grass-texture.png",
+    water: "assets/nature/water-shimmer.png",
+    leaves: "assets/nature/leaf-canopy.png",
+    bark: "assets/nature/bark-texture.png",
+    flowers: "assets/nature/wildflower-detail.png",
+  };
+
   const biomes = {
     Meadow: { sky: ["#9fc8d8", "#d9ecdf", "#4d6944"], meadow: ["#86a963", "#4f7d40", "#1f3a22"] },
     Forest: { sky: ["#274a3a", "#8fbf99", "#263c30"], meadow: ["#477954", "#2b5739", "#122619"] },
@@ -55,6 +63,8 @@
   let butterflies = [];
   let creatures = [];
   let motes = [];
+  let natureAssets = {};
+  let naturePatterns = {};
   let analyser = null;
   let frequencyData = null;
   let audioContext = null;
@@ -67,6 +77,7 @@
   let time = 0;
 
   function init() {
+    loadNatureAssets();
     for (let index = 0; index < 34; index += 1) {
       const bar = document.createElement("span");
       bar.style.setProperty("--i", index);
@@ -76,6 +87,26 @@
     resize();
     bind();
     requestAnimationFrame(draw);
+  }
+
+  function loadNatureAssets() {
+    Object.entries(natureAssetSources).forEach(([key, src]) => {
+      const image = new Image();
+      image.onload = () => {
+        naturePatterns[key] = null;
+      };
+      image.src = src;
+      natureAssets[key] = image;
+    });
+  }
+
+  function patternFor(key) {
+    const image = natureAssets[key];
+    if (!image || !image.complete || !image.naturalWidth) return null;
+    if (!naturePatterns[key]) {
+      naturePatterns[key] = ctx.createPattern(image, "repeat");
+    }
+    return naturePatterns[key];
   }
 
   function bind() {
@@ -318,25 +349,18 @@
   }
 
   function drawTrees() {
+    const barkPattern = patternFor("bark");
     for (let index = 0; index < 68; index += 1) {
       const x = (index / 67) * width + Math.sin(index) * 18;
       const base = height * (0.48 + Math.sin(index * 1.9) * 0.04);
       const treeHeight = height * (0.12 + seeded(index, 109) * 0.12);
       const shade = seeded(index, 113);
       const trunk = 1.6 + seeded(index, 117) * 2.8;
-      ctx.fillStyle = shade > 0.55 ? "rgba(28,58,36,.92)" : "rgba(19,47,34,.94)";
+      ctx.fillStyle = barkPattern || (shade > 0.55 ? "rgba(86,58,34,.92)" : "rgba(58,38,24,.94)");
       ctx.fillRect(x - trunk / 2, base - treeHeight * 0.32, trunk, treeHeight * 0.34);
 
       if (index % 4 === 0) {
-        const crown = ctx.createRadialGradient(x, base - treeHeight * 0.64, 2, x, base - treeHeight * 0.64, treeHeight * 0.32);
-        crown.addColorStop(0, "rgba(75,121,69,.88)");
-        crown.addColorStop(1, "rgba(22,64,39,.92)");
-        ctx.fillStyle = crown;
-        ctx.beginPath();
-        ctx.ellipse(x, base - treeHeight * 0.62, treeHeight * 0.28, treeHeight * 0.22, 0, 0, Math.PI * 2);
-        ctx.ellipse(x - treeHeight * 0.16, base - treeHeight * 0.55, treeHeight * 0.2, treeHeight * 0.16, 0.2, 0, Math.PI * 2);
-        ctx.ellipse(x + treeHeight * 0.16, base - treeHeight * 0.55, treeHeight * 0.2, treeHeight * 0.16, -0.2, 0, Math.PI * 2);
-        ctx.fill();
+        drawBroadleafCrown(x, base, treeHeight);
       } else {
         for (let tier = 0; tier < 4; tier += 1) {
           const tierY = base - treeHeight * (0.2 + tier * 0.18);
@@ -352,6 +376,28 @@
     }
   }
 
+  function drawBroadleafCrown(x, base, treeHeight) {
+    const leafPattern = patternFor("leaves");
+    const crown = ctx.createRadialGradient(x, base - treeHeight * 0.64, 2, x, base - treeHeight * 0.64, treeHeight * 0.32);
+    crown.addColorStop(0, "rgba(82,125,70,.9)");
+    crown.addColorStop(1, "rgba(22,64,39,.94)");
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(x, base - treeHeight * 0.62, treeHeight * 0.28, treeHeight * 0.22, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - treeHeight * 0.16, base - treeHeight * 0.55, treeHeight * 0.2, treeHeight * 0.16, 0.2, 0, Math.PI * 2);
+    ctx.ellipse(x + treeHeight * 0.16, base - treeHeight * 0.55, treeHeight * 0.2, treeHeight * 0.16, -0.2, 0, Math.PI * 2);
+    ctx.fillStyle = crown;
+    ctx.fill();
+    if (leafPattern) {
+      ctx.clip();
+      ctx.globalAlpha = 0.42;
+      ctx.fillStyle = leafPattern;
+      ctx.translate(-time * 2, 0);
+      ctx.fillRect(x - treeHeight * 0.38, base - treeHeight * 0.88, treeHeight * 0.76, treeHeight * 0.58);
+    }
+    ctx.restore();
+  }
+
   function drawMeadow() {
     const selected = biomes[biome] || biomes.Meadow;
     const meadow = ctx.createLinearGradient(0, height * 0.46, 0, height);
@@ -360,6 +406,26 @@
     meadow.addColorStop(1, selected.meadow[2]);
     ctx.fillStyle = meadow;
     ctx.fillRect(0, height * 0.45, width, height * 0.55);
+
+    const grassPattern = patternFor("grass");
+    if (grassPattern) {
+      ctx.save();
+      ctx.globalAlpha = 0.22 + smoothed * 0.08;
+      ctx.fillStyle = grassPattern;
+      ctx.translate(Math.sin(time * 0.45) * 10, Math.cos(time * 0.35) * 6);
+      ctx.fillRect(-32, height * 0.45 - 32, width + 64, height * 0.55 + 64);
+      ctx.restore();
+    }
+
+    const flowerPattern = patternFor("flowers");
+    if (flowerPattern) {
+      ctx.save();
+      ctx.globalAlpha = 0.15 + smoothed * 0.07;
+      ctx.fillStyle = flowerPattern;
+      ctx.translate(Math.sin(time * 0.5) * 8, 0);
+      ctx.fillRect(-32, height * 0.56, width + 64, height * 0.38);
+      ctx.restore();
+    }
 
     ctx.save();
     ctx.globalAlpha = 0.18;
@@ -424,6 +490,18 @@
     ctx.shadowBlur = 12 + water * 0.2;
     ctx.fill();
     ctx.shadowBlur = 0;
+
+    const waterPattern = patternFor("water");
+    if (waterPattern) {
+      ctx.save();
+      ctx.clip();
+      ctx.globalAlpha = 0.24 + smoothed * 0.16;
+      ctx.fillStyle = waterPattern;
+      ctx.translate(Math.sin(time * 1.6) * 18, (time * 42) % 512);
+      ctx.fillRect(-512, height * 0.5 - 512, width + 1024, height * 0.5 + 1024);
+      ctx.restore();
+    }
+
     const reflection = ctx.createLinearGradient(width * 0.38, height * 0.52, width * 0.62, height);
     reflection.addColorStop(0, "rgba(255,255,255,.16)");
     reflection.addColorStop(0.5, "rgba(255,255,255,.04)");
