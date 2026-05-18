@@ -1,0 +1,7 @@
+{
+  "duration_s": 3.0,
+  "estimated_bpm": 80,
+  "estimated_key": "C major",
+  "onsets": [0.0, 0.75, 1.5],
+  "pitch_trace": ["C4", "E4", "G4"]
+}

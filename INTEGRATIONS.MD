@@ -1,10 +1,11 @@
 # Integrations
 
-How Lilt talks to Gemma 4, where files live, and what we deliberately defer.
+How Lilt talks to Gemma 4, where files live, and what is deliberately parked.
 
 ## Gemma 4 backend abstraction
 
-Gemma is touched through one Protocol with three implementations. Swappable at startup; same pipeline code in every mode.
+Gemma is reached through one protocol. The pipeline calls the protocol once and
+then validates the returned JSON before codegen, MIDI, or Tone.js sees it.
 
 ```python
 class LLMBackend(Protocol):
@@ -12,7 +13,7 @@ class LLMBackend(Protocol):
         self,
         *,
         system: str,
-        audio: bytes,           # mono 16 kHz, ≤ 12 s
+        audio: bytes,           # short user audio clip
         text: str,              # JSON-encoded DSP digest
         response_schema: dict,  # Lilt JSON schema
         temperature: float = 0.2,
@@ -23,78 +24,69 @@ class LLMBackend(Protocol):
 
 | Backend | Use | Status |
 |---|---|---|
-| `GeminiBackend` | Hosted Gemma 4 E4B via Google AI Studio API | dev default — fastest path to working pipeline |
-| `OllamaBackend` | Local llama.cpp via Ollama at `localhost:11434` | demo target — verify audio support before committing |
-| `TransformersBackend` | Local `AutoModelForMultimodalLM` (Hugging Face) | fallback for local; heaviest install |
-| `FakeBackend` | Canned JSON responses keyed by audio hash | testing — zero network, zero model |
+| `GeminiBackend` | Hosted Gemma 4 via Google AI Studio / Gemini API | implemented, optional dependency |
+| `FakeBackend` | Canned JSON response for a given run | implemented, zero network |
+| `OllamaBackend` | Local runtime target | parked until Gemma 4 audio support is verified locally |
+| `TransformersBackend` | Heavy local fallback | parked until needed |
 
-`FakeBackend` exists so the entire pipeline (parser, codegen, MIDI emitter, UI) can be tested end-to-end without ever calling a real model.
+Official contest/API notes checked on May 18, 2026:
 
-## Deployment plan
+- The DEV Gemma 4 Challenge accepts any Gemma 4 model doing real work.
+- The challenge page lists free paths: Gemini API through Google AI Studio,
+  local downloads from Hugging Face/Kaggle, and OpenRouter free tier.
+- Google's Gemma-on-Gemini docs list `gemma-4-31b-it` and
+  `gemma-4-26b-a4b-it` as API-supported Gemma 4 models.
+- Free API quota is rate-limited per project and should be checked in AI
+  Studio before recording or submitting demos.
 
-**Two-track development**, single codebase.
+## CLI paths
 
-1. **Develop against `GeminiBackend`.** Audio multimodality is known-good on the hosted side. Day 1 working pipeline.
-2. **Demo on `OllamaBackend` or `TransformersBackend`.** Local edge story for the submission video. Whichever of the two is stable on the target hardware by week 2 is the one we ship.
+Compile an already-valid Lilt JSON contract:
 
-The submission post shows both paths. Local is the headline; hosted is the "develop without a GPU" answer for users who don't have local compute.
+```powershell
+python -m lilt.cli digest path\to\clip.wav
+python -m lilt.cli compile examples\three_note_hum.json
+python -m lilt.cli tonejs examples\three_note_hum.json
+python -m lilt.cli info examples\three_note_hum.json
+```
 
-## File integrations
+Run the full pipeline through a backend:
 
-### v0.1 — file save/load + gist share
+```powershell
+python -m lilt.cli audio path\to\clip.wav --digest examples\three_note_hum.digest.json --backend gemini
+```
 
-| Action | What it does | Auth |
-|---|---|---|
-| `Save .lilt` | Writes the current program to a `.lilt` file on disk | none |
-| `Open .lilt` | Loads a `.lilt` file, runs through parser, replaces editor buffer | none |
-| `Export .mid` | Writes the compiled MIDI to a `.mid` file on disk | none |
-| `Share as Gist` | Creates a public gist of the `.lilt` file, copies URL to clipboard | one-time GitHub PAT, stored locally only |
+Offline/quota-out demo path:
 
-PAT is **never** transmitted anywhere except `<api.github.com>` for the single gist-create call. Stored in OS keyring (`keyring` Python lib) on desktop; in `localStorage` only if the user explicitly opts in on web.
+```powershell
+python -m lilt.cli audio path\to\clip.wav `
+  --digest examples\three_note_hum.digest.json `
+  --backend fake `
+  --fake-response examples\three_note_hum.json
+```
 
-### v0.2 — repo mode (parked, not built)
+## Static browser demo
 
-`Save to my Lilt notebook` would let a user pick a GitHub repo and have the app commit + push `.lilt` files automatically. Real product feature: OAuth app registration, token refresh, branch awareness, conflict UI. **Out of scope for the May 24 submission.** Named here so the v0.1 abstraction (a `Storage` interface) is shaped correctly to add it later.
+`docs/` is a static Tone.js demo. Its data is generated from `examples/*.json`:
 
-## Lilt files are git-native by spec
+```powershell
+python -m lilt.cli demo-data
+```
 
-Enforced by the grammar (see `GRAMMAR.md`):
+That keeps examples, compiler output, and the browser preview aligned.
+
+## File rules
+
+Lilt files are git-native by spec:
 
 - Plain UTF-8, LF newlines.
-- Deterministic codegen: same JSON in → byte-identical text out.
-- No embedded timestamps. No run-dependent IDs. No comments auto-inserted by the compiler.
-- Voice names are stable across recompiles when the input is identical.
+- Deterministic codegen: same JSON in -> byte-identical text out.
+- No embedded timestamps, run-dependent IDs, or compiler-inserted comments.
+- Stable voice names when the model output is identical.
 
-These rules mean any external tool — `git diff`, GitHub PRs, `meld`, a screen reader — can compare two Lilt programs meaningfully.
+## Parked work
 
-## Eval harness
-
-Lives in `eval/`. Purpose: catch schema drift and semantic regression in Gemma's output before it breaks the user-facing pipeline.
-
-```
-eval/
-  fixtures/
-    01-c-major-triad.wav
-    01-c-major-triad.expected.json
-    02-boots-cats.wav
-    02-boots-cats.expected.json
-    ...
-  run_eval.py
-  README.md
-```
-
-Each fixture is a short audio clip + the JSON we expect Gemma to emit. The harness reports:
-
-- **Schema-valid rate** — does the output validate against `lilt.schema.json`?
-- **Field-level accuracy** — `tempo` within ±5 BPM, `key.root` exact match, `feel` exact match, `mood` Jaccard similarity ≥ 0.5, etc.
-- **Codegen stability** — does the same input produce the same Lilt text twice?
-
-Goal for the submission: **≥ 90% schema-valid, ≥ 75% feel-correct, ≥ 80% key-correct** across 30 fixtures.
-
-The eval is what we cite in the DEV submission post to prove "Gemma 4 is doing real work." Without numbers, that's just a claim.
-
-## What this document does NOT cover
-
-- UI layer (web vs. desktop vs. Pi) — separate decision, see `UI.md` (TBD).
-- Audio recording / DSP digest implementation details — see `DSP.md` (TBD).
-- The actual prompt and schema — see `SCHEMA.md`.
+- Browser recording and DSP digest generation.
+- A real eval harness with audio fixtures.
+- Local Ollama or Transformers backend once the target Gemma 4 runtime path is
+  verified for audio input.

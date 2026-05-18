@@ -83,6 +83,43 @@ def test_compile_invalid_json_exits_nonzero(tmp_path, capsys):
     assert "json" in capsys.readouterr().err.lower()
 
 
+def test_audio_with_fake_backend_writes_all_artifacts(tmp_path, canonical_example):
+    audio = tmp_path / "hum.wav"
+    audio.write_bytes(b"fake wav bytes")
+    digest = _write_fixture(tmp_path, {"duration_s": 1.0}, "digest.json")
+    response = _write_fixture(tmp_path, canonical_example, "response.json")
+    out_base = tmp_path / "compiled"
+
+    code = cli.main([
+        "audio",
+        str(audio),
+        "--digest",
+        str(digest),
+        "--backend",
+        "fake",
+        "--fake-response",
+        str(response),
+        "--output-base",
+        str(out_base),
+    ])
+
+    assert code == 0
+    assert (tmp_path / "compiled.json").exists()
+    assert (tmp_path / "compiled.lilt").exists()
+    assert (tmp_path / "compiled.mid").read_bytes()[:4] == b"MThd"
+
+
+def test_audio_fake_backend_requires_response(tmp_path, capsys):
+    audio = tmp_path / "hum.wav"
+    audio.write_bytes(b"fake wav bytes")
+    digest = _write_fixture(tmp_path, {"duration_s": 1.0}, "digest.json")
+
+    code = cli.main(["audio", str(audio), "--digest", str(digest), "--backend", "fake"])
+
+    assert code != 0
+    assert "fake-response" in capsys.readouterr().err
+
+
 def test_tonejs_writes_event_file(tmp_path, canonical_example):
     inp = _write_fixture(tmp_path, canonical_example)
     code = cli.main(["tonejs", str(inp)])

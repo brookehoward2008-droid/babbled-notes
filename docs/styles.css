@@ -1,27 +1,31 @@
 :root {
   color-scheme: light dark;
-  --bg: #f5f1ea;
+  --bg: #f7f4ee;
   --fg: #1b1815;
-  --muted: #6f665d;
-  --border: #d4cec3;
-  --accent: #b1380e;
+  --muted: #625f58;
+  --border: #cfc8ba;
+  --accent: #a73515;
   --accent-fg: #ffffff;
-  --code-bg: #2a2724;
-  --code-fg: #f5f1ea;
+  --accent-2: #186a68;
+  --code-bg: #242523;
+  --code-fg: #f4f1e9;
   --focus: #1f6fd4;
+  --panel: rgba(255, 252, 246, 0.78);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1a1715;
-    --fg: #f1ece4;
-    --muted: #b5a99c;
-    --border: #3a342f;
-    --accent: #e96e3a;
-    --accent-fg: #1a1715;
-    --code-bg: #0f0c0a;
-    --code-fg: #f1ece4;
+    --bg: #121514;
+    --fg: #f1eee7;
+    --muted: #bbb5aa;
+    --border: #39423e;
+    --accent: #f07b4d;
+    --accent-fg: #151210;
+    --accent-2: #63c7bc;
+    --code-bg: #090b0a;
+    --code-fg: #f1eee7;
     --focus: #6fa8ff;
+    --panel: rgba(18, 21, 20, 0.78);
   }
 }
 
@@ -42,13 +46,34 @@ body {
   max-width: 38rem;
   margin: 0 auto;
   padding: 1.25rem 1.25rem 4rem;
+  position: relative;
 }
 
-header { margin-bottom: 1.5rem; }
+#neural-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+header,
+main,
+footer {
+  background: var(--panel);
+  backdrop-filter: blur(14px);
+}
+
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 1.15rem 0 1rem;
+}
+
 header h1 {
   font-size: clamp(2rem, 6vw, 2.75rem);
   margin: 0 0 0.25rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 header p {
   margin: 0;
@@ -59,7 +84,7 @@ header p {
 h2 {
   font-size: 1.1rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   color: var(--muted);
   margin: 2rem 0 0.75rem;
   font-weight: 600;
@@ -81,7 +106,7 @@ h2 {
   background: var(--bg);
   color: var(--fg);
   border: 2px solid var(--border);
-  border-radius: 9px;
+  border-radius: 8px;
   cursor: pointer;
   transition: border-color 80ms ease, background 80ms ease;
 }
@@ -109,7 +134,7 @@ pre {
   background: var(--code-bg);
   color: var(--code-fg);
   padding: 1rem 1.1rem;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow-x: auto;
   font-size: 0.95rem;
   line-height: 1.6;
@@ -130,7 +155,7 @@ pre {
   font: inherit;
   font-size: 1.05rem;
   font-weight: 600;
-  border-radius: 11px;
+  border-radius: 8px;
   cursor: pointer;
   border: 2px solid transparent;
   transition: transform 60ms ease, opacity 80ms ease;
@@ -171,8 +196,13 @@ section.about p {
   margin: 0 0 0.75rem;
 }
 
+.digest-panel p {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
 section.about a {
-  color: var(--accent);
+  color: var(--accent-2);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
