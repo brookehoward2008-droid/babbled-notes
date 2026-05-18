@@ -6,6 +6,7 @@ This backend is optional. Install with `pip install -e .[gemini]` and provide
 
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 from typing import Any
 
@@ -39,11 +40,12 @@ class GeminiBackend:
     ) -> str:
         client, types = self._client_and_types()
         contents = self._contents(types, audio, text)
+        gemini_schema = _inline_schema_refs(response_schema)
         config = types.GenerateContentConfig(
             system_instruction=system,
             temperature=temperature,
             response_mime_type="application/json",
-            response_schema=response_schema,
+            response_schema=gemini_schema,
         )
         response = client.models.generate_content(
             model=self.model,
@@ -77,6 +79,41 @@ class GeminiBackend:
             types.Part.from_bytes(data=audio, mime_type=self.audio_mime_type),
             prompt,
         ]
+
+
+def _inline_schema_refs(schema: dict) -> dict:
+    """Return a Gemini-friendly schema without JSON Schema internal refs."""
+    root = deepcopy(schema)
+
+    def resolve_ref(ref: str) -> Any:
+        if not ref.startswith("#/"):
+            raise ValueError(f"Unsupported schema ref for Gemini backend: {ref}")
+        node: Any = root
+        for part in ref[2:].split("/"):
+            node = node[part]
+        return node
+
+    def walk(node: Any) -> Any:
+        if isinstance(node, list):
+            return [walk(item) for item in node]
+        if not isinstance(node, dict):
+            return node
+
+        if "$ref" in node:
+            resolved = walk(resolve_ref(node["$ref"]))
+            extras = {key: value for key, value in node.items() if key != "$ref"}
+            if extras and isinstance(resolved, dict):
+                resolved = {**resolved, **walk(extras)}
+            return resolved
+
+        cleaned = {
+            key: walk(value)
+            for key, value in node.items()
+            if key not in {"$schema", "$defs", "additionalProperties"}
+        }
+        return cleaned
+
+    return walk(root)
 
 
 def _response_text(response: Any) -> str:

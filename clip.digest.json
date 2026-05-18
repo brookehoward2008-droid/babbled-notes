@@ -1,0 +1,13 @@
+{
+  "source": "clip.wav",
+  "duration_s": 1.0,
+  "sample_rate": 16000,
+  "channels": 1,
+  "rms": 0.2589,
+  "peak": 0.3662,
+  "onsets": [],
+  "pitch_trace": [
+    "A4"
+  ],
+  "estimated_key": "A major"
+}

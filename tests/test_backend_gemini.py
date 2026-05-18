@@ -11,7 +11,8 @@ import importlib.util
 
 import pytest
 
-from lilt.backends.gemini import GeminiBackend
+from lilt import schema
+from lilt.backends.gemini import GeminiBackend, _inline_schema_refs
 
 
 class _Part:
@@ -61,6 +62,20 @@ def test_gemini_backend_calls_sdk_with_schema_and_audio():
     assert seen["contents"][0]["inline_data"] == b"wav"
     assert seen["config"].kwargs["response_mime_type"] == "application/json"
     assert seen["config"].kwargs["response_schema"] == {"type": "object"}
+
+
+def test_inline_schema_refs_removes_refs_without_mutating_contract_schema():
+    gemini_schema = _inline_schema_refs(schema.LILT_JSON_SCHEMA)
+    encoded = json.dumps(gemini_schema)
+
+    assert "$ref" not in encoded
+    assert "additionalProperties" not in encoded
+    assert "$defs" not in gemini_schema
+    assert "$schema" not in gemini_schema
+    assert gemini_schema["properties"]["voices"]["items"]["properties"]["bars"]
+    assert schema.LILT_JSON_SCHEMA["properties"]["voices"]["items"] == {
+        "$ref": "#/$defs/voice",
+    }
 
 
 def test_gemini_backend_missing_dependency_has_clear_error():
