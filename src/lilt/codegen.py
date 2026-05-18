@@ -22,6 +22,10 @@ def emit(data: dict) -> str:
     schema.validate(data)
 
     lines: list[str] = []
+    if "description" in data:
+        collapsed = " ".join(data["description"].split())
+        lines.append(f"# {collapsed}")
+        lines.append("")
     lines.append(f"tempo {data['tempo']}")
     lines.append(f"feel {data['feel']}")
     lines.append(f"key {data['key']['root']} {data['key']['mode']}")

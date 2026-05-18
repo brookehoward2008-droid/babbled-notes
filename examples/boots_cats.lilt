@@ -1,0 +1,16 @@
+# a swung boots-cats groove on kick, snare, and closed hat
+
+tempo 96
+feel swung-sixteenths
+key C major
+
+mood loose, playful
+
+voice kick:
+  x . . . x . . . x . . . x . . .
+
+voice snare:
+  . . . . x . . . . . . . x . . .
+
+voice hat:
+  . x . x . x . x . x . x . x . x

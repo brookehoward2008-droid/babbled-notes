@@ -1,0 +1,48 @@
+{
+  "tempo": 96,
+  "feel": "swung-sixteenths",
+  "key": {"root": "C", "mode": "major"},
+  "mood": ["loose", "playful"],
+  "description": "a swung boots-cats groove on kick, snare, and closed hat",
+  "voices": [
+    {
+      "name": "kick",
+      "kind": "drum",
+      "instrument_hint": "kick",
+      "bars": [
+        [
+          {"t": "hit"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"},
+          {"t": "hit"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"},
+          {"t": "hit"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"},
+          {"t": "hit"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"}
+        ]
+      ]
+    },
+    {
+      "name": "snare",
+      "kind": "drum",
+      "instrument_hint": "snare",
+      "bars": [
+        [
+          {"t": "skip"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"},
+          {"t": "hit"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"},
+          {"t": "skip"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"},
+          {"t": "hit"}, {"t": "skip"}, {"t": "skip"}, {"t": "skip"}
+        ]
+      ]
+    },
+    {
+      "name": "hat",
+      "kind": "drum",
+      "instrument_hint": "closed-hat",
+      "bars": [
+        [
+          {"t": "skip"}, {"t": "hit"}, {"t": "skip"}, {"t": "hit"},
+          {"t": "skip"}, {"t": "hit"}, {"t": "skip"}, {"t": "hit"},
+          {"t": "skip"}, {"t": "hit"}, {"t": "skip"}, {"t": "hit"},
+          {"t": "skip"}, {"t": "hit"}, {"t": "skip"}, {"t": "hit"}
+        ]
+      ]
+    }
+  ]
+}

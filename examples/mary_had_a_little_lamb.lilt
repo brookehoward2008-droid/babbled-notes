@@ -1,0 +1,13 @@
+# Mary Had a Little Lamb at a slow, walking tempo
+
+tempo 78
+feel straight
+key C major
+
+mood gentle, playful
+
+voice voice:
+  E4 ! soft D4 ! soft C4 ! soft D4 ! soft
+  E4 ! soft E4 ! soft E4 hold ! soft
+  D4 ! soft D4 ! soft D4 hold ! soft
+  E4 ! soft G4 ! soft G4 hold ! soft

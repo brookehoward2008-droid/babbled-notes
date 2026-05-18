@@ -23,7 +23,7 @@ EVENT_TYPES = ["note", "rest", "hit", "skip"]
 VOICE_KINDS = ["pitched", "drum"]
 
 LILT_JSON_SCHEMA: dict = {
-    "$schema": "<https://json-schema.org/draft/2020-12/schema>",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": ["tempo", "feel", "key", "mood", "voices"],
     "additionalProperties": False,
