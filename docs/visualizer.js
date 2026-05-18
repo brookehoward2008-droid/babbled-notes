@@ -46,12 +46,12 @@
   }
 
   function seedParticles() {
-    const count = Math.max(80, Math.min(180, Math.floor((width * height) / 9000)));
+    const count = Math.max(46, Math.min(96, Math.floor((width * height) / 15000)));
     particles = Array.from({ length: count }, (_, i) => ({
       x: width * (0.08 + 0.84 * seeded(i, 13)),
       y: height * (0.08 + 0.84 * seeded(i, 29)),
-      r: 5 + seeded(i, 47) * 18,
-      a: 0.2 + seeded(i, 71) * 0.42,
+      r: 16 + seeded(i, 47) * 38,
+      a: 0.08 + seeded(i, 71) * 0.22,
       drift: seeded(i, 97) * Math.PI * 2,
       speed: 0.2 + seeded(i, 111) * 0.7,
       color: i % 4,
@@ -154,6 +154,7 @@
     const intensity = Number(elements.intensity.value);
     const glow = Number(elements.glow.value);
     ctx.globalCompositeOperation = "lighter";
+    ctx.filter = "blur(8px)";
     particles.forEach((p, i) => {
       const wave = phase * p.speed + p.drift;
       const dx = p.x - width / 2;
@@ -172,11 +173,11 @@
       if (p.y < -80) p.y = height + 80;
       if (p.y > height + 80) p.y = -80;
 
-      const radius = p.r * (1.2 + smoothedLevel * 4.2 * intensity);
-      const alpha = Math.min(0.34, p.a * (0.18 + smoothedLevel * 1.1) * glow);
+      const radius = p.r * (1.15 + smoothedLevel * 3.6 * intensity);
+      const alpha = Math.min(0.22, p.a * (0.2 + smoothedLevel * 0.9) * glow);
       const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius);
       gradient.addColorStop(0, hexToRgba(palette[p.color], alpha));
-      gradient.addColorStop(0.5, hexToRgba(palette[(p.color + 1) % palette.length], alpha * 0.18));
+      gradient.addColorStop(0.44, hexToRgba(palette[(p.color + 1) % palette.length], alpha * 0.22));
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       ctx.fillStyle = gradient;
       ctx.beginPath();
@@ -191,6 +192,7 @@
       );
       ctx.fill();
     });
+    ctx.filter = "none";
     ctx.globalCompositeOperation = "source-over";
   }
 
