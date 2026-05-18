@@ -34,7 +34,10 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 18% 10%, rgba(196, 181, 253, 0.14), transparent 30rem),
+    radial-gradient(circle at 82% 18%, rgba(125, 211, 252, 0.12), transparent 34rem),
+    linear-gradient(180deg, #050806 0%, #0b140d 46%, var(--bg) 100%);
   color: var(--fg);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.55;
@@ -46,6 +49,8 @@ body {
   max-width: none;
   margin: 0 auto;
   padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
   position: relative;
 }
 
@@ -71,27 +76,66 @@ body > footer {
 }
 
 .meadow-app {
+  --world-accent: #bef264;
+  --world-accent-2: #7dd3fc;
+  --world-panel: rgba(4, 10, 7, 0.44);
+  --world-border: rgba(255, 255, 255, 0.16);
+  position: relative;
   max-width: 1560px;
-  min-height: calc(100vh - 1.5rem);
-  margin: 0.75rem auto;
+  height: calc(100vh - 1rem);
+  min-height: calc(100vh - 1rem);
+  margin: 0.5rem auto;
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr) 330px;
-  grid-template-rows: minmax(34rem, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
   color: #ffffff;
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.11), transparent 22rem),
+    radial-gradient(circle at 16% 82%, rgba(190, 242, 100, 0.12), transparent 28rem),
+    radial-gradient(circle at 80% 78%, rgba(125, 211, 252, 0.13), transparent 30rem),
+    rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--world-border);
   border-radius: 2rem;
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.52);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.58),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 80px rgba(125, 211, 252, 0.08);
+}
+
+.meadow-app::before,
+.meadow-app::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.meadow-app::before {
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.09), transparent 22%, transparent 72%, rgba(255, 255, 255, 0.05)),
+    radial-gradient(circle at 50% -10%, rgba(236, 252, 203, 0.16), transparent 22rem);
+  mix-blend-mode: screen;
+  opacity: 0.72;
+}
+
+.meadow-app::after {
+  inset: 1px;
+  border-radius: inherit;
+  box-shadow: inset 0 0 72px rgba(0, 0, 0, 0.42);
 }
 
 .meadow-left,
 .meadow-controls,
 .creature-strip {
   position: relative;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.36);
-  backdrop-filter: blur(24px);
+  z-index: 4;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent),
+    var(--world-panel);
+  backdrop-filter: blur(28px) saturate(1.1);
 }
 
 .meadow-left {
@@ -101,7 +145,9 @@ body > footer {
   justify-content: space-between;
   gap: 1.4rem;
   padding: 1.5rem;
+  overflow-y: auto;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 18px 0 40px rgba(0, 0, 0, 0.16);
 }
 
 .meadow-topline {
@@ -116,8 +162,8 @@ body > footer {
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 999px;
-  background: #a3e635;
-  box-shadow: 0 0 18px rgba(190, 242, 100, 0.72);
+  background: var(--world-accent);
+  box-shadow: 0 0 18px rgba(190, 242, 100, 0.72), 0 0 42px rgba(125, 211, 252, 0.28);
 }
 
 .meadow-left h1 {
@@ -126,6 +172,7 @@ body > footer {
   font-size: clamp(2.6rem, 4vw, 4rem);
   line-height: 0.95;
   font-weight: 500;
+  text-shadow: 0 0 28px rgba(236, 252, 203, 0.16), 0 14px 40px rgba(0, 0, 0, 0.32);
 }
 
 .meadow-subtitle {
@@ -158,9 +205,24 @@ body > footer {
   border-radius: 999px;
   border: 1px solid rgba(236, 252, 203, 0.36);
   color: #ffffff;
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 60px rgba(190, 242, 100, 0.2);
+  background:
+    radial-gradient(circle at 38% 28%, rgba(255, 255, 255, 0.24), transparent 1.6rem),
+    radial-gradient(circle, rgba(190, 242, 100, 0.22), rgba(125, 211, 252, 0.09) 48%, rgba(0, 0, 0, 0.38) 72%);
+  box-shadow:
+    0 0 0 10px rgba(255, 255, 255, 0.03),
+    0 0 60px rgba(190, 242, 100, 0.22),
+    0 18px 48px rgba(0, 0, 0, 0.36);
   cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.world-record:hover {
+  transform: translateY(-2px);
+  border-color: rgba(236, 252, 203, 0.68);
+  box-shadow:
+    0 0 0 10px rgba(255, 255, 255, 0.04),
+    0 0 82px rgba(190, 242, 100, 0.32),
+    0 22px 54px rgba(0, 0, 0, 0.38);
 }
 
 .world-record.is-active .mic-ring {
@@ -173,6 +235,7 @@ body > footer {
 
 .mic-icon {
   font-size: 2.4rem;
+  filter: drop-shadow(0 0 16px rgba(236, 252, 203, 0.38));
 }
 
 #world-record-label {
@@ -205,10 +268,14 @@ body > footer {
 .biome-panel,
 .world-slider,
 .creature-strip div {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--world-border);
   border-radius: 1.5rem;
-  background: rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.018)),
+    rgba(0, 0, 0, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 14px 38px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(20px);
 }
 
@@ -243,7 +310,8 @@ body > footer {
   height: 100%;
   width: 72%;
   border-radius: inherit;
-  background: #bef264;
+  background: linear-gradient(90deg, var(--world-accent), #e0f2fe, var(--world-accent-2));
+  box-shadow: 0 0 22px rgba(190, 242, 100, 0.35);
   transition: width 180ms ease;
 }
 
@@ -268,8 +336,34 @@ body > footer {
 
 .meadow-stage {
   position: relative;
-  min-height: 34rem;
+  min-height: 0;
   overflow: hidden;
+  background: #050805;
+}
+
+.meadow-stage::before,
+.meadow-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.meadow-stage::before {
+  background:
+    radial-gradient(circle at 48% 42%, rgba(255, 255, 255, 0.13), transparent 17rem),
+    radial-gradient(circle at 72% 18%, rgba(125, 211, 252, 0.16), transparent 19rem),
+    linear-gradient(110deg, rgba(255, 255, 255, 0.13), transparent 18%, transparent 72%, rgba(255, 255, 255, 0.08));
+  mix-blend-mode: screen;
+  opacity: 0.78;
+}
+
+.meadow-stage::after {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.08), transparent 26%),
+    radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.12), transparent 28rem);
+  mix-blend-mode: soft-light;
 }
 
 #meadow-world {
@@ -283,13 +377,16 @@ body > footer {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(ellipse at 50% 58%, transparent 0%, rgba(0, 0, 0, 0.06) 42%, rgba(0, 0, 0, 0.44) 100%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent 24%, transparent 74%, rgba(0, 0, 0, 0.45)),
     linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.28));
   pointer-events: none;
+  z-index: 2;
 }
 
 .world-message {
   position: absolute;
+  z-index: 3;
   top: 1.25rem;
   left: 50%;
   width: min(420px, calc(100% - 2rem));
@@ -300,8 +397,10 @@ body > footer {
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 1.5rem;
-  background: rgba(0, 0, 0, 0.45);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025)),
+    rgba(0, 0, 0, 0.46);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34), 0 0 32px rgba(190, 242, 100, 0.08);
   backdrop-filter: blur(24px);
 }
 
@@ -324,6 +423,7 @@ body > footer {
 
 .world-tip {
   position: absolute;
+  z-index: 3;
   bottom: 1.25rem;
   left: 50%;
   width: min(720px, calc(100% - 1.75rem));
@@ -335,7 +435,9 @@ body > footer {
   padding: 0.85rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 1.5rem;
-  background: rgba(0, 0, 0, 0.45);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.46);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(24px);
 }
@@ -360,7 +462,9 @@ body > footer {
   align-content: start;
   gap: 1rem;
   padding: 1.25rem;
+  overflow-y: auto;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -18px 0 40px rgba(0, 0, 0, 0.16);
 }
 
 .controls-title {
@@ -383,6 +487,32 @@ body > footer {
   width: 100%;
   height: 3px;
   accent-color: #bef264;
+}
+
+.world-slider input {
+  appearance: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--world-accent), rgba(125, 211, 252, 0.9), rgba(255, 255, 255, 0.16));
+  outline: none;
+}
+
+.world-slider input::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: #ecfccb;
+  box-shadow: 0 0 18px rgba(190, 242, 100, 0.75);
+}
+
+.world-slider input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: #ecfccb;
+  box-shadow: 0 0 18px rgba(190, 242, 100, 0.75);
 }
 
 .sound-sensitivity,
@@ -424,6 +554,12 @@ body > footer {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   box-shadow: none;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.biome-grid button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .biome-grid button[aria-pressed="true"] {
@@ -436,14 +572,16 @@ body > footer {
   height: 2.8rem;
   margin-bottom: 0.45rem;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, #7dd3fc, #ecfccb);
+  background:
+    radial-gradient(circle at 72% 20%, rgba(255,255,255,.72), transparent 0.45rem),
+    linear-gradient(180deg, #a8cdd6 0 46%, #5f8957 47% 100%);
 }
 
-.biome-grid button[data-biome="Forest"] span { background: linear-gradient(135deg, #064e3b, #86efac); }
-.biome-grid button[data-biome="Spring"] span { background: linear-gradient(135deg, #f9a8d4, #bae6fd, #ecfccb); }
-.biome-grid button[data-biome="Autumn"] span { background: linear-gradient(135deg, #fed7aa, #facc15, #86efac); }
-.biome-grid button[data-biome="Dusk"] span { background: linear-gradient(135deg, #8b5cf6, #fed7aa, #0f172a); }
-.biome-grid button[data-biome="Winter"] span { background: linear-gradient(135deg, #e0f2fe, #ffffff, #bfdbfe); }
+.biome-grid button[data-biome="Forest"] span { background: linear-gradient(180deg, #315441 0 44%, #0f3524 45% 100%); }
+.biome-grid button[data-biome="Spring"] span { background: radial-gradient(circle at 28% 70%, #d7a9bd, transparent .7rem), linear-gradient(180deg, #d7e5de 0 48%, #77a866 49% 100%); }
+.biome-grid button[data-biome="Autumn"] span { background: radial-gradient(circle at 68% 28%, #e4c16c, transparent .8rem), linear-gradient(180deg, #cda172 0 48%, #806f39 49% 100%); }
+.biome-grid button[data-biome="Dusk"] span { background: radial-gradient(circle at 74% 28%, #d7c4b2, transparent .7rem), linear-gradient(135deg, #4d4665, #b58f78 54%, #1b2630); }
+.biome-grid button[data-biome="Winter"] span { background: linear-gradient(180deg, #d9e8ed 0 50%, #9fb7b1 51% 100%); }
 
 .creature-strip {
   grid-column: 2;
@@ -459,11 +597,60 @@ body > footer {
   display: grid;
   gap: 0.25rem;
   padding: 1rem;
+  overflow: hidden;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.creature-strip div.is-active {
+  transform: translateY(-3px);
+  border-color: rgba(236, 252, 203, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 16px 42px rgba(0, 0, 0, 0.24),
+    0 0 34px rgba(190, 242, 100, 0.12);
 }
 
 .creature-strip span {
-  font-size: 1.5rem;
-  color: #ecfccb;
+  width: 3.8rem;
+  height: 2.7rem;
+  display: block;
+  overflow: hidden;
+  color: transparent;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    radial-gradient(ellipse at 52% 62%, rgba(168, 121, 72, 0.96) 0 28%, transparent 29%),
+    radial-gradient(ellipse at 70% 48%, rgba(120, 79, 42, 0.95) 0 12%, transparent 13%),
+    linear-gradient(180deg, rgba(159, 200, 216, 0.55) 0 48%, rgba(72, 116, 65, 0.92) 49% 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 22px rgba(0,0,0,.2);
+}
+
+.creature-strip div:nth-child(2) span {
+  background:
+    radial-gradient(ellipse at 58% 60%, rgba(207, 190, 163, 0.98) 0 25%, transparent 26%),
+    radial-gradient(ellipse at 70% 42%, rgba(170, 150, 124, 0.96) 0 12%, transparent 13%),
+    linear-gradient(180deg, rgba(202, 220, 214, 0.52) 0 48%, rgba(82, 125, 69, 0.94) 49% 100%);
+}
+
+.creature-strip div:nth-child(3) span {
+  background:
+    radial-gradient(ellipse at 40% 44%, rgba(170, 100, 48, 0.98) 0 18%, transparent 19%),
+    radial-gradient(ellipse at 55% 60%, rgba(106, 67, 33, 0.98) 0 18%, transparent 19%),
+    linear-gradient(180deg, rgba(158, 189, 156, 0.5) 0 48%, rgba(37, 82, 45, 0.94) 49% 100%);
+}
+
+.creature-strip div:nth-child(4) span {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(64, 101, 118, 0.98) 0 17%, transparent 18%),
+    radial-gradient(ellipse at 64% 48%, rgba(150, 176, 180, 0.82) 0 8%, transparent 9%),
+    linear-gradient(180deg, rgba(150, 190, 205, 0.58) 0 56%, rgba(48, 86, 55, 0.94) 57% 100%);
+}
+
+.creature-strip div:nth-child(5) span {
+  background:
+    radial-gradient(ellipse at 40% 52%, rgba(190, 142, 92, 0.98) 0 17%, transparent 18%),
+    radial-gradient(ellipse at 60% 52%, rgba(141, 169, 196, 0.98) 0 17%, transparent 18%),
+    linear-gradient(180deg, rgba(197, 215, 207, 0.56) 0 52%, rgba(83, 126, 66, 0.95) 53% 100%);
 }
 
 .creature-strip small {
@@ -505,6 +692,7 @@ body > footer {
 
 @media (max-width: 760px) {
   .meadow-app {
+    height: auto;
     min-height: auto;
     margin: 0;
     border-radius: 0;
