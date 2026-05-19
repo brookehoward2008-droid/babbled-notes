@@ -45,7 +45,7 @@
     leaves: "assets/nature/leaf-canopy.png",
     bark: "assets/nature/bark-texture.png",
     flowers: "assets/nature/wildflower-detail.png",
-    hero: "assets/nature/meadow-hero.png",
+    hero: "assets/nature/meadow-photo.jpg",
   };
 
   const biomes = {
@@ -251,7 +251,8 @@
       lastNoteBeat = noteBeat;
     }
 
-    if (drawHeroBackdrop()) {
+    const heroMode = drawHeroBackdrop();
+    if (heroMode) {
       drawSunBloom();
     } else {
       drawMountains();
@@ -259,7 +260,14 @@
       drawMeadow();
     }
     drawLightRibbons();
-    drawBrook();
+    if (heroMode) {
+      ctx.save();
+      ctx.globalAlpha = 0.34 + smoothed * 0.12;
+      drawBrook();
+      ctx.restore();
+    } else {
+      drawBrook();
+    }
     drawFlowers();
     drawCreatures();
     drawButterflies();
@@ -675,8 +683,10 @@
   }
 
   function drawCreatures() {
+    const heroMode = Boolean(natureAssets.hero && natureAssets.hero.complete && natureAssets.hero.naturalWidth);
     const animal = Number(elements.sliders.animal.value);
     creatures.forEach((creature, index) => {
+      if (heroMode && creature.type === "deer") return;
       const active = listening ? 0.35 + voiceLevel / 80 + animal / 130 : 0.18;
       creature.x = creature.baseX + Math.sin(time + creature.phase) * active * creature.direction * 9;
       creature.y = creature.baseY + Math.cos(time * 1.3 + creature.phase) * active * 1.4;

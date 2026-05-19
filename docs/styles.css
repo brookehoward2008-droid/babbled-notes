@@ -94,7 +94,7 @@ body > footer {
   background:
     linear-gradient(90deg, rgba(0,0,0,.52), transparent 18%, transparent 78%, rgba(0,0,0,.5)),
     radial-gradient(circle at 48% 22%, rgba(255, 246, 210, 0.18), transparent 22rem),
-    url("assets/nature/meadow-hero.png") center / cover no-repeat,
+    url("assets/nature/meadow-photo.jpg") center / cover no-repeat,
     rgba(0, 0, 0, 0.28);
   border: 1px solid var(--world-border);
   border-radius: 2rem;
@@ -615,7 +615,7 @@ body > footer {
   overflow: hidden;
   background:
     linear-gradient(180deg, transparent 28%, rgba(0,0,0,.72)),
-    url("assets/nature/meadow-hero.png") center / cover;
+    url("assets/nature/meadow-photo.jpg") center / cover;
   transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
@@ -679,7 +679,7 @@ body > footer {
   color: #fff;
   background:
     linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.78)),
-    url("assets/nature/meadow-hero.png") center / cover;
+    url("assets/nature/meadow-photo.jpg") center / cover;
   border: 1px solid rgba(255,255,255,.09);
 }
 
