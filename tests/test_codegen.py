@@ -6,8 +6,6 @@ text out, UTF-8 LF, exactly one trailing newline.
 
 from __future__ import annotations
 
-import pytest
-
 from lilt import codegen
 
 

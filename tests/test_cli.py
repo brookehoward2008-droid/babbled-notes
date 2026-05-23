@@ -11,8 +11,6 @@ import json
 import math
 import wave
 
-import pytest
-
 from lilt import cli
 
 
