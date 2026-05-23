@@ -70,6 +70,13 @@ def main(argv: list[str] | None = None) -> int:
         help="Output path without extension. Defaults to the digest filename stem.",
     )
 
+    p_sketch = sub.add_parser("sketch", help="WAV -> digest, starter JSON, .lilt, and .mid")
+    p_sketch.add_argument("input", help="Path to a PCM WAV file")
+    p_sketch.add_argument(
+        "--output-base",
+        help="Output path without extension. Defaults to the WAV filename stem.",
+    )
+
     p_digest = sub.add_parser("digest", help="WAV -> DSP digest JSON")
     p_digest.add_argument("input", help="Path to a PCM WAV file")
     p_digest.add_argument(
@@ -137,6 +144,8 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.cmd == "seed":
         return _cmd_seed(args.digest, args.output_base)
+    if args.cmd == "sketch":
+        return _cmd_sketch(args.input, args.output_base)
     if args.cmd == "digest":
         return _cmd_digest(args.input, args.output)
     if args.cmd == "info":
@@ -246,6 +255,43 @@ def _cmd_audio(
     )
     lilt_path.write_text(result.lilt_source, encoding="utf-8", newline="\n")
     mid_path.write_bytes(result.midi_bytes)
+    print(f"wrote {json_path}")
+    print(f"wrote {lilt_path}")
+    print(f"wrote {mid_path}")
+    return 0
+
+
+def _cmd_sketch(input_path: str, output_base: str | None) -> int:
+    path = Path(input_path)
+    if not path.exists():
+        print(f"error: WAV file not found: {path}", file=sys.stderr)
+        return 2
+    try:
+        digest = dsp.digest_wav(path)
+        data = translate.digest_to_seed(digest)
+    except Exception as e:
+        print(f"error: could not sketch WAV: {e}", file=sys.stderr)
+        return 3
+
+    base = Path(output_base) if output_base else path.with_suffix("")
+    digest_path = base.with_suffix(".digest.json")
+    json_path = base.with_suffix(".json")
+    lilt_path = base.with_suffix(".lilt")
+    mid_path = base.with_suffix(".mid")
+
+    digest_path.write_text(
+        json.dumps(digest, indent=2, sort_keys=False),
+        encoding="utf-8",
+        newline="\n",
+    )
+    json_path.write_text(
+        json.dumps(data, indent=2, sort_keys=False),
+        encoding="utf-8",
+        newline="\n",
+    )
+    lilt_path.write_text(codegen.emit(data), encoding="utf-8", newline="\n")
+    mid_path.write_bytes(midi.emit(data))
+    print(f"wrote {digest_path}")
     print(f"wrote {json_path}")
     print(f"wrote {lilt_path}")
     print(f"wrote {mid_path}")

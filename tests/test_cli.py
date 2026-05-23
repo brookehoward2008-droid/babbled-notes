@@ -8,6 +8,8 @@ sane defaults, predictable filenames, clear errors.
 from __future__ import annotations
 
 import json
+import math
+import wave
 
 import pytest
 
@@ -18,6 +20,19 @@ def _write_fixture(tmp_path, data, name="input.json"):
     path = tmp_path / name
     path.write_text(json.dumps(data), encoding="utf-8")
     return path
+
+
+def _write_sine_wav(path, *, freq=440.0, seconds=0.5, sample_rate=8000):
+    frames = bytearray()
+    total = int(seconds * sample_rate)
+    for i in range(total):
+        sample = int(0.45 * 32767 * math.sin(2 * math.pi * freq * (i / sample_rate)))
+        frames.extend(sample.to_bytes(2, "little", signed=True))
+    with wave.open(str(path), "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(sample_rate)
+        wf.writeframes(bytes(frames))
 
 
 def test_version_flag(capsys):
@@ -137,6 +152,20 @@ def test_seed_writes_json_lilt_and_midi_from_digest(tmp_path):
     assert (tmp_path / "seeded.json").exists()
     assert "voice voice:" in (tmp_path / "seeded.lilt").read_text(encoding="utf-8")
     assert (tmp_path / "seeded.mid").read_bytes()[:4] == b"MThd"
+
+
+def test_sketch_writes_digest_json_lilt_and_midi_from_wav(tmp_path):
+    wav = tmp_path / "idea.wav"
+    _write_sine_wav(wav, freq=440.0)
+    out_base = tmp_path / "idea-sketch"
+
+    code = cli.main(["sketch", str(wav), "--output-base", str(out_base)])
+
+    assert code == 0
+    assert (tmp_path / "idea-sketch.digest.json").exists()
+    assert (tmp_path / "idea-sketch.json").exists()
+    assert "voice voice:" in (tmp_path / "idea-sketch.lilt").read_text(encoding="utf-8")
+    assert (tmp_path / "idea-sketch.mid").read_bytes()[:4] == b"MThd"
 
 
 def test_tonejs_writes_event_file(tmp_path, canonical_example):

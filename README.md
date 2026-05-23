@@ -196,6 +196,20 @@ python -m lilt.cli tonejs examples\three_note_hum.json
 python -m lilt.cli info examples\three_note_hum.json
 ```
 
+Turn a WAV directly into editable music artifacts without any model call:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m lilt.cli sketch path\to\clip.wav --output-base out\my-first-idea
+```
+
+That writes:
+
+- `my-first-idea.digest.json`
+- `my-first-idea.json`
+- `my-first-idea.lilt`
+- `my-first-idea.mid`
+
 Run the full audio pipeline without spending API quota:
 
 ```powershell

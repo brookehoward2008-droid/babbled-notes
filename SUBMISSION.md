@@ -192,6 +192,7 @@ collaborator into the same DAW.
 - JSON -> `.mid`
 - JSON -> Tone.js
 - WAV -> digest JSON
+- WAV -> deterministic digest, starter JSON, `.lilt`, and MIDI through `lilt sketch`
 - digest JSON -> starter `.json`, `.lilt`, and `.mid`
 - audio + digest + backend -> JSON/Lilt/MIDI
 - JSON -> AI voice prompt or local/server-side voice WAV
