@@ -221,8 +221,12 @@ python -m lilt.cli demo-data
 
 Then open `docs/index.html`.
 
-The repo includes a GitHub Pages workflow that publishes `docs/` on every push
-to `main`. In GitHub Pages settings, use the GitHub Actions source if prompted.
+Publish the static demo with GitHub Pages:
+
+1. Open repository `Settings` -> `Pages`.
+2. Set source to `Deploy from a branch`.
+3. Set branch to `main` and folder to `/docs`.
+4. Save, then open `https://brookehoward2008-droid.github.io/babbled-notes/`.
 
 ## Package prep
 
