@@ -253,16 +253,16 @@ store or expose a Google AI Studio key.
 ## Submission Checklist
 
 - [ ] DEV post uses the Build With Gemma 4 template.
-- [ ] Live demo link included.
-- [ ] GitHub repo link included.
-- [ ] Gemma 4 model named: `gemma-4-26b-a4b-it`.
-- [ ] Explain why Gemma 4 is doing real work.
-- [ ] Explain why public demo does not expose API key.
-- [ ] Mention accessibility and non-speaking input.
-- [ ] Mention outputs: `.lilt`, MIDI, Tone.js, digest JSON.
-- [ ] Mention tests and code quality.
-- [ ] Mention visual direction: tech, space, electricity, neural bloom.
-- [ ] Do not include API keys.
+- [x] Live demo link included.
+- [x] GitHub repo link included.
+- [x] Gemma 4 model named: `gemma-4-26b-a4b-it`.
+- [x] Explain why Gemma 4 is doing real work.
+- [x] Explain why public demo does not expose API key.
+- [x] Mention accessibility and non-speaking input.
+- [x] Mention outputs: `.lilt`, MIDI, Tone.js, digest JSON.
+- [x] Mention tests and code quality.
+- [x] Mention visual direction: tech, space, electricity, neural bloom.
+- [x] Do not include API keys.
 - [ ] Confirm participant/team eligibility before submitting.
 
 ## Judging Criteria Mapping
@@ -276,14 +276,25 @@ store or expose a Google AI Studio key.
 
 ## Final Submission Claims To Verify
 
-- [ ] Babbled Notes is Brooke's own submission concept and implementation direction.
-- [ ] Gemma 4 is doing real interpretive work, not just being mentioned.
-- [ ] Public demo does not expose API keys.
-- [ ] AI voice rendering is documented as local/server-side.
-- [ ] The app supports voice, touch, keyboard, and switch-style paths.
-- [ ] No slider-only control is required for the main flow.
-- [ ] Sound quality is treated as accessibility, not decoration.
-- [ ] Sources and third-party libraries are named clearly.
+- [x] Babbled Notes is Brooke's own submission concept and implementation direction.
+- [x] Gemma 4 is doing real interpretive work, not just being mentioned.
+- [x] Public demo does not expose API keys.
+- [x] AI voice rendering is documented as local/server-side.
+- [x] The app supports voice, touch, keyboard, and switch-style paths.
+- [x] No slider-only control is required for the main flow.
+- [x] Sound quality is treated as accessibility, not decoration.
+- [x] Sources and third-party libraries are named clearly.
+
+## Verification Evidence
+
+- Live demo URL responds and redirects into the Neural Bloom demo.
+- Live browser smoke test found `Neural Bloom`, `seed-source`, and a nonblank
+  rendered canvas.
+- Local tests: `89 passed, 1 skipped`.
+- Lint: `python -m ruff check src tests` passed.
+- JavaScript syntax checks passed for demo scripts.
+- Package build passed with source archive and wheel.
+- Secret pattern scan found no API keys in repo text.
 
 ## Research-Informed Motivation
 
