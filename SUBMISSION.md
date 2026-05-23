@@ -123,6 +123,8 @@ The browser demo includes:
 - local recording playback
 - composer replay with Play Forever
 - classical style choices for the user's own coded notes
+- playback-depth receipt for depth, space, and motion feel without sliders
+- Use in Compose bridge from recorded starter code to replayable music
 - optional local/server-side AI voice rendering
 
 The sound alphabet is intentionally small:
@@ -190,6 +192,8 @@ collaborator into the same DAW.
 - Instrument selection
 - Classical style choices for coded-note playback
 - Play Forever loop for iterative composing
+- Playback-depth receipt for depth, sound space, and motion feedback
+- Record-to-Compose bridge for generated starter code
 - Example playback through Tone.js
 - JSON -> `.lilt`
 - JSON -> `.mid`
@@ -249,10 +253,12 @@ store or expose a Google AI Studio key.
 5. Tap C, E, G in "Tap a melody"; show the generated Lilt source changing.
 6. Change the instrument to Bell or Plucked string and play the taps.
 7. Play the built-in demos.
-8. Show "Why it is different."
-9. Show "Build a song" with melody, pulse, and bass.
-10. Show "Work with others" and the text diff.
-11. Close with: Babbled Notes makes musical ideas editable, portable, and accessible.
+8. In Compose, switch style and sound space; point out the depth receipt.
+9. Tap "Play forever" to show expression momentum.
+10. Show "Why it is different."
+11. Show "Build a song" with melody, pulse, and bass.
+12. Show "Work with others" and the text diff.
+13. Close with: Babbled Notes makes musical ideas editable, portable, and accessible.
 
 ## Submission Checklist
 
@@ -294,7 +300,7 @@ store or expose a Google AI Studio key.
 - Live demo URL responds and redirects into the Neural Bloom demo.
 - Live browser smoke test found `Neural Bloom`, `seed-source`, and a nonblank
   rendered canvas.
-- Local tests: `89 passed, 1 skipped`.
+- Local tests: `97 passed, 1 skipped`.
 - Lint: `python -m ruff check src tests` passed.
 - JavaScript syntax checks passed for demo scripts.
 - Package build passed with source archive and wheel.

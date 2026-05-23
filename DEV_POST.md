@@ -130,6 +130,12 @@ The demo includes:
 - composer replay with Play Forever
 - classical style choices for coded-note playback
 - Center, Room, and Concert Hall sound-space choices
+- a playback-depth receipt so users see the sound feel without sliders
+- a Use in Compose bridge from recorded starter code to replayable music
+
+The engagement loop is expression momentum, not gambling mechanics: make one
+sound, feel heard, hear it become music, save or replay the version, then try
+one small next move.
 
 ## Built With
 
@@ -146,7 +152,7 @@ The demo includes:
 - Live demo responds and redirects into the Neural Bloom demo.
 - Live browser smoke test found `Neural Bloom`, `seed-source`, and a nonblank
   rendered canvas.
-- Local tests: `89 passed, 1 skipped`.
+- Local tests: `97 passed, 1 skipped`.
 - `python -m ruff check src tests`: passed.
 - JavaScript syntax checks: passed.
 - Package build: passed.
