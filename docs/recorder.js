@@ -504,15 +504,105 @@
     visualLevel = readRecordLevel();
     visualSmoothed += (visualLevel - visualSmoothed) * 0.1;
 
-    drawRecordSky(ctx);
-    drawRecordHills(ctx);
-    drawRecordMeadow(ctx);
-    drawRecordBrook(ctx);
-    drawRecordFlowers(ctx);
-    drawRecordCreatures(ctx);
-    drawRecordButterflies(ctx);
-    drawRecordGlow(ctx);
+    drawRecordNeuralField(ctx);
     visualFrame = requestAnimationFrame(drawRecordVisualizer);
+  }
+
+  function drawRecordNeuralField(ctx) {
+    const field = ctx.createLinearGradient(0, 0, 0, visualHeight);
+    field.addColorStop(0, "#050816");
+    field.addColorStop(0.52, "#0b1026");
+    field.addColorStop(1, "#111827");
+    ctx.fillStyle = field;
+    ctx.fillRect(0, 0, visualWidth, visualHeight);
+
+    drawRecordStars(ctx);
+    drawRecordElectricBands(ctx);
+    drawRecordSignalBrain(ctx);
+  }
+
+  function drawRecordStars(ctx) {
+    for (let index = 0; index < 72; index += 1) {
+      const x = visualWidth * seeded(index, 211);
+      const y = visualHeight * seeded(index, 223);
+      const pulse = 0.3 + Math.sin(visualPhase * 2 + index) * 0.22 + visualSmoothed * 0.8;
+      ctx.globalAlpha = Math.max(0.12, Math.min(0.92, pulse));
+      ctx.fillStyle = index % 6 === 0 ? "#facc15" : "#dbeafe";
+      ctx.beginPath();
+      ctx.arc(x, y, 0.8 + seeded(index, 227) * 1.7 + visualSmoothed * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawRecordElectricBands(ctx) {
+    const count = 9;
+    ctx.save();
+    ctx.lineWidth = 1 + visualSmoothed * 3;
+    ctx.shadowColor = "#60efff";
+    ctx.shadowBlur = 14 + visualSmoothed * 28;
+    for (let band = 0; band < count; band += 1) {
+      const y = visualHeight * (0.18 + band * 0.075);
+      const alpha = 0.12 + visualSmoothed * 0.45 + (band % 3) * 0.03;
+      ctx.strokeStyle = band % 3 === 0
+        ? `rgba(250, 204, 21, ${alpha})`
+        : `rgba(96, 239, 255, ${alpha})`;
+      ctx.beginPath();
+      for (let x = 0; x <= visualWidth; x += 18) {
+        const wave = Math.sin(x * 0.018 + visualPhase * (4 + band * 0.2) + band) * (4 + visualSmoothed * 18);
+        if (x === 0) ctx.moveTo(x, y + wave);
+        else ctx.lineTo(x, y + wave);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawRecordSignalBrain(ctx) {
+    const cx = visualWidth * 0.5;
+    const cy = visualHeight * 0.5;
+    const sx = visualWidth * 0.28;
+    const sy = visualHeight * 0.28;
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(sx, sy) * 1.6);
+    glow.addColorStop(0, `rgba(96, 239, 255, ${0.08 + visualSmoothed * 0.26})`);
+    glow.addColorStop(0.45, `rgba(139, 92, 246, ${0.08 + visualSmoothed * 0.18})`);
+    glow.addColorStop(1, "rgba(5, 8, 22, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, visualWidth, visualHeight);
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(sx, sy);
+    ctx.strokeStyle = `rgba(191, 219, 254, ${0.42 + visualSmoothed * 0.5})`;
+    ctx.lineWidth = 0.012;
+    ctx.shadowColor = "#60efff";
+    ctx.shadowBlur = 0.08 + visualSmoothed * 0.2;
+    ctx.beginPath();
+    ctx.moveTo(-0.62, 0.18);
+    ctx.bezierCurveTo(-0.82, -0.2, -0.54, -0.68, -0.14, -0.62);
+    ctx.bezierCurveTo(0.02, -0.9, 0.48, -0.78, 0.52, -0.48);
+    ctx.bezierCurveTo(0.84, -0.42, 0.86, -0.02, 0.64, 0.16);
+    ctx.bezierCurveTo(0.78, 0.5, 0.38, 0.72, 0.08, 0.56);
+    ctx.bezierCurveTo(-0.18, 0.76, -0.62, 0.58, -0.62, 0.18);
+    ctx.stroke();
+    ctx.restore();
+
+    for (let index = 0; index < 38; index += 1) {
+      const angle = seeded(index, 241) * Math.PI * 2;
+      const radius = Math.sqrt(seeded(index, 251));
+      const x = cx + Math.cos(angle) * radius * sx * 0.95;
+      const y = cy + Math.sin(angle) * radius * sy * 0.8;
+      const active = 0.28 + visualSmoothed * 0.72 + Math.sin(visualPhase * 5 + index) * 0.12;
+      ctx.fillStyle = index % 5 === 0 ? "#facc15" : index % 3 === 0 ? "#fb7185" : "#60efff";
+      ctx.globalAlpha = Math.max(0.16, Math.min(1, active));
+      ctx.shadowColor = ctx.fillStyle;
+      ctx.shadowBlur = 8 + visualSmoothed * 22;
+      ctx.beginPath();
+      ctx.arc(x, y, 2 + visualSmoothed * 6 + seeded(index, 257) * 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
   }
 
   function drawRecordSky(ctx) {

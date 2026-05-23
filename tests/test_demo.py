@@ -71,3 +71,11 @@ def test_recording_copy_uses_neural_bloom_not_meadow_language():
     assert "Your voice will wake the world" not in html
     assert "Meadow saved" not in recorder
     assert "Your voice nourishes the world" not in recorder
+
+
+def test_recording_visualizer_uses_neural_field_renderer():
+    recorder = Path("docs/recorder.js").read_text(encoding="utf-8")
+
+    assert "drawRecordNeuralField" in recorder
+    assert "drawRecordSignalBrain" in recorder
+    assert "drawRecordElectricBands" in recorder
