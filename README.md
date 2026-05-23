@@ -1,84 +1,146 @@
 # Babbled Notes
 
-A sound-first music tool powered by the Lilt text language.
+**Sound into music. Music into something editable.**
 
-Babbled Notes turns a short hum, sung phrase, beatbox pattern, or played line into:
+Babbled Notes is a research-informed, accessibility-first music tool built for
+the DEV Gemma 4 Challenge. It turns hums, taps, breaths, clicks, beatbox
+patterns, or switch-style choices into readable music code, MIDI, and browser
+playback.
 
-- a structured JSON contract
-- a readable `.lilt` text program
-- a Standard MIDI file
-- a Tone.js event file for browser playback
+Live demo: https://brookehoward2008-droid.github.io/babbled-notes/
 
-Built for the DEV Gemma 4 Challenge, May 6-24, 2026.
-Submission materials: see [SUBMISSION.md](SUBMISSION.md).
-Paste-ready DEV post: see [DEV_POST.md](DEV_POST.md).
-Presentation runbook: see [PRESENTATION.md](PRESENTATION.md).
+Submission package: [SUBMISSION.md](SUBMISSION.md)
 
-## Why it exists
+Paste-ready DEV post: [DEV_POST.md](DEV_POST.md)
 
-Music tools often ask for steady hands, tiny controls, and a lot of theory up
-front. Babbled Notes starts with the gesture the user already has: make a sound,
-then edit the result as plain text.
+Presentation runbook: [PRESENTATION.md](PRESENTATION.md)
 
-The project is designed for ADHD-friendly use: short commands, predictable
-files, visible output, and no hidden project state. The neural model does the
-interpretation; the compiler keeps the artifact deterministic.
+```text
+one sound
+  -> timing, pitch, quality, and gesture facts
+  -> Gemma interpretation
+  -> validated music JSON
+  -> .lilt text, MIDI, Tone.js playback, Neural Bloom response
+```
 
-## What makes it different
+## The idea
 
-Babbled Notes is not a chatbot that gives music advice. It is a small compiler
-pipeline for musical intent:
+Most music tools assume the user can operate small controls, understand music
+theory, or speak clearly about what they want. Babbled Notes starts earlier:
 
-1. capture a hum, beatbox, tap pattern, or short played phrase
-2. extract timing and pitch facts
-3. ask Gemma to turn those facts into structured music JSON
-4. validate the JSON
-5. emit useful artifacts
+**make one sound.**
 
-The output is meant to leave the demo:
+The app listens for musical intent, not perfect performance. A hum can become a
+note. A pause can become a rest. A tap can become pulse. A breath can become a
+soft hit. The result stays editable as plain text so the user, a collaborator,
+or a screen reader can inspect it.
 
-- `.lilt`: readable music code that can be edited with a screen reader or text editor
-- `.mid`: a MIDI file for GarageBand, Ableton, Logic, MuseScore, or assistive music rigs
-- Tone.js JSON: browser playback for sharing
-- digest JSON: the timing and pitch receipt the model used
+Babbled Notes is not a medical device and does not diagnose or treat anyone. It
+is a creative access tool built around a simple belief:
 
-For non-speaking users, the browser demo also includes a tap-to-melody path:
-notes can be placed with touch, keyboard focus, or switch-style controls without
-recording a voice.
+**being heard through music is a real form of voice.**
 
-For users who benefit from voice-first controls, the recorder can be armed once
-with a button and then respond to simple phrases like "start recording" and
-"stop recording." It is not always-on; the user must opt in first.
+## Research frame
 
-The browser tool also includes a Composer Workspace. Users can edit `.lilt`
-source directly, play the edited song, save it locally, open it again later, and
-load a demo into the workspace as a starting point.
+### Why sound matters for non-speaking users
 
-The composer is built around a quick win: choose Bach, Mozart, Beethoven, or
-Chopin style, choose Center, Room, or Concert Hall sound space, then use Play
-Forever while changing the notes. The loop is meant to help the user hear their
-own idea becoming music instead of hearing a one-shot toy sound.
+Music is not processed in only one corner of the brain. Neuroscience research
+connects music and musical emotion with auditory processing, reward, movement,
+memory, attention, and limbic systems. Koelsch's review in *Nature Reviews
+Neuroscience* describes music-evoked emotions across auditory, striatal,
+fronto-insular, motor, and limbic networks.[1]
 
-## Visual direction
+For autistic and minimally verbal users, this matters because music can offer a
+communication channel that does not depend on ordinary speech output. A 2024
+meta-analysis in *Frontiers in Psychology* reviewed 18 randomized controlled
+trials with 1,457 children with autism spectrum disorder and found that music
+therapy can support language communication and social skills.[2]
 
-The next visual pass should use a tech, space, and electricity language instead
-of paper-cutout graphics. The core image is a symbolic neural bloom:
+### Why hum plus tap matters
 
-- start with a quiet, translucent, nearly empty brain
-- let the user's music fill it with electric paths, stars, sparks, and signal
-  lines
-- map rhythm, pitch, volume, repetition, and sound space to growth and motion
-- make the image feel like Gemma 4 if it were visible: structured, luminous,
-  layered, and pattern-forming
+Auditory-Motor Mapping Training (AMMT) is especially relevant to Babbled Notes.
+AMMT pairs intoned vocal sound with bimanual tapping, linking auditory and motor
+systems. In a 2011 PLOS ONE proof-of-concept study, non-verbal children with
+autism improved speech output after AMMT sessions.[3] A later PLOS ONE
+controlled comparison reported stronger gains for AMMT than speech repetition
+therapy in minimally verbal children with autism.[4]
 
-This is a metaphor for creative activation, not a medical claim.
+Babbled Notes is not AMMT and does not claim therapy outcomes. The design
+borrows the same practical insight:
+
+**sound plus movement can be a powerful starting point for expression.**
+
+### Why musical agency matters
+
+Community music research with people with disabilities describes music-making as
+a way to express voice, build social connection, and reduce isolation.[5] That
+maps directly to Babbled Notes' product goal: the first playback should not feel
+like a toy. It should feel like the user made something worth keeping.
+
+The engagement loop is expression momentum:
+
+1. make one sound
+2. feel recognized
+3. hear it become music
+4. replay it with depth
+5. change one thing
+6. save the version that feels like you
+
+## What Gemma does
+
+DSP can measure timing, pitch, loudness, silence, and onsets. Gemma gives those
+facts musical meaning.
+
+Gemma can:
+
+- translate a sound digest into schema-valid music JSON
+- choose tempo, feel, key, mood, voices, notes, rests, dynamics, and articulation
+- interpret vocal gestures such as hum, breath, whisper, click, tap, rise, fall,
+  slide, held tone, call-response, and intentional silence
+- create playback production plans for depth, space, reverb, humanization,
+  velocity curve, repeat variation, and Neural Bloom response
+- guide the user with one next musical move instead of overwhelming controls
+
+Tone.js/Web Audio renders the browser sound. Gemma plans and interprets; the
+compiler validates; the browser plays.
+
+## Neural Bloom
+
+The visual direction is **Gemma-like: structured, luminous, layered, and
+pattern-forming.**
+
+Neural Bloom starts as a quiet holographic brain in a tech, space, and
+electricity scene. As the user's sound becomes music, electric paths, sparks,
+stars, and signal lines grow through it.
+
+| Musical signal | Neural Bloom response |
+|---|---|
+| low notes | base glow |
+| high notes | upper sparks |
+| rhythm | electric pulses |
+| repeated motifs | stronger pathways |
+| spatial playback | wider left/right glow |
+| long held tones | steady luminous bands |
+
+This is a creative-access metaphor, not a medical claim. The message is:
+
+**your music creates activation, connection, and growth.**
+
+## What it outputs
+
+Babbled Notes turns one musical gesture into portable artifacts:
+
+| Artifact | Purpose |
+|---|---|
+| `.lilt` | readable music code for editing, review, and collaboration |
+| `.mid` | MIDI for GarageBand, Ableton, Logic, MuseScore, or assistive music rigs |
+| Tone.js JSON | browser playback |
+| digest JSON | timing, pitch, and quality receipt |
+| playback plan JSON | depth, space, reverb, humanization, and variation |
 
 ## Sound alphabet
 
-Babbled Notes uses a small input alphabet so the model knows how to map human
-sound and gesture into editable music code:
-
-| Input | Meaning | `.lilt` output |
+| Input | Musical meaning | `.lilt` output |
 |---|---|---|
 | hum or sung tone | pitched note | `C4 ! mf` |
 | longer hum | held note | `G4 hold` |
@@ -86,40 +148,58 @@ sound and gesture into editable music code:
 | tap, clap, or click | drum hit | `x` |
 | soft breath or soft click | ghost/soft hit | `o` |
 | rising pitch | glide or melodic rise | `C4 ~ E4` |
-| loud sound | louder dynamic | `! loud` |
+| loud sound | stronger dynamic | `! loud` |
 | short clipped sound | articulation | `/ staccato` |
 
-The same alphabet can also be driven by tap buttons or assisted selection, so
-the system does not depend on speech.
+The same alphabet can be driven by recording, touch, keyboard focus, or
+assisted selection. Speech is useful, but speech is not required.
 
-The backend prompt now carries a larger vocal gesture library for translation
-depth: hum, ah, ooh, ee, la, na, breath, whisper, click, clap, tap, beatbox
-kick/snare/hat, slides, rises, falls, trills, vibrato, staccato, held tones,
-call-response phrases, question endings, answer endings, and intentional
-silence. These are guidance terms for Gemma; the compiler still accepts only
-the strict schema.
+## Browser demo
 
-The WAV digest also reports recording quality and musical features:
+The static GitHub Pages demo includes:
 
-- `quality.level`: usable, too quiet, clipped, or very loud
-- `quality.silence_ratio`: how much of the clip is near silence
-- `quality.dynamic_range`: peak minus RMS
-- `features.pitch_direction`: steady, rising, falling, or arched
-- `features.gesture_density`: sparse, moderate, or dense
+- Neural Bloom reactive scene
+- recording for hums and other sounds
+- recording quality hints
+- starter `.lilt` code from the recording
+- **Use in Compose** bridge from recording to editable music
+- tap-to-melody input
+- instrument choices
+- composer workspace
+- Bach, Mozart, Beethoven, and Chopin style buttons
+- Center, Room, and Concert Hall sound spaces
+- playback-depth receipt: depth, space, and motion feel without sliders
+- Play Forever loop for expression momentum
+- optional user feedback export
 
-That gives Gemma better facts without asking the user to understand DSP.
+The public browser demo does not expose an API key. Gemma and Gemini TTS paths
+run locally or server-side.
 
-## Full song build demo
+## Architecture
 
-A complete Babbled Notes workflow is intentionally small:
+```text
+audio / tap / switch input
+        |
+        v
+browser or CLI digest
+        |
+        v
+Gemma backend or deterministic fallback
+        |
+        v
+strict JSON schema validation
+        |
+        +--> .lilt readable music code
+        +--> .mid MIDI file
+        +--> Tone.js event data
+        +--> playback depth plan
+        +--> Neural Bloom visual response
+```
 
-1. Capture a hook with voice, tapping, keyboard, or assisted selection.
-2. Let Babbled Notes/Gemma translate the gesture into validated Lilt JSON.
-3. Emit `.lilt`, `.mid`, and Tone.js playback.
-4. Edit the text to arrange the idea.
-5. Share the text or MIDI with collaborators.
+The compiler boundary matters. Gemma is allowed to be creative, but the output
+must pass the schema before it becomes a usable artifact.
 
-Example first build:
+## Example `.lilt`
 
 ```lilt
 # Brooke's first idea
@@ -139,17 +219,7 @@ voice bass:
   C2 hold ! soft
 ```
 
-That output can become:
-
-- a playable browser demo
-- a MIDI import in a DAW
-- a pull request where someone edits one musical line
-- a text message to another musician
-- a screen-reader-friendly artifact for review
-
-## Collaboration workflow
-
-Babbled Notes is built for collaboration because the song is plain text.
+Because the song is text, collaboration can happen like code review:
 
 ```diff
 - voice bass:
@@ -157,27 +227,6 @@ Babbled Notes is built for collaboration because the song is plain text.
 + voice bass:
 +   C2 ! soft G1 ! soft C2 hold ! mf
 ```
-
-A collaborator can change the bass, instrument, tempo, drum pattern, or key and
-send back a tiny text diff. That keeps the workflow accessible to people who
-cannot operate a full DAW timeline but can read, listen, review, or approve
-small changes.
-
-## Gemma path
-
-The contest allows Gemma 4 through several paths. This repo supports:
-
-- `GeminiBackend`: hosted Gemma 4 through the Gemini API / Google AI Studio key
-  path. Install with `pip install -e .[gemini]`.
-- `FakeBackend`: no network, no API key. Useful for tests, demos, and quota-out
-  moments.
-
-As of the contest docs, the Gemini API supports `gemma-4-31b-it` and
-`gemma-4-26b-a4b-it`. Babbled Notes defaults to `gemma-4-26b-a4b-it`.
-
-The public browser demo does not expose an API key. The hosted Gemma path runs
-from local or server-side code. Longer term, the clean backend boundary leaves
-room for a private on-device Gemma runtime after the hosted version is stable.
 
 ## Quick start
 
@@ -187,11 +236,10 @@ $env:PYTHONPATH = "src"
 python -m pytest
 ```
 
-Compile an existing Lilt JSON contract:
+Compile an existing JSON music contract:
 
 ```powershell
 $env:PYTHONPATH = "src"
-python -m lilt.cli digest path\to\clip.wav
 python -m lilt.cli compile examples\three_note_hum.json
 python -m lilt.cli tonejs examples\three_note_hum.json
 python -m lilt.cli info examples\three_note_hum.json
@@ -211,27 +259,6 @@ That writes:
 - `my-first-idea.lilt`
 - `my-first-idea.mid`
 
-Run the full audio pipeline without spending API quota:
-
-```powershell
-$env:PYTHONPATH = "src"
-python -m lilt.cli audio path\to\clip.wav `
-  --digest examples\three_note_hum.digest.json `
-  --backend fake `
-  --fake-response examples\three_note_hum.json
-```
-
-Create a deterministic starter song from a digest without any model call:
-
-```powershell
-$env:PYTHONPATH = "src"
-python -m lilt.cli seed examples\three_note_hum.digest.json --output-base examples\three_note_seed
-```
-
-This writes `.json`, `.lilt`, and `.mid` from the digest facts. Use it when the
-network is unavailable, when quota is gone, or when you want a stable baseline
-before asking Gemma for a more expressive interpretation.
-
 Run the hosted Gemma path:
 
 ```powershell
@@ -241,8 +268,15 @@ $env:PYTHONPATH = "src"
 python -m lilt.cli audio path\to\clip.wav --digest examples\three_note_hum.digest.json --backend gemini
 ```
 
-Render an AI voice prompt or WAV locally. This uses your Google AI Studio key
-from local/server-side code, never from GitHub Pages:
+Create a playback depth plan:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m lilt.cli playback-plan examples\three_note_hum.json --style chopin --space concert-hall
+python -m lilt.cli playback-plan examples\three_note_hum.json --style chopin --space concert-hall --dry-run-prompt
+```
+
+Render an AI voice prompt or local/server-side WAV:
 
 ```powershell
 $env:PYTHONPATH = "src"
@@ -253,44 +287,23 @@ pip install -e .[gemini]
 python -m lilt.cli voice examples\three_note_hum.json --style chopin -o examples\three_note_hum.voice.wav
 ```
 
-Create a digital playback depth plan for Tone.js/Web Audio:
-
-```powershell
-$env:PYTHONPATH = "src"
-python -m lilt.cli playback-plan examples\three_note_hum.json --style chopin --space concert-hall
-python -m lilt.cli playback-plan examples\three_note_hum.json --style chopin --space concert-hall --dry-run-prompt
-```
-
-The deterministic plan describes instrument layers, spatial width, reverb,
-humanization, velocity curve, vocal depth, variation, and Neural Bloom response.
-The dry-run prompt is the Gemma path for creating richer playback production
-plans without asking the model to generate raw audio bytes.
-
-## Browser demo
-
-The static demo lives in `docs/`. Rebuild its data from the example JSON files:
+## Rebuild demo data
 
 ```powershell
 $env:PYTHONPATH = "src"
 python -m lilt.cli demo-data
 ```
 
-Then open `docs/index.html`.
+Then open `docs/index.html`, or use the published GitHub Pages demo:
 
-Publish the static demo with GitHub Pages:
-
-1. Open repository `Settings` -> `Pages`.
-2. Set source to `Deploy from a branch`.
-3. Set branch to `main` and folder to `/docs`.
-4. Save, then open `https://brookehoward2008-droid.github.io/babbled-notes/`.
+https://brookehoward2008-droid.github.io/babbled-notes/
 
 ## Package prep
-
-Before packaging or publishing:
 
 ```powershell
 $env:PYTHONPATH = "src"
 python -m pytest
+python -m ruff check src tests
 node --check docs/composer.js
 node --check docs/player.js
 node --check docs/voice-control.js
@@ -300,18 +313,40 @@ node --check docs/accessible.js
 node --check docs/backdrop.js
 git diff --check
 $secretPattern = "AI" + "za|sk-[A-Za-z0-9]|" + "GEMINI_API_KEY\\s*=|" + "GOOGLE_API_KEY\\s*="
-rg -n $secretPattern README.md SUBMISSION.md docs src tests pyproject.toml
+rg -n $secretPattern README.md SUBMISSION.md DEV_POST.md docs src tests pyproject.toml
 python -m build
 ```
 
-`dist/` is ignored by Git. Keep API keys in the local shell or deployment
-secrets, never in the static demo.
+Keep API keys in the local shell or deployment secrets, never in the static
+demo.
 
-## Verification
+## Current verification
 
-Current local check:
+- Local tests: `97 passed, 1 skipped`
+- Ruff: passed
+- JavaScript syntax checks: passed
+- Package build: passed
+- Secret scan: no API keys found
+- Live GitHub Pages smoke: Neural Bloom, Use in Compose, playback receipt, 4
+  styles, and 3 sound spaces present
 
-```powershell
-$env:PYTHONPATH = "src"
-python -m pytest
-```
+## Research sources
+
+1. Koelsch S. *Brain correlates of music-evoked emotions.* Nature Reviews
+   Neuroscience. 2014. DOI: [10.1038/nrn3666](https://doi.org/10.1038/nrn3666)
+2. Shi Z, Wang S, Chen M, Hu A, Long Q, Lee Y. *The effect of music therapy on
+   language communication and social skills in children with autism spectrum
+   disorder: a systematic review and meta-analysis.* Frontiers in Psychology.
+   2024. DOI: [10.3389/fpsyg.2024.1336421](https://doi.org/10.3389/fpsyg.2024.1336421)
+3. Wan CY, Bazen L, Baars R, et al. *Auditory-Motor Mapping Training as an
+   Intervention to Facilitate Speech Output in Non-Verbal Children with Autism:
+   A Proof of Concept Study.* PLOS ONE. 2011. DOI:
+   [10.1371/journal.pone.0025505](https://doi.org/10.1371/journal.pone.0025505)
+4. Chenausky K, Norton A, Tager-Flusberg H, Schlaug G. *Auditory-Motor Mapping
+   Training: Comparing the Effects of a Novel Speech Treatment to a Control
+   Treatment for Minimally Verbal Children with Autism.* PLOS ONE. 2016. DOI:
+   [10.1371/journal.pone.0164930](https://doi.org/10.1371/journal.pone.0164930)
+5. MacGlone UM, Vamvakaris J, Wilson GB, MacDonald RAR. *Understanding the
+   Wellbeing Effects of a Community Music Program for People With Disabilities:
+   A Mixed Methods, Person-Centered Study.* Frontiers in Psychology. 2020. DOI:
+   [10.3389/fpsyg.2020.588734](https://doi.org/10.3389/fpsyg.2020.588734)
