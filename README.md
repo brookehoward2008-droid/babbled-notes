@@ -221,6 +221,9 @@ python -m lilt.cli demo-data
 
 Then open `docs/index.html`.
 
+The repo includes a GitHub Pages workflow that publishes `docs/` on every push
+to `main`. In GitHub Pages settings, use the GitHub Actions source if prompted.
+
 ## Package prep
 
 Before packaging or publishing:
