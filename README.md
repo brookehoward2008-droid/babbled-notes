@@ -11,6 +11,7 @@ Babbled Notes turns a short hum, sung phrase, beatbox pattern, or played line in
 
 Built for the DEV Gemma 4 Challenge, May 6-24, 2026.
 Submission materials: see [SUBMISSION.md](SUBMISSION.md).
+Paste-ready DEV post: see [DEV_POST.md](DEV_POST.md).
 Presentation runbook: see [PRESENTATION.md](PRESENTATION.md).
 
 ## Why it exists

@@ -14,6 +14,8 @@ traditional music tools can still express musical ideas.
 
 ## DEV Post Draft
 
+Paste-ready version: [DEV_POST.md](DEV_POST.md).
+
 ### Title
 
 Babbled Notes: turning hums, taps, and breath into editable music code with Gemma 4
