@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from lilt import vocal
+
 SYSTEM_PROMPT = """\
 You are Lilt's audio compiler frontend. You receive an audio clip plus a DSP
 digest extracted from it. Your job is to emit ONE JSON object that captures
@@ -30,4 +32,12 @@ Rules:
 10. Use only dynamics from: soft, mf, loud.
 11. If you can summarize the clip in 1-2 short sentences of plain English, also
     include a `description` field. Screen-reader users hear it first.
-"""
+12. Use digest.quality before trusting the clip:
+    - too_quiet: keep the idea sparse, prefer soft dynamics, and preserve rests.
+    - clipped: do not overfit distortion; use loud only for clear intentional peaks.
+    - usable: follow pitch_trace, onsets, and feature hints closely.
+13. Use digest.features:
+    - pitch_direction rising/falling/arched should influence melodic contour.
+    - gesture_density sparse/moderate/dense should influence rests and event count.
+    - onset_count should guide rhythm depth without creating fake notes.
+""" + "\n\n" + vocal.prompt_block()

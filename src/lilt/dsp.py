@@ -29,6 +29,8 @@ def digest_wav(path: str | Path) -> dict:
     onsets = _estimate_onsets(mono, sample_rate)
     bpm = _estimate_bpm(onsets)
     pitch_trace = _estimate_pitch_trace(mono, sample_rate)
+    quality = describe_quality(rms=rms, peak=peak, samples=mono)
+    features = describe_features(onsets=onsets, pitch_trace=pitch_trace, duration_s=duration_s)
 
     digest = {
         "source": wav_path.name,
@@ -39,12 +41,44 @@ def digest_wav(path: str | Path) -> dict:
         "peak": round(peak, 4),
         "onsets": onsets,
         "pitch_trace": pitch_trace,
+        "quality": quality,
+        "features": features,
     }
     if bpm is not None:
         digest["estimated_bpm"] = bpm
     if pitch_trace:
         digest["estimated_key"] = _rough_key(pitch_trace)
     return digest
+
+
+def describe_quality(*, rms: float, peak: float, samples: list[float]) -> dict:
+    """Return compact recording-quality facts for model and UI feedback."""
+    silence_ratio = _silence_ratio(samples)
+    clipped = peak >= 0.985
+    if rms < 0.008 or silence_ratio > 0.92:
+        level = "too_quiet"
+    elif clipped:
+        level = "clipped"
+    elif rms > 0.45:
+        level = "very_loud"
+    else:
+        level = "usable"
+    return {
+        "level": level,
+        "clipped": clipped,
+        "silence_ratio": round(silence_ratio, 3),
+        "dynamic_range": round(max(0.0, peak - rms), 4),
+    }
+
+
+def describe_features(*, onsets: list[float], pitch_trace: list[str], duration_s: float) -> dict:
+    """Return music-facing features that help Gemma translate precisely."""
+    return {
+        "onset_count": len(onsets),
+        "pitch_count": len(pitch_trace),
+        "pitch_direction": _pitch_direction(pitch_trace),
+        "gesture_density": _gesture_density(onsets, duration_s),
+    }
 
 
 def _decode_pcm(raw: bytes, sample_width: int, channels: int) -> list[float]:
@@ -87,6 +121,13 @@ def _rms(samples: list[float]) -> float:
     if not samples:
         return 0.0
     return math.sqrt(sum(s * s for s in samples) / len(samples))
+
+
+def _silence_ratio(samples: list[float]) -> float:
+    if not samples:
+        return 1.0
+    silent = sum(1 for sample in samples if abs(sample) < 0.012)
+    return silent / len(samples)
 
 
 def _estimate_onsets(samples: list[float], sample_rate: int) -> list[float]:
@@ -177,6 +218,48 @@ def _freq_to_note(freq: float) -> str:
     midi = int(round(69 + 12 * math.log2(freq / 440.0)))
     names = ("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
     return f"{names[midi % 12]}{(midi // 12) - 1}"
+
+
+def _pitch_direction(notes: list[str]) -> str:
+    midi_values = [_note_to_midi(note) for note in notes if _note_to_midi(note) is not None]
+    if len(midi_values) < 2:
+        return "steady"
+    delta = midi_values[-1] - midi_values[0]
+    if delta >= 3:
+        return "rising"
+    if delta <= -3:
+        return "falling"
+    span = max(midi_values) - min(midi_values)
+    if span >= 5:
+        return "arched"
+    return "steady"
+
+
+def _gesture_density(onsets: list[float], duration_s: float) -> str:
+    if duration_s <= 0:
+        return "sparse"
+    density = len(onsets) / duration_s
+    if density >= 5:
+        return "dense"
+    if density >= 2:
+        return "moderate"
+    return "sparse"
+
+
+def _note_to_midi(note: str) -> int | None:
+    if len(note) < 2:
+        return None
+    names = {"C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4, "F": 5,
+             "F#": 6, "Gb": 6, "G": 7, "G#": 8, "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11}
+    if note[1:2] in {"#", "b"}:
+      name = note[:2]
+      octave_text = note[2:]
+    else:
+      name = note[:1]
+      octave_text = note[1:]
+    if name not in names or not octave_text.isdigit():
+        return None
+    return (int(octave_text) + 1) * 12 + names[name]
 
 
 def _rough_key(notes: list[str]) -> str:

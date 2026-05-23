@@ -39,6 +39,11 @@ Babbled Notes turns that intent into:
 - a Standard MIDI file
 - Tone.js browser playback data
 
+The backend also carries a vocal gesture library so Gemma has a deeper musical
+vocabulary for human sounds: hums, vowel tones, breath, whisper, clicks, claps,
+taps, beatbox roles, slides, rises, falls, trills, vibrato, staccato notes,
+held tones, call-response phrasing, and intentional silence.
+
 The public demo is static and safe to share. It lets people record, tap a
 melody, choose instruments, inspect the generated `.lilt` text, and understand
 the sound alphabet.
@@ -188,6 +193,8 @@ collaborator into the same DAW.
 - WAV -> digest JSON
 - audio + digest + backend -> JSON/Lilt/MIDI
 - JSON -> AI voice prompt or local/server-side voice WAV
+- recording quality hints: usable, too quiet, clipped, very loud
+- musical feature hints: pitch direction and gesture density
 - test suite
 
 ### Visual Direction

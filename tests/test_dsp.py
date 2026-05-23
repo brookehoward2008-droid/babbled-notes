@@ -35,6 +35,21 @@ def test_digest_wav_reports_basic_audio_facts(tmp_path):
     assert out["rms"] > 0.2
     assert out["peak"] > 0.5
     assert "A4" in out["pitch_trace"]
+    assert out["quality"]["level"] == "usable"
+    assert out["quality"]["clipped"] is False
+    assert 0 <= out["quality"]["silence_ratio"] <= 1
+    assert out["features"]["pitch_direction"] == "steady"
+
+
+def test_digest_flags_quiet_recording_quality(tmp_path):
+    wav = tmp_path / "quiet.wav"
+    _write_sine_wav(wav, freq=220.0, seconds=0.5)
+
+    out = dsp.digest_wav(wav)
+    out["rms"] = 0.001
+    quality = dsp.describe_quality(rms=out["rms"], peak=out["peak"], samples=[0.0] * 100)
+
+    assert quality["level"] == "too_quiet"
 
 
 def test_digest_cli_writes_json(tmp_path):

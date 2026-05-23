@@ -91,6 +91,23 @@ sound and gesture into editable music code:
 The same alphabet can also be driven by tap buttons or assisted selection, so
 the system does not depend on speech.
 
+The backend prompt now carries a larger vocal gesture library for translation
+depth: hum, ah, ooh, ee, la, na, breath, whisper, click, clap, tap, beatbox
+kick/snare/hat, slides, rises, falls, trills, vibrato, staccato, held tones,
+call-response phrases, question endings, answer endings, and intentional
+silence. These are guidance terms for Gemma; the compiler still accepts only
+the strict schema.
+
+The WAV digest also reports recording quality and musical features:
+
+- `quality.level`: usable, too quiet, clipped, or very loud
+- `quality.silence_ratio`: how much of the clip is near silence
+- `quality.dynamic_range`: peak minus RMS
+- `features.pitch_direction`: steady, rising, falling, or arched
+- `features.gesture_density`: sparse, moderate, or dense
+
+That gives Gemma better facts without asking the user to understand DSP.
+
 ## Full song build demo
 
 A complete Babbled Notes workflow is intentionally small:
