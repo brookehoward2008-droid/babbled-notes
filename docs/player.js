@@ -105,7 +105,15 @@
   let playStartMs = 0;
   let currentExpectedMs = 0;
   let studioChain = null;
-  const HUMANIZE_SECONDS = 0.018;
+  let studioProfile = {
+    depth: 0.58,
+    spatialWidth: 0.54,
+    humanizeSeconds: 0.018,
+    reverbMix: 0.16,
+    reverbDecay: 2.4,
+    delayWet: 0.065,
+    velocityCurve: "expressive",
+  };
 
   function buildPicker() {
     elements.picker.innerHTML = "";
@@ -250,12 +258,12 @@
     const delay = new Tone.FeedbackDelay({
       delayTime: "8n",
       feedback: 0.12,
-      wet: 0.065,
+      wet: studioProfile.delayWet,
     });
     const reverb = new Tone.Reverb({
-      decay: 2.4,
+      decay: studioProfile.reverbDecay,
       preDelay: 0.025,
-      wet: 0.16,
+      wet: studioProfile.reverbMix,
     });
     const limiter = new Tone.Limiter(-1);
     compressor.chain(toneFilter, delay, reverb, limiter, Tone.getDestination());
@@ -263,8 +271,20 @@
     return studioChain.input;
   }
 
+  function configureStudioDepth(profile) {
+    studioProfile = Object.assign({}, studioProfile, profile || {});
+    if (!studioChain) return;
+    if (studioChain.delay && studioChain.delay.wet) {
+      studioChain.delay.wet.value = studioProfile.delayWet;
+    }
+    if (studioChain.reverb) {
+      studioChain.reverb.wet.value = studioProfile.reverbMix;
+      studioChain.reverb.decay = studioProfile.reverbDecay;
+    }
+  }
+
   function connectStudio(node, name) {
-    const pan = new Tone.Panner(stereoPosition(name || ""));
+    const pan = new Tone.Panner(stereoPosition(name || "") * studioProfile.spatialWidth);
     node.connect(pan);
     pan.connect(studioDestination());
     return node;
@@ -293,6 +313,7 @@
   window.LILT_SYNTHS = {
     makePitchedSynth: makePitchedSynth,
     connectStudio: connectStudio,
+    configureStudioDepth: configureStudioDepth,
     humanizeTime: humanizeTime,
     humanizeVelocity: humanizeVelocity,
   };
@@ -324,11 +345,16 @@
   }
 
   function humanizeTime(time, amount) {
-    return Math.max(0, time + (Math.random() - 0.5) * HUMANIZE_SECONDS * amount);
+    return Math.max(0, time + (Math.random() - 0.5) * studioProfile.humanizeSeconds * amount);
   }
 
   function humanizeVelocity(velocity, amount) {
-    const next = velocity + (Math.random() - 0.5) * amount;
+    const curveLift = studioProfile.velocityCurve === "dramatic"
+      ? 0.04
+      : studioProfile.velocityCurve === "gentle"
+        ? -0.03
+        : 0;
+    const next = velocity + curveLift + (Math.random() - 0.5) * amount;
     return Math.max(0.22, Math.min(0.92, next));
   }
 

@@ -79,3 +79,24 @@ def test_recording_visualizer_uses_neural_field_renderer():
     assert "drawRecordNeuralField" in recorder
     assert "drawRecordSignalBrain" in recorder
     assert "drawRecordElectricBands" in recorder
+
+
+def test_browser_player_exposes_depth_controls_for_composer():
+    player = Path("docs/player.js").read_text(encoding="utf-8")
+
+    assert "configureStudioDepth" in player
+    assert "studioProfile" in player
+    assert "spatialWidth" in player
+    assert "humanizeSeconds" in player
+    assert "reverb.wet.value" in player
+    assert "reverb.decay" in player
+
+
+def test_composer_builds_playback_profile_from_style_and_space():
+    composer = Path("docs/composer.js").read_text(encoding="utf-8")
+
+    assert "playbackProfileFor" in composer
+    assert "configureStudioDepth" in composer
+    assert "concert-hall" in composer
+    assert "velocityCurve" in composer
+    assert "repeatVariationFor" in composer

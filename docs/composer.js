@@ -251,10 +251,43 @@
     return connector(synth, spatialName);
   }
 
+  function playbackProfileFor(nextStyle, nextSpace) {
+    const normalizedSpace = nextSpace === "hall" ? "concert-hall" : nextSpace;
+    const spaceProfiles = {
+      center: { depth: 0.35, spatialWidth: 0.18, reverbMix: 0.1, reverbDecay: 0.8, delayWet: 0.02 },
+      room: { depth: 0.58, spatialWidth: 0.54, reverbMix: 0.18, reverbDecay: 1.6, delayWet: 0.055 },
+      "concert-hall": { depth: 0.76, spatialWidth: 0.86, reverbMix: 0.32, reverbDecay: 3.2, delayWet: 0.08 },
+    };
+    const styleProfiles = {
+      bach: { humanizeSeconds: 0.008, velocityCurve: "balanced" },
+      mozart: { humanizeSeconds: 0.012, velocityCurve: "gentle" },
+      beethoven: { humanizeSeconds: 0.02, velocityCurve: "dramatic" },
+      chopin: { humanizeSeconds: 0.026, velocityCurve: "expressive" },
+    };
+    return Object.assign(
+      {},
+      spaceProfiles[normalizedSpace] || spaceProfiles.room,
+      styleProfiles[nextStyle] || styleProfiles.chopin,
+      { style: nextStyle || "chopin", space: normalizedSpace || "room" }
+    );
+  }
+
+  function repeatVariationFor(nextStyle) {
+    return {
+      bach: "counter-line",
+      mozart: "light ornament",
+      beethoven: "stronger bass",
+      chopin: "soft rubato",
+    }[nextStyle] || "soft rubato";
+  }
+
   async function play(forever) {
     try {
       await Tone.start();
       const compiled = buildEvents(parseLilt(elements.source.value));
+      const profile = playbackProfileFor(style, space);
+      const configureStudioDepth = window.LILT_SYNTHS && window.LILT_SYNTHS.configureStudioDepth;
+      if (configureStudioDepth) configureStudioDepth(profile);
       Tone.getTransport().stop();
       Tone.getTransport().cancel();
       Tone.getTransport().position = 0;
@@ -286,7 +319,9 @@
       Tone.getTransport().start();
       looping = Boolean(forever);
       elements.loop.setAttribute("aria-pressed", looping ? "true" : "false");
-      setStatus(forever ? `Playing forever in ${styleLabel()} style, ${spaceLabel()} space.` : `Playing once in ${styleLabel()} style, ${spaceLabel()} space.`);
+      setStatus(forever
+        ? `Playing forever in ${styleLabel()} style, ${spaceLabel()} space with ${repeatVariationFor(style)}.`
+        : `Playing once in ${styleLabel()} style, ${spaceLabel()} space.`);
       if (!forever) {
         stopTimer = setTimeout(stop, Math.ceil((compiled.totalSeconds + 0.4) * 1000));
       }
