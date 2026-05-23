@@ -17,6 +17,9 @@
     summaryVoices: document.getElementById("composer-voices"),
     summaryEvents: document.getElementById("composer-events"),
     summaryLength: document.getElementById("composer-length"),
+    playbackDepth: document.getElementById("playback-depth-summary"),
+    playbackSpace: document.getElementById("playback-space-summary"),
+    playbackMotion: document.getElementById("playback-motion-summary"),
   };
 
   if (!elements.source || !elements.play) return;
@@ -68,6 +71,7 @@
     elements.styleButtons.forEach((button) => {
       button.setAttribute("aria-pressed", button.dataset.composerStyle === style ? "true" : "false");
     });
+    updatePlaybackReceipt();
     setStatus(`${styleLabel()} style selected.`);
   }
 
@@ -76,6 +80,7 @@
     elements.spaceButtons.forEach((button) => {
       button.setAttribute("aria-pressed", button.dataset.soundSpace === space ? "true" : "false");
     });
+    updatePlaybackReceipt();
     setStatus(`${spaceLabel()} sound space selected.`);
   }
 
@@ -281,6 +286,19 @@
     }[nextStyle] || "soft rubato";
   }
 
+  function depthLabel(profile) {
+    if (profile.depth >= 0.72) return "Wide depth";
+    if (profile.depth >= 0.52) return "Warm depth";
+    return "Close depth";
+  }
+
+  function updatePlaybackReceipt() {
+    const profile = playbackProfileFor(style, space);
+    if (elements.playbackDepth) elements.playbackDepth.textContent = depthLabel(profile);
+    if (elements.playbackSpace) elements.playbackSpace.textContent = spaceLabel();
+    if (elements.playbackMotion) elements.playbackMotion.textContent = repeatVariationFor(style);
+  }
+
   async function play(forever) {
     try {
       await Tone.start();
@@ -433,6 +451,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     updateSummary();
+    updatePlaybackReceipt();
     elements.play.addEventListener("click", () => play(false));
     elements.loop.addEventListener("click", () => {
       if (looping) stop();

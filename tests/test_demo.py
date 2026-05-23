@@ -100,3 +100,14 @@ def test_composer_builds_playback_profile_from_style_and_space():
     assert "concert-hall" in composer
     assert "velocityCurve" in composer
     assert "repeatVariationFor" in composer
+
+
+def test_composer_surfaces_playback_depth_receipt_without_sliders():
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    composer = Path("docs/composer.js").read_text(encoding="utf-8")
+
+    assert "playback-depth-summary" in html
+    assert "playback-space-summary" in html
+    assert "playback-motion-summary" in html
+    assert "updatePlaybackReceipt" in composer
+    assert "depthLabel" in composer

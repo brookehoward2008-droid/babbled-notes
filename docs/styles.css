@@ -1492,6 +1492,10 @@ textarea {
   margin-top: 1rem;
 }
 
+.playback-receipt {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .composer-summary div {
   min-height: 4.5rem;
   padding: 0.65rem 0.5rem;
@@ -1525,6 +1529,10 @@ textarea {
 
   .composer-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .playback-receipt {
+    grid-template-columns: 1fr;
   }
 }
 
