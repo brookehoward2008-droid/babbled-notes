@@ -61,3 +61,13 @@ def test_static_demo_surfaces_recording_quality_and_seed_path():
     assert "buildSeedSource" in recorder
     assert "quality" in recorder
     assert "features" in recorder
+
+
+def test_recording_copy_uses_neural_bloom_not_meadow_language():
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    recorder = Path("docs/recorder.js").read_text(encoding="utf-8")
+
+    assert "The meadow is listening" not in html
+    assert "Your voice will wake the world" not in html
+    assert "Meadow saved" not in recorder
+    assert "Your voice nourishes the world" not in recorder

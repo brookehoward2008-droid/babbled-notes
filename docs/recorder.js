@@ -85,7 +85,7 @@
       stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (e) {
       setStatus("Microphone permission was not granted.");
-      setVisualText("Mic not available", "The visualizer needs microphone permission.");
+      setVisualText("Mic not available", "Neural Bloom needs microphone permission.");
       window.dispatchEvent(new CustomEvent("babbled-recording-denied"));
       return;
     }
@@ -117,7 +117,7 @@
     }
     setRecording(false);
     window.dispatchEvent(new CustomEvent("babbled-recording-stop"));
-    stopRecordVisualizer("Building sound map", "The meadow is being turned into a digest.");
+    stopRecordVisualizer("Building sound map", "Your recording is being turned into a digest.");
     setStatus("Building digest...");
   }
 
@@ -465,10 +465,10 @@
       visualData = new Uint8Array(visualAnalyser.frequencyBinCount);
       source.connect(visualAnalyser);
       visualActive = true;
-      setVisualText("Your voice nourishes the world", "Flowers, water, and creatures respond as you record.");
+      setVisualText("Neural Bloom is listening", "The recording will become a digest and starter code.");
     } catch (e) {
       visualActive = true;
-      setVisualText("Your voice nourishes the world", "Showing ambient meadow motion while recording.");
+      setVisualText("Neural Bloom is listening", "Showing sound-reactive motion while recording.");
     }
   }
 
