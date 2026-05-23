@@ -20,7 +20,7 @@ from pathlib import Path
 
 import jsonschema
 
-from . import __version__, codegen, demo, dsp, midi, pipeline, schema, tonejs, voice
+from . import __version__, codegen, demo, dsp, midi, pipeline, schema, tonejs, translate, voice
 from .backends.fake import FakeBackend
 from .backends.gemini import GeminiBackend
 
@@ -61,6 +61,13 @@ def main(argv: list[str] | None = None) -> int:
     p_audio.add_argument(
         "--output-base",
         help="Output path without extension. Defaults to the audio filename stem.",
+    )
+
+    p_seed = sub.add_parser("seed", help="DSP digest -> starter .json, .lilt, and .mid")
+    p_seed.add_argument("digest", help="Path to a DSP digest JSON file")
+    p_seed.add_argument(
+        "--output-base",
+        help="Output path without extension. Defaults to the digest filename stem.",
     )
 
     p_digest = sub.add_parser("digest", help="WAV -> DSP digest JSON")
@@ -128,6 +135,8 @@ def main(argv: list[str] | None = None) -> int:
             args.fake_response,
             args.output_base,
         )
+    if args.cmd == "seed":
+        return _cmd_seed(args.digest, args.output_base)
     if args.cmd == "digest":
         return _cmd_digest(args.input, args.output)
     if args.cmd == "info":
@@ -237,6 +246,33 @@ def _cmd_audio(
     )
     lilt_path.write_text(result.lilt_source, encoding="utf-8", newline="\n")
     mid_path.write_bytes(result.midi_bytes)
+    print(f"wrote {json_path}")
+    print(f"wrote {lilt_path}")
+    print(f"wrote {mid_path}")
+    return 0
+
+
+def _cmd_seed(digest_path: str, output_base: str | None) -> int:
+    digest = _load_json(digest_path)
+    if digest is None:
+        return 2
+    try:
+        data = translate.digest_to_seed(digest)
+    except Exception as e:
+        print(f"error: could not translate digest: {e}", file=sys.stderr)
+        return 5
+
+    base = Path(output_base) if output_base else Path(digest_path).with_suffix("").with_suffix("")
+    json_path = base.with_suffix(".json")
+    lilt_path = base.with_suffix(".lilt")
+    mid_path = base.with_suffix(".mid")
+    json_path.write_text(
+        json.dumps(data, indent=2, sort_keys=False),
+        encoding="utf-8",
+        newline="\n",
+    )
+    lilt_path.write_text(codegen.emit(data), encoding="utf-8", newline="\n")
+    mid_path.write_bytes(midi.emit(data))
     print(f"wrote {json_path}")
     print(f"wrote {lilt_path}")
     print(f"wrote {mid_path}")

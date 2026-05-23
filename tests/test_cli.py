@@ -120,6 +120,25 @@ def test_audio_fake_backend_requires_response(tmp_path, capsys):
     assert "fake-response" in capsys.readouterr().err
 
 
+def test_seed_writes_json_lilt_and_midi_from_digest(tmp_path):
+    digest = _write_fixture(tmp_path, {
+        "estimated_bpm": 90,
+        "estimated_key": "C major",
+        "pitch_trace": ["C4", "E4", "G4"],
+        "onsets": [0.0, 0.5, 1.0],
+        "quality": {"level": "usable"},
+        "features": {"gesture_density": "moderate", "pitch_direction": "rising"},
+    }, "digest.json")
+    out_base = tmp_path / "seeded"
+
+    code = cli.main(["seed", str(digest), "--output-base", str(out_base)])
+
+    assert code == 0
+    assert (tmp_path / "seeded.json").exists()
+    assert "voice voice:" in (tmp_path / "seeded.lilt").read_text(encoding="utf-8")
+    assert (tmp_path / "seeded.mid").read_bytes()[:4] == b"MThd"
+
+
 def test_tonejs_writes_event_file(tmp_path, canonical_example):
     inp = _write_fixture(tmp_path, canonical_example)
     code = cli.main(["tonejs", str(inp)])

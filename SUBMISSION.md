@@ -174,6 +174,7 @@ collaborator into the same DAW.
 - MIDI emitter
 - Tone.js emitter
 - local WAV digest generator
+- deterministic digest-to-song seed generator for no-network fallback
 - fake backend for offline tests
 - Gemini/Gemma backend for hosted model use
 - local/server-side Gemini TTS voice render path
@@ -191,6 +192,7 @@ collaborator into the same DAW.
 - JSON -> `.mid`
 - JSON -> Tone.js
 - WAV -> digest JSON
+- digest JSON -> starter `.json`, `.lilt`, and `.mid`
 - audio + digest + backend -> JSON/Lilt/MIDI
 - JSON -> AI voice prompt or local/server-side voice WAV
 - recording quality hints: usable, too quiet, clipped, very loud

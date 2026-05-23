@@ -206,6 +206,17 @@ python -m lilt.cli audio path\to\clip.wav `
   --fake-response examples\three_note_hum.json
 ```
 
+Create a deterministic starter song from a digest without any model call:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m lilt.cli seed examples\three_note_hum.digest.json --output-base examples\three_note_seed
+```
+
+This writes `.json`, `.lilt`, and `.mid` from the digest facts. Use it when the
+network is unavailable, when quota is gone, or when you want a stable baseline
+before asking Gemma for a more expressive interpretation.
+
 Run the hosted Gemma path:
 
 ```powershell
