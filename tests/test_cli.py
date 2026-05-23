@@ -139,6 +139,17 @@ def test_tonejs_with_explicit_output(tmp_path, canonical_example):
     assert out.exists()
 
 
+def test_voice_dry_run_writes_prompt(tmp_path, canonical_example):
+    inp = _write_fixture(tmp_path, canonical_example)
+    out = tmp_path / "voice.txt"
+    code = cli.main(["voice", str(inp), "--style", "beethoven", "--dry-run-prompt", "-o", str(out)])
+    assert code == 0
+    text = out.read_text(encoding="utf-8")
+    assert "Vocalize this short musical idea" in text
+    assert "bold" in text
+    assert "la(C4" in text
+
+
 def test_info_prints_summary(tmp_path, canonical_example, capsys):
     inp = _write_fixture(tmp_path, canonical_example)
     code = cli.main(["info", str(inp)])

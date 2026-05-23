@@ -1,8 +1,8 @@
-# Lilt
+# Babbled Notes
 
-A tiny programming language whose front-end is your voice.
+A sound-first music tool powered by the Lilt text language.
 
-Lilt turns a short hum, sung phrase, beatbox pattern, or played line into:
+Babbled Notes turns a short hum, sung phrase, beatbox pattern, or played line into:
 
 - a structured JSON contract
 - a readable `.lilt` text program
@@ -16,8 +16,8 @@ Presentation runbook: see [PRESENTATION.md](PRESENTATION.md).
 ## Why it exists
 
 Music tools often ask for steady hands, tiny controls, and a lot of theory up
-front. Lilt starts with the gesture the user already has: make a sound, then
-edit the result as plain text.
+front. Babbled Notes starts with the gesture the user already has: make a sound,
+then edit the result as plain text.
 
 The project is designed for ADHD-friendly use: short commands, predictable
 files, visible output, and no hidden project state. The neural model does the
@@ -25,8 +25,8 @@ interpretation; the compiler keeps the artifact deterministic.
 
 ## What makes it different
 
-Lilt is not a chatbot that gives music advice. It is a small compiler pipeline
-for musical intent:
+Babbled Notes is not a chatbot that gives music advice. It is a small compiler
+pipeline for musical intent:
 
 1. capture a hum, beatbox, tap pattern, or short played phrase
 2. extract timing and pitch facts
@@ -45,16 +45,39 @@ For non-speaking users, the browser demo also includes a tap-to-melody path:
 notes can be placed with touch, keyboard focus, or switch-style controls without
 recording a voice.
 
+For users who benefit from voice-first controls, the recorder can be armed once
+with a button and then respond to simple phrases like "start recording" and
+"stop recording." It is not always-on; the user must opt in first.
+
 The browser tool also includes a Composer Workspace. Users can edit `.lilt`
 source directly, play the edited song, save it locally, open it again later, and
 load a demo into the workspace as a starting point.
 
+The composer is built around a quick win: choose Bach, Mozart, Beethoven, or
+Chopin style, choose Center, Room, or Concert Hall sound space, then use Play
+Forever while changing the notes. The loop is meant to help the user hear their
+own idea becoming music instead of hearing a one-shot toy sound.
+
+## Visual direction
+
+The next visual pass should use a tech, space, and electricity language instead
+of paper-cutout graphics. The core image is a symbolic neural bloom:
+
+- start with a quiet, translucent, nearly empty brain
+- let the user's music fill it with electric paths, stars, sparks, and signal
+  lines
+- map rhythm, pitch, volume, repetition, and sound space to growth and motion
+- make the image feel like Gemma 4 if it were visible: structured, luminous,
+  layered, and pattern-forming
+
+This is a metaphor for creative activation, not a medical claim.
+
 ## Sound alphabet
 
-Lilt uses a small input alphabet so the model knows how to map human sound and
-gesture into editable music code:
+Babbled Notes uses a small input alphabet so the model knows how to map human
+sound and gesture into editable music code:
 
-| Input | Meaning | Lilt output |
+| Input | Meaning | `.lilt` output |
 |---|---|---|
 | hum or sung tone | pitched note | `C4 ! mf` |
 | longer hum | held note | `G4 hold` |
@@ -70,10 +93,10 @@ the system does not depend on speech.
 
 ## Full song build demo
 
-A complete Lilt workflow is intentionally small:
+A complete Babbled Notes workflow is intentionally small:
 
 1. Capture a hook with voice, tapping, keyboard, or assisted selection.
-2. Let Lilt/Gemma translate the gesture into validated Lilt JSON.
+2. Let Babbled Notes/Gemma translate the gesture into validated Lilt JSON.
 3. Emit `.lilt`, `.mid`, and Tone.js playback.
 4. Edit the text to arrange the idea.
 5. Share the text or MIDI with collaborators.
@@ -108,7 +131,7 @@ That output can become:
 
 ## Collaboration workflow
 
-Lilt is built for collaboration because the song is plain text.
+Babbled Notes is built for collaboration because the song is plain text.
 
 ```diff
 - voice bass:
@@ -132,12 +155,16 @@ The contest allows Gemma 4 through several paths. This repo supports:
   moments.
 
 As of the contest docs, the Gemini API supports `gemma-4-31b-it` and
-`gemma-4-26b-a4b-it`. Lilt defaults to `gemma-4-26b-a4b-it`.
+`gemma-4-26b-a4b-it`. Babbled Notes defaults to `gemma-4-26b-a4b-it`.
+
+The public browser demo does not expose an API key. The hosted Gemma path runs
+from local or server-side code. Longer term, the clean backend boundary leaves
+room for a private on-device Gemma runtime after the hosted version is stable.
 
 ## Quick start
 
 ```powershell
-cd C:\Users\toddl\OneDrive\Documents\GitHub\lilt
+cd C:\Users\toddl\OneDrive\Documents\GitHub\babbled-notes
 $env:PYTHONPATH = "src"
 python -m pytest
 ```
@@ -166,9 +193,21 @@ Run the hosted Gemma path:
 
 ```powershell
 pip install -e .[gemini]
-$env:GOOGLE_API_KEY = "<your Google AI Studio key>"
+# Set GOOGLE_API_KEY in your local shell before running this.
 $env:PYTHONPATH = "src"
 python -m lilt.cli audio path\to\clip.wav --digest examples\three_note_hum.digest.json --backend gemini
+```
+
+Render an AI voice prompt or WAV locally. This uses your Google AI Studio key
+from local/server-side code, never from GitHub Pages:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m lilt.cli voice examples\three_note_hum.json --style chopin --dry-run-prompt
+
+pip install -e .[gemini]
+# Set GEMINI_API_KEY in your local shell before running this.
+python -m lilt.cli voice examples\three_note_hum.json --style chopin -o examples\three_note_hum.voice.wav
 ```
 
 ## Browser demo
@@ -181,6 +220,29 @@ python -m lilt.cli demo-data
 ```
 
 Then open `docs/index.html`.
+
+## Package prep
+
+Before packaging or publishing:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m pytest
+node --check docs/composer.js
+node --check docs/player.js
+node --check docs/voice-control.js
+node --check docs/meadow.js
+node --check docs/recorder.js
+node --check docs/accessible.js
+node --check docs/backdrop.js
+git diff --check
+$secretPattern = "AI" + "za|sk-[A-Za-z0-9]|" + "GEMINI_API_KEY\\s*=|" + "GOOGLE_API_KEY\\s*="
+rg -n $secretPattern README.md SUBMISSION.md docs src tests pyproject.toml
+python -m build
+```
+
+`dist/` is ignored by Git. Keep API keys in the local shell or deployment
+secrets, never in the static demo.
 
 ## Verification
 

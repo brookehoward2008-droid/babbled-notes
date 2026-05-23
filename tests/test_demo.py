@@ -37,3 +37,15 @@ def test_demo_data_cli_writes_js(tmp_path):
     text = out.read_text(encoding="utf-8")
     assert "window.LILT_DEMOS" in text
     assert "three-note-hum" in text
+
+
+def test_static_demo_names_neural_bloom_visual_direction():
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    meadow = Path("docs/meadow.js").read_text(encoding="utf-8")
+
+    assert "Neural Bloom" in html
+    assert "tech, space, and electricity" in html
+    assert "drawNeuralBloom" in meadow
+    assert "drawElectricPathways" in meadow
+    assert "drawFrequencyBloom" in meadow
+    assert "drawSpatialGlow" in meadow

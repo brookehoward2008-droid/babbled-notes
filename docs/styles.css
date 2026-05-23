@@ -1393,6 +1393,58 @@ textarea {
   outline: none;
 }
 
+.style-picker,
+.space-picker {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  border: 0;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.space-picker {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.style-picker legend,
+.space-picker legend {
+  grid-column: 1 / -1;
+  margin-bottom: 0.2rem;
+  font-weight: 750;
+}
+
+.style-picker button,
+.space-picker button {
+  min-height: 52px;
+  padding: 0.7rem 0.6rem;
+  font: inherit;
+  font-weight: 800;
+  color: var(--fg);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.style-picker button[aria-pressed="true"],
+.space-picker button[aria-pressed="true"] {
+  color: var(--bg);
+  background: var(--fg);
+  border-color: var(--fg);
+}
+
+.style-picker button:focus-visible,
+.space-picker button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+#composer-loop[aria-pressed="true"] {
+  background: #174d5c;
+  border-color: #174d5c;
+}
+
 .composer-summary {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1424,6 +1476,11 @@ textarea {
 @media (max-width: 560px) {
   .composer-toolbar {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .style-picker,
+  .space-picker {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .composer-summary {
@@ -1520,4 +1577,327 @@ footer a {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; }
+}
+
+/* Tonight build: simplify the opening scene to birds on telephone wires. */
+.wire-app {
+  --world-accent: #f59e0b;
+  --world-accent-2: #0ea5e9;
+  --world-panel: rgba(37, 30, 22, 0.44);
+  grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr) minmax(14rem, 18rem);
+  background:
+    radial-gradient(circle at 72% 18%, rgba(14, 165, 233, 0.14), transparent 24rem),
+    linear-gradient(135deg, #f8efe0, #cfe8ef 48%, #8f6b3f);
+}
+
+.wire-app::before {
+  opacity: 0.36;
+}
+
+.wire-app .meadow-left h1 {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(2.25rem, 3.4vw, 3.4rem);
+  font-weight: 850;
+  letter-spacing: 0;
+}
+
+.wire-app .meadow-subtitle {
+  color: #fef3c7;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.wire-app .meadow-copy {
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 24rem;
+}
+
+.wire-steps {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0 0;
+  padding-left: 1.25rem;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.95rem;
+}
+
+.wire-steps li {
+  padding-left: 0.15rem;
+}
+
+.wire-steps a,
+.wire-note a {
+  color: #fef3c7;
+  font-weight: 800;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.wire-app .mic-icon {
+  width: auto;
+  height: auto;
+  color: #3b260e;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.wire-app .world-record {
+  background:
+    radial-gradient(circle at 50% 42%, #fef3c7, #f59e0b 72%);
+  box-shadow:
+    0 0 0 8px rgba(245, 158, 11, 0.13),
+    0 18px 50px rgba(120, 53, 15, 0.34);
+}
+
+.wire-app .world-record.is-active {
+  box-shadow:
+    0 0 0 12px rgba(245, 158, 11, 0.18),
+    0 0 42px rgba(14, 165, 233, 0.28);
+}
+
+.wire-app .stage-shade {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), transparent 42%),
+    linear-gradient(0deg, rgba(48, 35, 20, 0.28), transparent 34%);
+}
+
+.wire-app .world-message,
+.wire-app .world-tip {
+  background: rgba(54, 41, 27, 0.68);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.wire-controls {
+  align-content: start;
+}
+
+.wire-mode-picker {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.wire-mode-picker legend {
+  margin-bottom: 0.25rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.wire-mode-picker button {
+  min-height: 3.6rem;
+  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(0, 0, 0, 0.26);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.9rem;
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wire-mode-picker button[aria-pressed="true"] {
+  color: #2d1d08;
+  background: #fef3c7;
+  border-color: #fbbf24;
+}
+
+.wire-mode-picker button:focus-visible {
+  outline: 3px solid #fbbf24;
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wire-note {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.84);
+  border: 1px solid var(--world-border);
+  border-radius: 0.8rem;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.wire-note p {
+  margin: 0;
+}
+
+.wire-strip {
+  background: rgba(47, 35, 23, 0.54);
+}
+
+.wire-strip div {
+  min-width: 10rem;
+  min-height: 7rem;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.1), rgba(0,0,0,0.44)),
+    repeating-linear-gradient(0deg, transparent 0 1.42rem, rgba(255,255,255,0.16) 1.42rem 1.52rem),
+    linear-gradient(135deg, rgba(96, 165, 250, 0.34), rgba(146, 64, 14, 0.44));
+}
+
+.creature-strip.wire-strip div:nth-child(n) span {
+  display: block;
+  width: 1.7rem;
+  height: 1.7rem;
+  color: #3b260e;
+  background: #fef3c7;
+  border-radius: 999px;
+  text-align: center;
+  line-height: 1.7rem;
+  font-weight: 900;
+}
+
+.wire-strip strong {
+  color: #fff7ed;
+}
+
+.wire-strip small {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.wire-app .phone-preview,
+.wire-app .biome-panel,
+.wire-app .world-icon-row {
+  display: none;
+}
+
+.record-visual-copy span {
+  color: #fbbf24;
+}
+
+@media (max-width: 760px) {
+  .wire-app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(27rem, 60vh) auto auto;
+  }
+
+  .wire-app .meadow-left,
+  .wire-app .meadow-stage,
+  .wire-app .meadow-controls,
+  .wire-app .wire-strip {
+    grid-column: 1;
+  }
+
+  .wire-app .meadow-left {
+    grid-row: auto;
+  }
+
+  .wire-app .meadow-stage {
+    min-height: 27rem;
+  }
+}
+
+/* Neural Bloom pass: tech, space, electricity. */
+.neural-bloom-app {
+  background:
+    radial-gradient(circle at 52% 42%, rgba(96, 239, 255, 0.22), transparent 34%),
+    radial-gradient(circle at 78% 18%, rgba(250, 204, 21, 0.12), transparent 24%),
+    linear-gradient(135deg, #050816 0%, #0b1026 50%, #111827 100%);
+  color: #eef6ff;
+}
+
+.neural-bloom-app::before {
+  background:
+    linear-gradient(rgba(96, 239, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96, 239, 255, 0.06) 1px, transparent 1px);
+  background-size: 38px 38px;
+  opacity: 0.42;
+}
+
+.neural-bloom-app .meadow-left,
+.neural-bloom-app .meadow-controls,
+.neural-bloom-app .wire-strip div {
+  background: rgba(5, 8, 22, 0.72);
+  border-color: rgba(96, 239, 255, 0.28);
+  box-shadow: 0 0 32px rgba(96, 239, 255, 0.12);
+}
+
+.neural-bloom-app .meadow-subtitle {
+  color: #60efff;
+  text-shadow: 0 0 24px rgba(96, 239, 255, 0.55);
+}
+
+.neural-bloom-app .meadow-copy,
+.neural-bloom-app .wire-steps,
+.neural-bloom-app .wire-note p,
+.neural-bloom-app .world-tip p {
+  color: rgba(238, 246, 255, 0.82);
+}
+
+.neural-bloom-app .world-record {
+  background:
+    radial-gradient(circle, rgba(250, 204, 21, 0.95), rgba(251, 113, 133, 0.82) 48%, rgba(96, 239, 255, 0.12) 72%),
+    #0b1026;
+  border-color: rgba(250, 204, 21, 0.72);
+  box-shadow:
+    0 0 0 10px rgba(96, 239, 255, 0.1),
+    0 0 46px rgba(250, 204, 21, 0.38);
+}
+
+.neural-bloom-app .world-record.is-active {
+  box-shadow:
+    0 0 0 14px rgba(96, 239, 255, 0.16),
+    0 0 70px rgba(96, 239, 255, 0.44),
+    0 0 90px rgba(250, 204, 21, 0.28);
+}
+
+.neural-bloom-app .meadow-stage {
+  background:
+    radial-gradient(circle at 52% 48%, rgba(96, 239, 255, 0.18), transparent 38%),
+    #050816;
+  border-color: rgba(96, 239, 255, 0.34);
+}
+
+.neural-bloom-app .stage-shade {
+  background:
+    linear-gradient(180deg, rgba(5, 8, 22, 0.04), rgba(5, 8, 22, 0.32)),
+    radial-gradient(circle at center, transparent 34%, rgba(5, 8, 22, 0.34));
+}
+
+.neural-bloom-app .world-message,
+.neural-bloom-app .world-tip {
+  background: rgba(5, 8, 22, 0.72);
+  border-color: rgba(96, 239, 255, 0.26);
+  color: #eef6ff;
+}
+
+.neural-bloom-app .world-message span,
+.neural-bloom-app .controls-title span:last-child,
+.neural-bloom-app .wire-strip div span {
+  color: #facc15;
+  text-shadow: 0 0 18px rgba(250, 204, 21, 0.55);
+}
+
+.neural-bloom-app .wire-mode-picker button {
+  background: rgba(15, 23, 42, 0.86);
+  border-color: rgba(96, 239, 255, 0.22);
+  color: #dbeafe;
+}
+
+.neural-bloom-app .wire-mode-picker button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #60efff, #8b5cf6);
+  color: #050816;
+  box-shadow: 0 0 26px rgba(96, 239, 255, 0.34);
+}
+
+.neural-bloom-app .wire-strip div.is-awake {
+  border-color: rgba(250, 204, 21, 0.44);
+  box-shadow: 0 0 28px rgba(250, 204, 21, 0.18);
 }

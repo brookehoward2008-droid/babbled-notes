@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "lilt"
+name = "babbled-notes"
 version = "0.1.0.dev0"
-description = "A tiny programming language whose front-end is your voice. Powered by Gemma 4."
+description = "A sound-first music tool powered by the Lilt text language and Gemma 4."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
-authors = [{ name = "Lilt contributors" }]
+authors = [{ name = "Babbled Notes contributors" }]
 keywords = ["music", "dsl", "gemma", "audio", "midi", "accessibility"]
 
 dependencies = [
@@ -31,6 +31,7 @@ packages = ["src/lilt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 addopts = "-q"
 
 [tool.ruff]

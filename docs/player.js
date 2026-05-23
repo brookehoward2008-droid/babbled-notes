@@ -1,5 +1,5 @@
 /**
- * Lilt mobile demo player + session reporter.
+ * Babbled Notes demo player + session reporter.
  *
  * - Loads Tone.js and plays the selected demo via per-voice synths.
  * - Quietly logs the user's session (which demos played, did playback
@@ -10,7 +10,7 @@
 
 (function () {
   const demos = window.LILT_DEMOS || [];
-  const REPO = "brookehoward2008-droid/lilt";
+  const REPO = "brookehoward2008-droid/babbled-notes";
 
   const elements = {
     picker: document.getElementById("picker"),
@@ -34,7 +34,7 @@
   // ---------------------------------------------------------------
 
   const report = {
-    schema: "lilt-demo-report/v1",
+    schema: "babbled-notes-demo-report/v1",
     session_id: makeSessionId(),
     started_at: new Date().toISOString(),
     page_url: location.href,
@@ -135,7 +135,7 @@
   function makeSynth(voice) {
     const selected = elements.demoInstrument ? elements.demoInstrument.value : "auto";
     if (voice.kind !== "drum" && selected !== "auto") {
-      return { synth: connectStudio(makePitchedSynth(selected), voice.name), drumPitch: null };
+      return { synth: connectStudio(makePitchedSynth(selected), voice.name), drumPitch: null, style: selected };
     }
 
     const hint = (voice.instrument_hint || "").toLowerCase();
@@ -147,7 +147,7 @@
           envelope: { attack: 0.001, decay: 0.42, sustain: 0.01, release: 0.08 },
         });
         s.volume.value = -5;
-        return { synth: connectStudio(s, voice.name), drumPitch: "C2" };
+        return { synth: connectStudio(s, voice.name), drumPitch: "C2", style: "drum" };
       }
       if (hint.includes("snare") || hint.includes("clap")) {
         const s = new Tone.MembraneSynth({
@@ -157,7 +157,7 @@
           envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.03 },
         });
         s.volume.value = -16;
-        return { synth: connectStudio(s, voice.name), drumPitch: "D2" };
+        return { synth: connectStudio(s, voice.name), drumPitch: "D2", style: "drum" };
       }
       if (hint.includes("hat") || hint.includes("cymbal") || hint.includes("ride")) {
         const s = new Tone.Synth({
@@ -165,78 +165,97 @@
           envelope: { attack: 0.001, decay: 0.045, sustain: 0, release: 0.02 },
         });
         s.volume.value = -20;
-        return { synth: connectStudio(s, voice.name), drumPitch: "F#5" };
+        return { synth: connectStudio(s, voice.name), drumPitch: "F#5", style: "drum" };
       }
       const s = new Tone.MembraneSynth();
       s.volume.value = -6;
-      return { synth: connectStudio(s, voice.name), drumPitch: "D2" };
+      return { synth: connectStudio(s, voice.name), drumPitch: "D2", style: "drum" };
     }
 
     if (hint.includes("pluck") || hint.includes("guitar")) {
-      return { synth: connectStudio(makePitchedSynth("pluck"), voice.name), drumPitch: null };
+      return { synth: connectStudio(makePitchedSynth("wire"), voice.name), drumPitch: null, style: "wire" };
     }
-    return { synth: connectStudio(makePitchedSynth("pad"), voice.name), drumPitch: null };
+    if (hint.includes("bird") || hint.includes("chirp") || hint.includes("whistle")) {
+      return { synth: connectStudio(makePitchedSynth("bird"), voice.name), drumPitch: null, style: "bird" };
+    }
+    return { synth: connectStudio(makePitchedSynth("pad"), voice.name), drumPitch: null, style: "pad" };
   }
 
   function makePitchedSynth(mode) {
     if (mode === "piano") {
       const s = new Tone.PolySynth(Tone.Synth, {
-        oscillator: { type: "sine" },
-        envelope: { attack: 0.012, decay: 0.28, sustain: 0.12, release: 0.85 },
+        oscillator: { type: "triangle" },
+        envelope: { attack: 0.01, decay: 0.22, sustain: 0.1, release: 0.72 },
       });
-      s.volume.value = -8;
+      s.volume.value = -10;
+      return s;
+    }
+    if (mode === "wire") {
+      const s = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "triangle" },
+        envelope: { attack: 0.004, decay: 0.22, sustain: 0.06, release: 0.62 },
+      });
+      s.volume.value = -12;
+      return s;
+    }
+    if (mode === "bird") {
+      const s = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.003, decay: 0.07, sustain: 0.02, release: 0.16 },
+      });
+      s.volume.value = -16;
       return s;
     }
     if (mode === "pluck") {
       const s = new Tone.PolySynth(Tone.PluckSynth, {
-        attackNoise: 0.55,
-        dampening: 4600,
-        resonance: 0.78,
+        attackNoise: 0.38,
+        dampening: 5200,
+        resonance: 0.62,
       });
-      s.volume.value = -9;
+      s.volume.value = -12;
       return s;
     }
     if (mode === "bell") {
       const s = new Tone.PolySynth(Tone.FMSynth, {
-        harmonicity: 2.4,
-        modulationIndex: 6,
-        envelope: { attack: 0.012, decay: 0.35, sustain: 0.04, release: 1.15 },
-        modulationEnvelope: { attack: 0.01, decay: 0.28, sustain: 0, release: 0.55 },
+        harmonicity: 1.8,
+        modulationIndex: 4.2,
+        envelope: { attack: 0.012, decay: 0.28, sustain: 0.03, release: 0.95 },
+        modulationEnvelope: { attack: 0.01, decay: 0.22, sustain: 0, release: 0.45 },
       });
-      s.volume.value = -11;
+      s.volume.value = -14;
       return s;
     }
     const s = new Tone.PolySynth(Tone.Synth, {
-      oscillator: { type: "sine" },
-      envelope: { attack: 0.12, decay: 0.18, sustain: 0.62, release: 1.15 },
+      oscillator: { type: "triangle" },
+      envelope: { attack: 0.16, decay: 0.2, sustain: 0.58, release: 1.25 },
     });
-    s.volume.value = -9;
+    s.volume.value = -11;
     return s;
   }
 
   function studioDestination() {
     if (studioChain) return studioChain.input;
-    Tone.getDestination().volume.value = -2;
+    Tone.getDestination().volume.value = -4;
     const compressor = new Tone.Compressor({
-      threshold: -20,
-      ratio: 3,
+      threshold: -18,
+      ratio: 2.4,
       attack: 0.004,
       release: 0.22,
     });
     const toneFilter = new Tone.Filter({
-      frequency: 5200,
+      frequency: 6800,
       type: "lowpass",
       rolloff: -12,
     });
     const delay = new Tone.FeedbackDelay({
       delayTime: "8n",
-      feedback: 0.08,
-      wet: 0.045,
+      feedback: 0.12,
+      wet: 0.065,
     });
     const reverb = new Tone.Reverb({
-      decay: 1.8,
+      decay: 2.4,
       preDelay: 0.025,
-      wet: 0.12,
+      wet: 0.16,
     });
     const limiter = new Tone.Limiter(-1);
     compressor.chain(toneFilter, delay, reverb, limiter, Tone.getDestination());
@@ -253,6 +272,18 @@
 
   function stereoPosition(name) {
     const lower = name.toLowerCase();
+    if (lower.includes("hall")) {
+      if (lower.includes("bass") || lower.includes("kick")) return -0.18;
+      if (lower.includes("pulse") || lower.includes("hat")) return 0.34;
+      if (lower.includes("melody") || lower.includes("voice")) return -0.28;
+      return 0.24;
+    }
+    if (lower.includes("room")) {
+      if (lower.includes("bass") || lower.includes("kick")) return 0;
+      if (lower.includes("pulse") || lower.includes("hat")) return 0.24;
+      if (lower.includes("melody") || lower.includes("voice")) return -0.18;
+      return 0.14;
+    }
     if (lower.includes("bass") || lower.includes("kick")) return 0;
     if (lower.includes("pulse") || lower.includes("hat")) return 0.18;
     if (lower.includes("melody") || lower.includes("voice")) return -0.12;
@@ -267,13 +298,29 @@
   };
 
   function trigger(entry, ev, time) {
-    const { synth, drumPitch } = entry;
+    const { synth, drumPitch, style } = entry;
     if (synth instanceof Tone.NoiseSynth) {
       synth.triggerAttackRelease(ev.duration, humanizeTime(time, 0.5), humanizeVelocity(ev.velocity, 0.06));
       return;
     }
     const note = drumPitch || ev.note;
-    synth.triggerAttackRelease(note, softenDuration(ev.duration), humanizeTime(time, 1), humanizeVelocity(ev.velocity, 0.08));
+    const start = humanizeTime(time, 1);
+    const velocity = humanizeVelocity(ev.velocity, style === "bird" ? 0.14 : 0.08);
+    if (style === "bird" && !drumPitch) {
+      const chirp = transposeNote(note, 7);
+      synth.triggerAttackRelease(note, Math.min(0.14, softenDuration(ev.duration) * 0.5), start, velocity);
+      synth.triggerAttackRelease(chirp, 0.08, start + 0.055, Math.max(0.18, velocity * 0.72));
+      return;
+    }
+    synth.triggerAttackRelease(note, softenDuration(ev.duration), start, velocity);
+  }
+
+  function transposeNote(note, semitones) {
+    try {
+      return Tone.Frequency(note).transpose(semitones).toNote();
+    } catch (_) {
+      return note;
+    }
   }
 
   function humanizeTime(time, amount) {
@@ -438,7 +485,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "lilt-report-" + report.session_id.slice(0, 8) + ".json";
+      a.download = "babbled-notes-report-" + report.session_id.slice(0, 8) + ".json";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

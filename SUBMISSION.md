@@ -1,26 +1,27 @@
-# Lilt DEV Submission Package
+# Babbled Notes DEV Submission Package
 
 ## Submission Links
 
-- Live demo: https://brookehoward2008-droid.github.io/lilt/
-- Source code: https://github.com/brookehoward2008-droid/lilt
+- Live demo: https://brookehoward2008-droid.github.io/babbled-notes/
+- Source code: https://github.com/brookehoward2008-droid/babbled-notes
 - Challenge: https://dev.to/challenges/google-gemma-2026-05-06/
 
 ## One-Sentence Pitch
 
-Lilt turns hums, taps, breaths, clicks, or switch-style input into editable music
-code, MIDI, and browser playback so people who cannot use traditional music
-tools can still express musical ideas.
+Babbled Notes turns hums, taps, breaths, clicks, or switch-style input into
+editable music code, MIDI, and browser playback so people who cannot use
+traditional music tools can still express musical ideas.
 
 ## DEV Post Draft
 
 ### Title
 
-Lilt: turning hums, taps, and breath into editable music code with Gemma 4
+Babbled Notes: turning hums, taps, and breath into editable music code with Gemma 4
 
 ### What I Built
 
-Lilt is a tiny voice-and-gesture-first music programming language.
+Babbled Notes is a tiny voice-and-gesture-first music tool powered by the Lilt
+text language.
 
 Instead of starting with a piano roll, notation editor, or DAW timeline, the
 user starts with a human gesture:
@@ -31,7 +32,7 @@ user starts with a human gesture:
 - use a breath pulse
 - make a switch-style selection
 
-Lilt turns that intent into:
+Babbled Notes turns that intent into:
 
 - a structured JSON contract
 - readable `.lilt` music code
@@ -39,8 +40,8 @@ Lilt turns that intent into:
 - Tone.js browser playback data
 
 The public demo is static and safe to share. It lets people record, tap a
-melody, choose instruments, inspect the generated Lilt text, and understand the
-sound alphabet.
+melody, choose instruments, inspect the generated `.lilt` text, and understand
+the sound alphabet.
 
 ### Why Gemma 4
 
@@ -58,12 +59,13 @@ those facts into a schema-valid musical idea:
 I chose the hosted Gemini API path with `gemma-4-26b-a4b-it` because it is a
 practical Gemma 4 route for development and demo preparation. The code also
 keeps a fake backend so the pipeline can be tested without quota or network
-access. The architecture leaves room for a local Gemma runtime later.
+access. The architecture leaves room for a private on-device Gemma runtime later,
+but that is a roadmap path, not something the public browser demo claims today.
 
 ### What Makes It Different
 
-Lilt is not a chatbot that talks about music. It is a compiler pipeline for
-musical intent:
+Babbled Notes is not a chatbot that talks about music. It is a compiler
+pipeline for musical intent:
 
 1. capture a sound or gesture
 2. extract timing and pitch facts
@@ -76,13 +78,32 @@ the MIDI into GarageBand, Ableton, Logic, MuseScore, or an assistive music rig.
 A collaborator can edit the `.lilt` text in a pull request. A screen-reader
 user can review the musical idea as plain text.
 
+### Originality and Attribution
+
+This submission is Brooke's original project idea and build direction:
+accessible music creation from hums, taps, switch-style input, readable code,
+MIDI, browser playback, and optional AI voice rendering.
+
+The project uses standard open source/runtime building blocks:
+
+- Python package tooling
+- `jsonschema`
+- `mido`
+- Tone.js for browser audio playback
+- Gemini/Gemma through Google AI Studio
+- Gemini TTS for local/server-side voice rendering
+
+Those tools support the project, but the core product is original: Babbled
+Notes turns small human sounds into editable musical programs and gives users a
+loopable, style-aware way to hear their own coded notes become music.
+
 ### Accessibility
 
-The accessibility goal is musical agency.
+The accessibility goal is musical agency with emotional safety.
 
-Lilt is designed for people who may be autistic, non-speaking, motor-limited,
-fatigued, blind, screen-reader-dependent, or unable to operate a traditional
-DAW. Voice is useful, but voice is not required.
+Babbled Notes is designed for people who may be autistic, non-speaking,
+motor-limited, fatigued, blind, screen-reader-dependent, or unable to operate a
+traditional DAW. Voice is useful, but voice is not required.
 
 The browser demo includes:
 
@@ -93,6 +114,9 @@ The browser demo includes:
 - instrument selection
 - no tracking or analytics
 - local recording playback
+- composer replay with Play Forever
+- classical style choices for the user's own coded notes
+- optional local/server-side AI voice rendering
 
 The sound alphabet is intentionally small:
 
@@ -107,10 +131,22 @@ The sound alphabet is intentionally small:
 | loud/quiet sound | dynamic |
 | short/smooth sound | articulation |
 
+Babbled Notes is meant to heal, teach, expand, and invite expression. The user
+should feel listened to, not corrected. The first playback matters because a
+cheap or harsh sound can make someone stop creating; the project treats sound
+quality as part of accessibility.
+
+This is research-informed, not a medical claim. Music has evidence-backed roles
+in communication, emotion, movement, reward, and social connection, including
+music therapy work with autistic people and auditory-motor mapping research for
+minimally verbal children. Babbled Notes is not therapy or diagnosis; it is a
+creative access tool built from the belief that music can give people another
+way to be heard.
+
 ### How Collaboration Works
 
-Because Lilt is text, musical collaboration can happen in the same way code
-collaboration happens.
+Because the song becomes `.lilt` text, musical collaboration can happen in the
+same way code collaboration happens.
 
 Example:
 
@@ -135,6 +171,7 @@ collaborator into the same DAW.
 - local WAV digest generator
 - fake backend for offline tests
 - Gemini/Gemma backend for hosted model use
+- local/server-side Gemini TTS voice render path
 - accessibility notes and test plan
 
 ### What Works Today
@@ -142,13 +179,27 @@ collaborator into the same DAW.
 - Record UI and local playback in supported browsers
 - Tap-to-melody input
 - Instrument selection
+- Classical style choices for coded-note playback
+- Play Forever loop for iterative composing
 - Example playback through Tone.js
 - JSON -> `.lilt`
 - JSON -> `.mid`
 - JSON -> Tone.js
 - WAV -> digest JSON
 - audio + digest + backend -> JSON/Lilt/MIDI
+- JSON -> AI voice prompt or local/server-side voice WAV
 - test suite
+
+### Visual Direction
+
+The intended visual language is tech, space, and electricity. The reactive
+graphic should begin as a quiet, nearly empty translucent brain. As the user's
+music plays, electric pathways, stars, sparks, and signal lines grow through it.
+Rhythm, pitch, volume, repetition, and sound space should shape the glow.
+
+The image is also meant to echo Gemma 4 if it were visible: structured,
+luminous, layered, and pattern-forming. This is a creative-access metaphor, not
+a medical claim.
 
 ### Known Limits
 
@@ -158,6 +209,13 @@ local/server-side use. For judging, the public page demonstrates the user
 experience and artifacts; the repo demonstrates the backend integration and
 testable pipeline.
 
+Future direction: a local or on-device Gemma runtime could make Babbled Notes
+more private, but the submission only claims the hosted Gemma path that is
+implemented here.
+
+AI voice rendering is also local/server-side. The public static page does not
+store or expose a Google AI Studio key.
+
 ### Built With
 
 - Gemma 4 via Gemini API path
@@ -165,12 +223,13 @@ testable pipeline.
 - mido
 - jsonschema
 - Tone.js
+- Gemini TTS for local/server-side AI voice rendering
 - GitHub Pages
 
 ## Demo Script
 
-1. Open https://brookehoward2008-droid.github.io/lilt/
-2. Show the sentence: "Hum into readable music code."
+1. Open https://brookehoward2008-droid.github.io/babbled-notes/
+2. Show the sentence: "Start with one sound."
 3. Record a short sound, stop, and play it back.
 4. Point out that the digest is a model receipt, not homework for the user.
 5. Tap C, E, G in "Tap a melody"; show the generated Lilt source changing.
@@ -179,7 +238,7 @@ testable pipeline.
 8. Show "Why it is different."
 9. Show "Build a song" with melody, pulse, and bass.
 10. Show "Work with others" and the text diff.
-11. Close with: Lilt makes musical ideas editable, portable, and accessible.
+11. Close with: Babbled Notes makes musical ideas editable, portable, and accessible.
 
 ## Submission Checklist
 
@@ -192,14 +251,38 @@ testable pipeline.
 - [ ] Mention accessibility and non-speaking input.
 - [ ] Mention outputs: `.lilt`, MIDI, Tone.js, digest JSON.
 - [ ] Mention tests and code quality.
+- [ ] Mention visual direction: tech, space, electricity, neural bloom.
 - [ ] Do not include API keys.
 - [ ] Confirm participant/team eligibility before submitting.
 
 ## Judging Criteria Mapping
 
-| Criterion | Lilt answer |
+| Criterion | Babbled Notes answer |
 |---|---|
 | Intentional Gemma 4 use | Gemma interprets audio/digest facts into schema-valid music JSON. |
 | Technical implementation | Tested Python pipeline, schema validation, deterministic codegen, MIDI/Tone.js emitters. |
 | Creativity/originality | A music accessibility compiler, not another chatbot or DAW clone. |
-| Usability/UX | Record, tap, play, choose instruments, inspect readable output, send feedback. |
+| Usability/UX | Record, tap, play forever, choose classical style and sound space, inspect readable output, send feedback. |
+
+## Final Submission Claims To Verify
+
+- [ ] Babbled Notes is Brooke's own submission concept and implementation direction.
+- [ ] Gemma 4 is doing real interpretive work, not just being mentioned.
+- [ ] Public demo does not expose API keys.
+- [ ] AI voice rendering is documented as local/server-side.
+- [ ] The app supports voice, touch, keyboard, and switch-style paths.
+- [ ] No slider-only control is required for the main flow.
+- [ ] Sound quality is treated as accessibility, not decoration.
+- [ ] Sources and third-party libraries are named clearly.
+
+## Research-Informed Motivation
+
+- Harvard Medicine Magazine: music engages broad brain systems, including
+  emotion, reward, memory, and motor networks.
+- American Music Therapy Association: music therapy is used to support
+  communication, expression, and emotional goals for autistic people.
+- Auditory-Motor Mapping Training research: intonation and bimanual movement can
+  create an interactive music-making path for spoken-language learning in
+  minimally verbal autistic children.
+- DEV Gemma 4 Challenge: Build submissions are judged on intentional Gemma 4
+  use, code quality, creativity/originality, and usability/UX.

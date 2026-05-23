@@ -11,40 +11,41 @@
 <body>
   <canvas id="neural-backdrop" aria-hidden="true"></canvas>
 
-  <section class="meadow-app" aria-label="Babbled Notes responsive world">
-    <aside class="meadow-left">
+  <section class="meadow-app wire-app neural-bloom-app" aria-label="Babbled Notes Neural Bloom reactive scene">
+    <aside class="meadow-left wire-left">
       <div>
         <div class="meadow-topline">
           <span class="live-dot"></span>
-          <span>Live</span>
+          <span>Tonight build</span>
         </div>
         <h1>Babbled Notes</h1>
-        <p class="meadow-subtitle">Responsive World</p>
-        <p class="meadow-copy">Speak, sing, hum, or babble. The meadow listens and comes alive.</p>
+        <p class="meadow-subtitle">Neural Bloom</p>
+        <p class="meadow-copy">Start with one sound. The tech, space, and electricity visual shows an empty brain filling as your music grows.</p>
+        <ol class="wire-steps">
+          <li>Tap <strong>Start Listening</strong>.</li>
+          <li>Hum, sing, speak, tap, or make one short sound.</li>
+          <li>Watch electric pathways bloom through the brain.</li>
+          <li>Try Record, Tap, or Compose below.</li>
+          <li><a href="#feedback-heading">Leave one line of feedback</a>.</li>
+        </ol>
       </div>
 
       <div class="meadow-mic-block">
         <button id="world-record" type="button" class="world-record" aria-label="Start recording in Babbled Notes world">
           <span class="mic-ring" aria-hidden="true"></span>
-          <span class="mic-icon" aria-hidden="true">🎙</span>
+          <span class="mic-icon" aria-hidden="true">Mic</span>
         </button>
-        <p id="world-record-label">Start Recording</p>
+        <p id="world-record-label">Start Listening</p>
         <div id="world-waveform" class="world-waveform" aria-hidden="true"></div>
       </div>
 
       <div class="world-activity-card">
         <div>
-          <span>World Activity</span>
-          <strong id="world-activity">72%</strong>
+          <span>Voice response</span>
+          <strong id="world-activity">0%</strong>
         </div>
         <div class="activity-meter"><span id="world-activity-bar"></span></div>
-        <small id="world-activity-state">Awakening</small>
-      </div>
-
-      <div class="world-icon-row" role="group" aria-label="World shortcuts">
-        <button type="button" aria-label="Morning">☀</button>
-        <button type="button" aria-label="Rain">☔</button>
-        <button type="button" aria-label="Dusk">☾</button>
+        <small id="world-activity-state">Waiting for sound</small>
       </div>
     </aside>
 
@@ -53,90 +54,56 @@
       <div class="stage-shade" aria-hidden="true"></div>
 
       <div class="world-message">
-        <span aria-hidden="true">🌿</span>
+        <span aria-hidden="true">♪</span>
         <div>
-          <h2 id="world-heading">The meadow is listening</h2>
-          <p id="world-message-text">Speak, hum, or record babbled notes.</p>
+          <h2 id="world-heading">Start with one sound</h2>
+          <p id="world-message-text">Tap Start Listening, hum or tap, then watch Neural Bloom light up.</p>
         </div>
         <div class="stage-meter"><span id="world-voice-meter"></span></div>
       </div>
 
       <div class="world-tip">
-        <span aria-hidden="true">✨</span>
-        <p>Higher pitch brings butterflies. Longer notes grow flowers. Softer sound draws the deer closer.</p>
-        <strong id="world-note-count">0 notes</strong>
+        <span aria-hidden="true">Tip</span>
+        <p>Short sounds spark quick signals. Longer sounds grow steady electric paths.</p>
+        <strong id="world-note-count">0 sounds</strong>
       </div>
     </section>
 
-    <aside class="meadow-controls" aria-label="Babbled Notes world controls">
+    <aside class="meadow-controls wire-controls" aria-label="Babbled Notes Neural Bloom controls">
       <div class="controls-title">
-        <span>World Controls</span>
-        <span aria-hidden="true">✿</span>
+        <span>Sound Controls</span>
+        <span aria-hidden="true">Tune</span>
       </div>
-      <label class="world-slider">
-        <span>Life intensity <strong id="life-value">80%</strong></span>
-        <input id="life-intensity" type="range" min="0" max="100" value="80" />
-      </label>
-      <label class="world-slider">
-        <span>Animal activity <strong id="animal-value">75%</strong></span>
-        <input id="animal-activity" type="range" min="0" max="100" value="75" />
-      </label>
-      <label class="world-slider">
-        <span>Plant growth <strong id="plant-value">85%</strong></span>
-        <input id="plant-growth" type="range" min="0" max="100" value="85" />
-      </label>
-      <label class="world-slider">
-        <span>Butterflies <strong id="butterfly-value">90%</strong></span>
-        <input id="butterfly-activity" type="range" min="0" max="100" value="90" />
-      </label>
-      <label class="world-slider">
-        <span>Brook flow <strong id="water-value">70%</strong></span>
-        <input id="water-flow" type="range" min="0" max="100" value="70" />
-      </label>
+      <fieldset class="wire-mode-picker">
+        <legend>Reaction mode</legend>
+        <button type="button" data-wire-mode="calm">Calm</button>
+        <button type="button" data-wire-mode="balanced" aria-pressed="true">Balanced</button>
+        <button type="button" data-wire-mode="bright">Bright</button>
+      </fieldset>
+      <input id="life-intensity" type="hidden" value="70" />
+      <input id="animal-activity" type="hidden" value="65" />
+      <input id="plant-growth" type="hidden" value="55" />
+      <span id="life-value" class="sr-only">70%</span>
+      <span id="animal-value" class="sr-only">65%</span>
+      <span id="plant-value" class="sr-only">55%</span>
 
       <div class="sound-sensitivity">
         <span>Sound sensitivity</span>
         <div><span>Voice level</span><strong id="voice-level">42%</strong></div>
       </div>
 
-      <div class="biome-panel">
-        <p>Biome Mood</p>
-        <div class="biome-grid" role="group" aria-label="Biome mood">
-          <button type="button" data-biome="Meadow" aria-pressed="true"><span></span>Meadow</button>
-          <button type="button" data-biome="Forest"><span></span>Forest</button>
-          <button type="button" data-biome="Spring"><span></span>Spring</button>
-          <button type="button" data-biome="Autumn"><span></span>Autumn</button>
-          <button type="button" data-biome="Dusk"><span></span>Dusk</button>
-          <button type="button" data-biome="Winter"><span></span>Winter</button>
-        </div>
-      </div>
-
-      <div class="phone-preview" aria-hidden="true">
-        <div class="phone-shell">
-          <div class="phone-screen">
-            <div class="phone-bar"><span></span><strong>Babbled Notes</strong><span></span></div>
-            <div class="phone-scene"></div>
-            <div class="phone-listening">
-              <span class="phone-mic">🎙</span>
-              <div>
-                <strong>Listening...</strong>
-                <small>World Activity · Thriving</small>
-              </div>
-            </div>
-            <div class="phone-tabs">
-              <span>Time</span><span>Weather</span><span>Controls</span><span>Biomes</span>
-            </div>
-          </div>
-        </div>
+      <div class="wire-note">
+        <strong>Creative activation.</strong>
+        <p>Neural Bloom is a symbolic music-reactive graphic, not a medical claim.</p>
+        <a href="#record-heading">Go to Record</a>
       </div>
     </aside>
 
-    <footer class="creature-strip" aria-label="Responsive creatures">
-      <div><span>⛰</span><strong>Deer</strong><small id="deer-state">Watching</small></div>
-      <div><span>◜</span><strong>Rabbit</strong><small id="rabbit-state">Hidden</small></div>
-      <div><span>♣</span><strong>Squirrel</strong><small id="squirrel-state">Still</small></div>
-      <div><span>♪</span><strong>Bird</strong><small id="bird-state">Perched</small></div>
-      <div><span>✦</span><strong>Butterfly</strong><small id="butterfly-state">Resting</small></div>
+    <footer class="creature-strip wire-strip" aria-label="Reactive Neural Bloom states">
+      <div><span>1</span><strong>Brain</strong><small id="bird-state">Empty</small></div>
+      <div><span>2</span><strong>Signals</strong><small id="wire-state">Still</small></div>
+      <div><span>3</span><strong>Melody</strong><small id="melody-state">Waiting</small></div>
+      <div><span>4</span><strong>Listening</strong><small id="listening-state">Off</small></div>
     </footer>
   </section>
 
@@ -148,7 +115,7 @@
       <a href="#why-heading">Why</a>
       <a href="#feedback-heading">Feedback</a>
     </nav>
-    <p class="helper-text">The classic composing tools are below the responsive world.</p>
+    <p class="helper-text">Use the tools below when you are ready to record, tap, compose, and send feedback.</p>
   </header>
 
   <main>
@@ -169,7 +136,11 @@
       <div class="controls recorder-controls" role="group" aria-label="Recording">
         <button id="record" type="button" class="record-btn" aria-label="Start recording">Record</button>
         <button id="record-stop" type="button" class="stop-btn" aria-label="Stop recording">Stop</button>
+        <button id="voice-arm" type="button" class="stop-btn" aria-pressed="false">Voice start</button>
       </div>
+      <p class="helper-text">
+        Optional voice control: tap Voice start once, then say "start recording" or "stop recording."
+      </p>
       <audio id="recording-player" controls></audio>
       <div class="controls recorder-actions" role="group" aria-label="Recording actions">
         <button id="record-play" type="button" class="play-btn" aria-label="Play recording">Play recording</button>
@@ -213,6 +184,8 @@
         <select id="tap-instrument">
           <option value="pad">Warm pad</option>
           <option value="piano">Soft piano</option>
+          <option value="wire">Telephone wire</option>
+          <option value="bird">Bird chirp</option>
           <option value="pluck">Plucked string</option>
           <option value="bell">Bell</option>
         </select>
@@ -249,6 +222,8 @@ voice voice:
           <option value="auto">From .lilt code</option>
           <option value="pad">Warm pad</option>
           <option value="piano">Soft piano</option>
+          <option value="wire">Telephone wire</option>
+          <option value="bird">Bird chirp</option>
           <option value="pluck">Plucked string</option>
           <option value="bell">Bell</option>
         </select>
@@ -261,10 +236,10 @@ voice voice:
     </section>
 
     <section class="composer-panel" aria-labelledby="composer-heading">
-      <h2 id="composer-heading">Composer workspace</h2>
+      <h2 id="composer-heading">Make your music win</h2>
       <p class="helper-text">
-        Edit the music text directly. Play it, save it as a `.lilt` file, or
-        open a saved idea later.
+        Write one tiny idea, choose a classical style, then let it replay while
+        you change notes. The goal is to hear your idea become worth keeping.
       </p>
       <div class="composer-toolbar" role="group" aria-label="Insert music tokens">
         <button type="button" data-insert="C4 ! mf ">C</button>
@@ -277,7 +252,7 @@ voice voice:
         <button type="button" data-insert="! soft ">Soft</button>
         <button type="button" data-insert="! loud ">Loud</button>
       </div>
-      <label class="comment-label" for="composer-source">Babbled Notes source</label>
+      <label class="comment-label" for="composer-source">Your music code</label>
       <textarea id="composer-source" spellcheck="false" rows="12"># Brooke's first idea
 tempo 86
 feel straight
@@ -298,12 +273,28 @@ voice bass:
         <select id="composer-instrument">
           <option value="pad">Warm pad</option>
           <option value="piano">Soft piano</option>
+          <option value="wire">Telephone wire</option>
+          <option value="bird">Bird chirp</option>
           <option value="pluck">Plucked string</option>
           <option value="bell">Bell</option>
         </select>
       </div>
+      <fieldset class="style-picker">
+        <legend>Classical style</legend>
+        <button type="button" data-composer-style="bach">Bach</button>
+        <button type="button" data-composer-style="mozart">Mozart</button>
+        <button type="button" data-composer-style="beethoven">Beethoven</button>
+        <button type="button" data-composer-style="chopin" aria-pressed="true">Chopin</button>
+      </fieldset>
+      <fieldset class="space-picker">
+        <legend>Sound space</legend>
+        <button type="button" data-sound-space="center">Center</button>
+        <button type="button" data-sound-space="room" aria-pressed="true">Room</button>
+        <button type="button" data-sound-space="hall">Concert hall</button>
+      </fieldset>
       <div class="controls composer-actions" role="group" aria-label="Composer actions">
         <button id="composer-play" type="button" class="play-btn">Play workspace</button>
+        <button id="composer-loop" type="button" class="play-btn" aria-pressed="false">Play forever</button>
         <button id="composer-stop" type="button" class="stop-btn">Stop</button>
       </div>
       <div class="controls composer-actions" role="group" aria-label="File actions">
@@ -319,6 +310,10 @@ voice bass:
         <div><span id="composer-length">4s</span><small>rough length</small></div>
       </div>
       <p id="composer-status" class="status" role="status" aria-live="polite"></p>
+      <p class="helper-text">
+        Local AI voice render is available from the CLI for server-side use:
+        <code>python -m lilt.cli voice examples\three_note_hum.json --style chopin</code>
+      </p>
     </section>
 
     <section class="why-panel" aria-labelledby="why-heading">
@@ -336,7 +331,8 @@ voice bass:
       </ul>
       <p>
         The goal is musical agency for people who may hum, tap, use a switch,
-        use assisted speech, or communicate without speech at all.
+        use assisted speech, or communicate without speech at all. The first
+        playback should feel like proof: your sound can become music.
       </p>
     </section>
 
@@ -471,7 +467,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
         the audio pipeline live offline; this page is the in-browser preview.
       </p>
       <p>
-        <a href="https://github.com/brookehoward2008-droid/lilt" rel="noopener">See the code on GitHub &raquo;</a>
+        <a href="https://github.com/brookehoward2008-droid/babbled-notes" rel="noopener">See the code on GitHub &raquo;</a>
       </p>
     </section>
   </main>
@@ -489,6 +485,7 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="player.js"></script>
   <script src="meadow.js"></script>
   <script src="recorder.js"></script>
+  <script src="voice-control.js"></script>
   <script src="accessible.js"></script>
   <script src="composer.js"></script>
   <script src="backdrop.js"></script>

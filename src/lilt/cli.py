@@ -20,7 +20,7 @@ from pathlib import Path
 
 import jsonschema
 
-from . import __version__, codegen, demo, dsp, midi, pipeline, schema, tonejs
+from . import __version__, codegen, demo, dsp, midi, pipeline, schema, tonejs, voice
 from .backends.fake import FakeBackend
 from .backends.gemini import GeminiBackend
 
@@ -80,6 +80,30 @@ def main(argv: list[str] | None = None) -> int:
         help="Output path. Defaults to <input>.tonejs.json alongside the input.",
     )
 
+    p_voice = sub.add_parser("voice", help="JSON -> AI voice render prompt or WAV")
+    p_voice.add_argument("input", help="Path to a Lilt JSON file")
+    p_voice.add_argument(
+        "--style",
+        choices=("bach", "beethoven", "mozart", "chopin"),
+        default="chopin",
+        help="Classical performance style. Defaults to chopin.",
+    )
+    p_voice.add_argument("--voice", default="Kore", help="Gemini TTS voice name.")
+    p_voice.add_argument(
+        "--model",
+        default="gemini-3.1-flash-tts-preview",
+        help="Gemini TTS model.",
+    )
+    p_voice.add_argument(
+        "--dry-run-prompt",
+        action="store_true",
+        help="Write the TTS prompt without calling Gemini.",
+    )
+    p_voice.add_argument(
+        "-o", "--output",
+        help="Output path. Defaults to <input>.voice.wav or <input>.voice-prompt.txt.",
+    )
+
     p_demo = sub.add_parser("demo-data", help="Regenerate docs/data.js from examples")
     p_demo.add_argument(
         "--examples",
@@ -110,6 +134,15 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_info(args.input)
     if args.cmd == "tonejs":
         return _cmd_tonejs(args.input, args.output)
+    if args.cmd == "voice":
+        return _cmd_voice(
+            args.input,
+            args.output,
+            args.style,
+            args.voice,
+            args.model,
+            args.dry_run_prompt,
+        )
     if args.cmd == "demo-data":
         return _cmd_demo_data(args.examples, args.output)
 
@@ -250,6 +283,40 @@ def _cmd_tonejs(input_path: str, output_path: str | None) -> int:
         encoding="utf-8",
         newline="\n",
     )
+    print(f"wrote {out}")
+    return 0
+
+
+def _cmd_voice(
+    input_path: str,
+    output_path: str | None,
+    style: str,
+    voice_name: str,
+    model: str,
+    dry_run_prompt: bool,
+) -> int:
+    data = _load_json(input_path)
+    if data is None:
+        return 2
+    try:
+        schema.validate(data)
+    except jsonschema.ValidationError as e:
+        print(f"error: input does not match Lilt schema: {e.message}", file=sys.stderr)
+        return 3
+
+    base = Path(input_path).with_suffix("")
+    if dry_run_prompt:
+        out = Path(output_path) if output_path else base.with_suffix(".voice-prompt.txt")
+        out.write_text(voice.prompt_for_voice(data, style), encoding="utf-8", newline="\n")
+        print(f"wrote {out}")
+        return 0
+
+    out = Path(output_path) if output_path else base.with_suffix(".voice.wav")
+    try:
+        voice.render_voice(data, out, style=style, voice_name=voice_name, model=model)
+    except Exception as e:
+        print(f"error: voice render failed: {e}", file=sys.stderr)
+        return 5
     print(f"wrote {out}")
     return 0
 

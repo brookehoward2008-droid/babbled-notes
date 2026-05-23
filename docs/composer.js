@@ -2,7 +2,10 @@
   const elements = {
     source: document.getElementById("composer-source"),
     instrument: document.getElementById("composer-instrument"),
+    styleButtons: document.querySelectorAll("[data-composer-style]"),
+    spaceButtons: document.querySelectorAll("[data-sound-space]"),
     play: document.getElementById("composer-play"),
+    loop: document.getElementById("composer-loop"),
     stop: document.getElementById("composer-stop"),
     save: document.getElementById("composer-save"),
     open: document.getElementById("composer-open"),
@@ -23,6 +26,9 @@
   let parts = [];
   let stopTimer = null;
   let lastSelection = null;
+  let style = "chopin";
+  let space = "room";
+  let looping = false;
 
   function setStatus(text) {
     elements.status.textContent = text;
@@ -55,6 +61,22 @@
       clearTimeout(stopTimer);
       stopTimer = null;
     }
+  }
+
+  function setStyle(next) {
+    style = next || "chopin";
+    elements.styleButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", button.dataset.composerStyle === style ? "true" : "false");
+    });
+    setStatus(`${styleLabel()} style selected.`);
+  }
+
+  function setSpace(next) {
+    space = next || "room";
+    elements.spaceButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", button.dataset.soundSpace === space ? "true" : "false");
+    });
+    setStatus(`${spaceLabel()} sound space selected.`);
   }
 
   function parseLilt(text) {
@@ -183,22 +205,60 @@
       s.volume.value = -5;
       return connectStudio(s);
     }
+    const styled = makeClassicalSynth(style);
+    if (styled) return connectStudio(styled, voice.name);
     const factory = window.LILT_SYNTHS && window.LILT_SYNTHS.makePitchedSynth;
-    return connectStudio(factory ? factory(elements.instrument.value) : new Tone.PolySynth(Tone.Synth));
+    return connectStudio(factory ? factory(elements.instrument.value) : new Tone.PolySynth(Tone.Synth), voice.name);
   }
 
-  function connectStudio(synth) {
+  function makeClassicalSynth(mode) {
+    if (mode === "bach") {
+      const s = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "triangle" },
+        envelope: { attack: 0.018, decay: 0.16, sustain: 0.72, release: 0.58 },
+      });
+      s.volume.value = -12;
+      return s;
+    }
+    if (mode === "mozart") {
+      const s = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "sine" },
+        envelope: { attack: 0.008, decay: 0.18, sustain: 0.22, release: 0.54 },
+      });
+      s.volume.value = -10;
+      return s;
+    }
+    if (mode === "beethoven") {
+      const s = new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: "triangle" },
+        envelope: { attack: 0.006, decay: 0.3, sustain: 0.24, release: 0.82 },
+      });
+      s.volume.value = -9;
+      return s;
+    }
+    const s = new Tone.PolySynth(Tone.Synth, {
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.04, decay: 0.28, sustain: 0.46, release: 1.4 },
+    });
+    s.volume.value = -13;
+    return s;
+  }
+
+  function connectStudio(synth, name) {
     const connector = window.LILT_SYNTHS && window.LILT_SYNTHS.connectStudio;
-    return connector ? connector(synth, "workspace") : synth.toDestination();
+    if (!connector) return synth.toDestination();
+    const spatialName = space === "center" ? "workspace" : `${name || "workspace"}-${space}`;
+    return connector(synth, spatialName);
   }
 
-  async function play() {
+  async function play(forever) {
     try {
       await Tone.start();
       const compiled = buildEvents(parseLilt(elements.source.value));
       Tone.getTransport().stop();
       Tone.getTransport().cancel();
       Tone.getTransport().position = 0;
+      Tone.getTransport().loop = false;
       dispose();
 
       compiled.voices.forEach((voice) => {
@@ -209,27 +269,61 @@
           const humanVelocity = window.LILT_SYNTHS && window.LILT_SYNTHS.humanizeVelocity;
           synth.triggerAttackRelease(
             event.note,
-            Math.max(0.08, event.duration * 0.96),
+            styledDuration(event.duration),
             humanTime ? humanTime(time, 1) : time,
-            humanVelocity ? humanVelocity(event.velocity, 0.08) : event.velocity
+            humanVelocity ? humanVelocity(styledVelocity(event.velocity), 0.08) : styledVelocity(event.velocity)
           );
         }, voice.events.map((event) => [event.time, event]));
         part.start(0);
         parts.push(part);
       });
 
+      if (forever) {
+        Tone.getTransport().loop = true;
+        Tone.getTransport().loopStart = 0;
+        Tone.getTransport().loopEnd = Math.max(1.25, compiled.totalSeconds + loopGap());
+      }
       Tone.getTransport().start();
-      setStatus("Playing workspace...");
-      stopTimer = setTimeout(stop, Math.ceil((compiled.totalSeconds + 0.4) * 1000));
+      looping = Boolean(forever);
+      elements.loop.setAttribute("aria-pressed", looping ? "true" : "false");
+      setStatus(forever ? `Playing forever in ${styleLabel()} style, ${spaceLabel()} space.` : `Playing once in ${styleLabel()} style, ${spaceLabel()} space.`);
+      if (!forever) {
+        stopTimer = setTimeout(stop, Math.ceil((compiled.totalSeconds + 0.4) * 1000));
+      }
     } catch (e) {
       setStatus(`Could not play: ${e.message}`);
     }
+  }
+
+  function styledDuration(duration) {
+    const amount = style === "bach" ? 0.88 : style === "beethoven" ? 1.05 : style === "chopin" ? 1.12 : 0.94;
+    return Math.max(0.08, duration * amount);
+  }
+
+  function styledVelocity(velocity) {
+    const lift = style === "beethoven" ? 0.12 : style === "mozart" ? 0.04 : style === "chopin" ? -0.08 : 0;
+    return Math.max(0.22, Math.min(0.92, velocity + lift));
+  }
+
+  function loopGap() {
+    return style === "bach" ? 0.18 : style === "beethoven" ? 0.5 : style === "chopin" ? 0.72 : 0.32;
+  }
+
+  function styleLabel() {
+    return style.charAt(0).toUpperCase() + style.slice(1);
+  }
+
+  function spaceLabel() {
+    return space === "hall" ? "Concert hall" : space.charAt(0).toUpperCase() + space.slice(1);
   }
 
   function stop() {
     Tone.getTransport().stop();
     Tone.getTransport().cancel();
     Tone.getTransport().position = 0;
+    Tone.getTransport().loop = false;
+    looping = false;
+    elements.loop.setAttribute("aria-pressed", "false");
     dispose();
     setStatus("Stopped.");
   }
@@ -304,12 +398,22 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     updateSummary();
-    elements.play.addEventListener("click", play);
+    elements.play.addEventListener("click", () => play(false));
+    elements.loop.addEventListener("click", () => {
+      if (looping) stop();
+      else play(true);
+    });
     elements.stop.addEventListener("click", stop);
     elements.save.addEventListener("click", save);
     elements.open.addEventListener("click", openFile);
     elements.file.addEventListener("change", readFile);
     elements.loadDemo.addEventListener("click", loadSelectedDemo);
+    elements.styleButtons.forEach((button) => {
+      button.addEventListener("click", () => setStyle(button.dataset.composerStyle));
+    });
+    elements.spaceButtons.forEach((button) => {
+      button.addEventListener("click", () => setSpace(button.dataset.soundSpace));
+    });
     elements.source.addEventListener("input", () => {
       rememberSelection();
       updateSummary();
