@@ -1627,7 +1627,7 @@ footer a {
   *, *::before, *::after { transition: none !important; }
 }
 
-/* Tonight build: simplify the opening scene to birds on telephone wires. */
+/* Neural Bloom opening scene. */
 .wire-app {
   --world-accent: #f59e0b;
   --world-accent-2: #0ea5e9;
@@ -1952,4 +1952,124 @@ footer a {
 .neural-bloom-app .wire-strip div.is-awake {
   border-color: rgba(250, 204, 21, 0.44);
   box-shadow: 0 0 28px rgba(250, 204, 21, 0.18);
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  .meadow-app {
+    height: 100vh;
+    min-height: 100vh;
+    margin: 0 auto;
+    border-radius: 1.2rem;
+  }
+
+  .wire-app {
+    grid-template-columns: minmax(16rem, 22rem) minmax(28rem, 1fr) minmax(13rem, 18rem);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .wire-app .meadow-left {
+    grid-row: 1;
+    gap: 0.7rem;
+    padding: 1rem 1.35rem;
+    overflow: hidden;
+  }
+
+  .wire-app .meadow-left h1 {
+    margin-top: 0.65rem;
+    font-size: clamp(2.6rem, 4.2vw, 4.1rem);
+  }
+
+  .wire-app .meadow-subtitle {
+    margin-top: 0.3rem;
+  }
+
+  .wire-app .meadow-copy {
+    max-width: 19rem;
+    margin-top: 1.15rem;
+    font-size: 0.96rem;
+    line-height: 1.55;
+  }
+
+  .wire-steps {
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.42;
+  }
+
+  .wire-app .meadow-mic-block {
+    gap: 0.5rem;
+  }
+
+  .wire-app .world-record {
+    width: 7.1rem;
+    height: 7.1rem;
+  }
+
+  #world-record-label {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .world-waveform {
+    height: 1.1rem;
+  }
+
+  .world-activity-card {
+    display: none;
+  }
+
+  .wire-app .meadow-stage {
+    min-height: 0;
+  }
+
+  .wire-app .world-message {
+    top: 1.25rem;
+    max-width: min(31rem, 62%);
+    padding: 0.8rem 1rem;
+  }
+
+  .wire-app .world-message h2 {
+    font-size: 1rem;
+  }
+
+  .wire-app .world-message p {
+    font-size: 0.86rem;
+  }
+
+  .wire-app .world-tip {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .wire-app .meadow-controls {
+    grid-row: 1;
+    gap: 0.85rem;
+    padding: 1rem 1.35rem;
+    overflow: hidden;
+  }
+
+  .wire-mode-picker {
+    gap: 0.45rem;
+  }
+
+  .wire-mode-picker button {
+    min-height: 3.15rem;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .sound-sensitivity,
+  .wire-note {
+    padding: 0.8rem;
+  }
+
+  .wire-note {
+    gap: 0.25rem;
+  }
+
+  .creature-strip.wire-strip {
+    display: none;
+  }
 }
