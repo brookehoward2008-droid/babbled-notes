@@ -147,6 +147,17 @@
         <button id="record-download" type="button" class="stop-btn" aria-label="Download recording">Download</button>
       </div>
       <p id="record-status" class="status" role="status" aria-live="polite"></p>
+      <div class="record-receipt" aria-label="Sound to code receipt">
+        <div>
+          <span>Recording quality</span>
+          <strong id="record-quality-summary">Waiting for sound</strong>
+        </div>
+        <div>
+          <span>Music features</span>
+          <strong id="record-feature-summary">No digest yet</strong>
+        </div>
+      </div>
+      <pre id="seed-preview"><code id="seed-source"># Your starter .lilt code will appear after recording.</code></pre>
       <pre id="digest-preview"><code id="digest-json"></code></pre>
     </section>
 

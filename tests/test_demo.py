@@ -49,3 +49,15 @@ def test_static_demo_names_neural_bloom_visual_direction():
     assert "drawElectricPathways" in meadow
     assert "drawFrequencyBloom" in meadow
     assert "drawSpatialGlow" in meadow
+
+
+def test_static_demo_surfaces_recording_quality_and_seed_path():
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    recorder = Path("docs/recorder.js").read_text(encoding="utf-8")
+
+    assert "record-quality-summary" in html
+    assert "seed-source" in html
+    assert "describeQuality" in recorder
+    assert "buildSeedSource" in recorder
+    assert "quality" in recorder
+    assert "features" in recorder

@@ -6,6 +6,9 @@
     download: document.getElementById("record-download"),
     audio: document.getElementById("recording-player"),
     status: document.getElementById("record-status"),
+    qualitySummary: document.getElementById("record-quality-summary"),
+    featureSummary: document.getElementById("record-feature-summary"),
+    seedSource: document.getElementById("seed-source"),
     digestPreview: document.getElementById("digest-preview"),
     digestJson: document.getElementById("digest-json"),
     actions: document.querySelector(".recorder-actions"),
@@ -60,8 +63,9 @@
     elements.actions.classList.add("is-ready");
     elements.digestPreview.classList.add("is-ready");
     elements.digestJson.textContent = JSON.stringify(digest, null, 2);
-    setVisualText("Meadow saved", "Your recording can now play back or download.");
-    setStatus("Recording ready. The preview below is for the model; you can ignore it.");
+    updateReceipt(digest);
+    setVisualText("Sound became code", "Your recording now has a digest and starter music code.");
+    setStatus("Recording ready. Review the quality hint, starter code, or play it back.");
   }
 
   function setRecording(active) {
@@ -160,8 +164,76 @@
     const bpm = estimateBpm(digest.onsets);
     if (bpm) digest.estimated_bpm = bpm;
     if (digest.pitch_trace.length) digest.estimated_key = roughKey(digest.pitch_trace);
+    digest.quality = describeQuality(digest.rms, digest.peak, samples);
+    digest.features = describeFeatures(digest.onsets, digest.pitch_trace, buffer.duration);
     await context.close();
     return digest;
+  }
+
+  function updateReceipt(digest) {
+    const quality = digest.quality || { level: "unknown", silence_ratio: 0, clipped: false };
+    const features = digest.features || { pitch_direction: "steady", gesture_density: "sparse" };
+    if (elements.qualitySummary) {
+      const clipped = quality.clipped ? ", clipped" : "";
+      elements.qualitySummary.textContent = `${quality.level.replace("_", " ")}${clipped}; silence ${Math.round((quality.silence_ratio || 0) * 100)}%`;
+    }
+    if (elements.featureSummary) {
+      elements.featureSummary.textContent = `${features.pitch_direction || "steady"} pitch, ${features.gesture_density || "sparse"} gestures`;
+    }
+    if (elements.seedSource) {
+      elements.seedSource.textContent = buildSeedSource(digest);
+    }
+  }
+
+  function describeQuality(rmsValue, peakValue, samples) {
+    const silence = silenceRatio(samples);
+    const clipped = peakValue >= 0.985;
+    let level = "usable";
+    if (rmsValue < 0.008 || silence > 0.92) level = "too_quiet";
+    else if (clipped) level = "clipped";
+    else if (rmsValue > 0.45) level = "very_loud";
+    return {
+      level,
+      clipped,
+      silence_ratio: round(silence, 3),
+      dynamic_range: round(Math.max(0, peakValue - rmsValue), 4),
+    };
+  }
+
+  function describeFeatures(onsets, pitchTrace, duration) {
+    return {
+      onset_count: onsets.length,
+      pitch_count: pitchTrace.length,
+      pitch_direction: pitchDirection(pitchTrace),
+      gesture_density: gestureDensity(onsets, duration),
+    };
+  }
+
+  function buildSeedSource(digest) {
+    const tempo = digest.estimated_bpm || 80;
+    const key = digest.estimated_key || "C major";
+    const quality = digest.quality && digest.quality.level ? digest.quality.level : "usable";
+    const dynamic = quality === "too_quiet" ? "soft" : quality === "clipped" || quality === "very_loud" ? "loud" : "mf";
+    const notes = digest.pitch_trace && digest.pitch_trace.length ? digest.pitch_trace.slice(0, 8) : [];
+    const lines = [
+      "# starter code from your recording",
+      `tempo ${tempo}`,
+      `feel ${digest.features && digest.features.gesture_density === "dense" ? "tight" : "straight"}`,
+      `key ${key}`,
+      "",
+      `mood ${quality === "too_quiet" ? "gentle, intimate" : "warm, bright"}`,
+      "",
+    ];
+
+    if (notes.length) {
+      lines.push("voice voice:");
+      lines.push(`  ${notes.map((note) => `${note} ! ${dynamic}`).join(" ")}`);
+    } else {
+      const hits = Math.max(1, Math.min(8, (digest.onsets || []).length || 4));
+      lines.push("voice pulse:");
+      lines.push(`  ${Array.from({ length: hits }, () => `x ! ${dynamic}`).join(" ")}`);
+    }
+    return `${lines.join("\n")}\n`;
   }
 
   function mixToMono(buffer) {
@@ -186,6 +258,15 @@
     let max = 0;
     for (let i = 0; i < samples.length; i += 1) max = Math.max(max, Math.abs(samples[i]));
     return max;
+  }
+
+  function silenceRatio(samples) {
+    if (!samples.length) return 1;
+    let silent = 0;
+    for (let i = 0; i < samples.length; i += 1) {
+      if (Math.abs(samples[i]) < 0.012) silent += 1;
+    }
+    return silent / samples.length;
   }
 
   function estimateOnsets(samples, sampleRate) {
@@ -271,6 +352,31 @@
 
   function roughKey(notes) {
     return `${notes[0].replace(/[0-9-]/g, "")} major`;
+  }
+
+  function pitchDirection(notes) {
+    const values = notes.map(noteToMidi).filter((value) => value !== null);
+    if (values.length < 2) return "steady";
+    const delta = values[values.length - 1] - values[0];
+    if (delta >= 3) return "rising";
+    if (delta <= -3) return "falling";
+    if (Math.max(...values) - Math.min(...values) >= 5) return "arched";
+    return "steady";
+  }
+
+  function gestureDensity(onsets, duration) {
+    if (!duration) return "sparse";
+    const density = onsets.length / duration;
+    if (density >= 5) return "dense";
+    if (density >= 2) return "moderate";
+    return "sparse";
+  }
+
+  function noteToMidi(note) {
+    const match = /^([A-G](?:#|b)?)(-?\d)$/.exec(note);
+    if (!match) return null;
+    const roots = { C: 0, "C#": 1, Db: 1, D: 2, "D#": 3, Eb: 3, E: 4, F: 5, "F#": 6, Gb: 6, G: 7, "G#": 8, Ab: 8, A: 9, "A#": 10, Bb: 10, B: 11 };
+    return (Number(match[2]) + 1) * 12 + roots[match[1]];
   }
 
   function round(value, places) {
