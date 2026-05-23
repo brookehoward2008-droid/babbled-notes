@@ -196,6 +196,32 @@ def test_voice_dry_run_writes_prompt(tmp_path, canonical_example):
     assert "la(C4" in text
 
 
+def test_playback_plan_writes_plan_and_prompt(tmp_path, canonical_example):
+    inp = _write_fixture(tmp_path, canonical_example)
+    plan_out = tmp_path / "plan.json"
+    prompt_out = tmp_path / "plan-prompt.txt"
+
+    code = cli.main(["playback-plan", str(inp), "--style", "chopin", "--space", "room", "-o", str(plan_out)])
+    prompt_code = cli.main([
+        "playback-plan",
+        str(inp),
+        "--style",
+        "chopin",
+        "--space",
+        "room",
+        "--dry-run-prompt",
+        "-o",
+        str(prompt_out),
+    ])
+
+    assert code == 0
+    assert prompt_code == 0
+    plan = json.loads(plan_out.read_text(encoding="utf-8"))
+    assert plan["style"] == "chopin"
+    assert plan["vocal_depth"]
+    assert "playback production plan" in prompt_out.read_text(encoding="utf-8")
+
+
 def test_info_prints_summary(tmp_path, canonical_example, capsys):
     inp = _write_fixture(tmp_path, canonical_example)
     code = cli.main(["info", str(inp)])

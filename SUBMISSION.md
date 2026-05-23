@@ -180,6 +180,7 @@ collaborator into the same DAW.
 - fake backend for offline tests
 - Gemini/Gemma backend for hosted model use
 - local/server-side Gemini TTS voice render path
+- playback depth plan for Tone.js/Web Audio production choices
 - accessibility notes and test plan
 
 ### What Works Today
@@ -198,6 +199,7 @@ collaborator into the same DAW.
 - digest JSON -> starter `.json`, `.lilt`, and `.mid`
 - audio + digest + backend -> JSON/Lilt/MIDI
 - JSON -> AI voice prompt or local/server-side voice WAV
+- JSON -> playback depth plan or Gemma playback-plan prompt
 - recording quality hints: usable, too quiet, clipped, very loud
 - musical feature hints: pitch direction and gesture density
 - test suite

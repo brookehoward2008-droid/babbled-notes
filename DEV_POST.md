@@ -48,6 +48,11 @@ The repo uses the hosted Gemini API path with `gemma-4-26b-a4b-it`. The public
 browser demo does not expose an API key. The Gemma path runs locally or
 server-side.
 
+Gemma can also be used for a playback production plan instead of raw audio. The
+plan describes instrument layers, spatial width, reverb, humanization, velocity
+curve, vocal depth, repeat variation, and Neural Bloom response. Tone.js/Web
+Audio can render those choices safely in the browser.
+
 ## What Makes It Different
 
 Babbled Notes is not a chatbot that talks about music. It is a compiler pipeline

@@ -20,7 +20,7 @@ from pathlib import Path
 
 import jsonschema
 
-from . import __version__, codegen, demo, dsp, midi, pipeline, schema, tonejs, translate, voice
+from . import __version__, codegen, demo, dsp, midi, pipeline, playback, schema, tonejs, translate, voice
 from .backends.fake import FakeBackend
 from .backends.gemini import GeminiBackend
 
@@ -118,6 +118,28 @@ def main(argv: list[str] | None = None) -> int:
         help="Output path. Defaults to <input>.voice.wav or <input>.voice-prompt.txt.",
     )
 
+    p_playback = sub.add_parser("playback-plan", help="JSON -> playback depth/quality plan")
+    p_playback.add_argument("input", help="Path to a Lilt JSON file")
+    p_playback.add_argument(
+        "--style",
+        choices=("bach", "beethoven", "mozart", "chopin"),
+        default="chopin",
+    )
+    p_playback.add_argument(
+        "--space",
+        choices=("center", "room", "concert-hall"),
+        default="room",
+    )
+    p_playback.add_argument(
+        "--dry-run-prompt",
+        action="store_true",
+        help="Write a Gemma playback-plan prompt instead of deterministic JSON.",
+    )
+    p_playback.add_argument(
+        "-o", "--output",
+        help="Output path. Defaults to <input>.playback-plan.json or .playback-prompt.txt.",
+    )
+
     p_demo = sub.add_parser("demo-data", help="Regenerate docs/data.js from examples")
     p_demo.add_argument(
         "--examples",
@@ -159,6 +181,14 @@ def main(argv: list[str] | None = None) -> int:
             args.style,
             args.voice,
             args.model,
+            args.dry_run_prompt,
+        )
+    if args.cmd == "playback-plan":
+        return _cmd_playback_plan(
+            args.input,
+            args.output,
+            args.style,
+            args.space,
             args.dry_run_prompt,
         )
     if args.cmd == "demo-data":
@@ -399,6 +429,44 @@ def _cmd_voice(
     except Exception as e:
         print(f"error: voice render failed: {e}", file=sys.stderr)
         return 5
+    print(f"wrote {out}")
+    return 0
+
+
+def _cmd_playback_plan(
+    input_path: str,
+    output_path: str | None,
+    style: str,
+    space: str,
+    dry_run_prompt: bool,
+) -> int:
+    data = _load_json(input_path)
+    if data is None:
+        return 2
+    try:
+        schema.validate(data)
+    except jsonschema.ValidationError as e:
+        print(f"error: input does not match Lilt schema: {e.message}", file=sys.stderr)
+        return 3
+
+    source = Path(input_path)
+    if dry_run_prompt:
+        out = Path(output_path) if output_path else source.with_suffix(".playback-prompt.txt")
+        out.write_text(
+            playback.prompt_for_plan(data, style=style, space=space),
+            encoding="utf-8",
+            newline="\n",
+        )
+        print(f"wrote {out}")
+        return 0
+
+    plan = playback.plan_from_lilt(data, style=style, space=space)
+    out = Path(output_path) if output_path else source.with_suffix(".playback-plan.json")
+    out.write_text(
+        json.dumps(plan, indent=2, sort_keys=False),
+        encoding="utf-8",
+        newline="\n",
+    )
     print(f"wrote {out}")
     return 0
 

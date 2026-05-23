@@ -253,6 +253,19 @@ pip install -e .[gemini]
 python -m lilt.cli voice examples\three_note_hum.json --style chopin -o examples\three_note_hum.voice.wav
 ```
 
+Create a digital playback depth plan for Tone.js/Web Audio:
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m lilt.cli playback-plan examples\three_note_hum.json --style chopin --space concert-hall
+python -m lilt.cli playback-plan examples\three_note_hum.json --style chopin --space concert-hall --dry-run-prompt
+```
+
+The deterministic plan describes instrument layers, spatial width, reverb,
+humanization, velocity curve, vocal depth, variation, and Neural Bloom response.
+The dry-run prompt is the Gemma path for creating richer playback production
+plans without asking the model to generate raw audio bytes.
+
 ## Browser demo
 
 The static demo lives in `docs/`. Rebuild its data from the example JSON files:
