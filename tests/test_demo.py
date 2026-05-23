@@ -111,3 +111,13 @@ def test_composer_surfaces_playback_depth_receipt_without_sliders():
     assert "playback-motion-summary" in html
     assert "updatePlaybackReceipt" in composer
     assert "depthLabel" in composer
+
+
+def test_recorded_seed_can_load_into_composer_for_depth_playback():
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    recorder = Path("docs/recorder.js").read_text(encoding="utf-8")
+
+    assert "record-load-seed" in html
+    assert "loadSeedIntoComposer" in recorder
+    assert "composer-source" in recorder
+    assert "Loaded starter code into Compose" in recorder

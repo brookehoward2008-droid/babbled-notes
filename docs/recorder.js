@@ -3,6 +3,7 @@
     record: document.getElementById("record"),
     stop: document.getElementById("record-stop"),
     play: document.getElementById("record-play"),
+    loadSeed: document.getElementById("record-load-seed"),
     download: document.getElementById("record-download"),
     audio: document.getElementById("recording-player"),
     status: document.getElementById("record-status"),
@@ -391,6 +392,23 @@
     a.href = recordingUrl;
     a.download = `babbled-notes-recording.${ext}`;
     a.click();
+  }
+
+  function loadSeedIntoComposer() {
+    const composer = document.getElementById("composer-source");
+    if (!composer || !elements.seedSource) {
+      setStatus("Compose is not available on this page.");
+      return;
+    }
+    const seed = elements.seedSource.textContent || "";
+    if (!seed.trim() || seed.includes("will appear after recording")) {
+      setStatus("Record a sound first, then load the starter code into Compose.");
+      return;
+    }
+    composer.value = seed;
+    composer.dispatchEvent(new Event("input", { bubbles: true }));
+    document.getElementById("composer-heading")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setStatus("Loaded starter code into Compose. Choose a style and play it with depth.");
   }
 
   function setupRecordVisualizer() {
@@ -844,13 +862,16 @@
     setupRecordVisualizer();
     elements.stop.disabled = true;
     elements.play.disabled = true;
+    if (elements.loadSeed) elements.loadSeed.disabled = true;
     elements.download.disabled = true;
     elements.record.addEventListener("click", startRecording);
     elements.stop.addEventListener("click", stopRecording);
     elements.play.addEventListener("click", () => elements.audio.play());
+    if (elements.loadSeed) elements.loadSeed.addEventListener("click", loadSeedIntoComposer);
     elements.download.addEventListener("click", downloadRecording);
     elements.audio.addEventListener("loadedmetadata", () => {
       elements.play.disabled = false;
+      if (elements.loadSeed) elements.loadSeed.disabled = false;
       elements.download.disabled = false;
     });
   });
