@@ -1800,6 +1800,14 @@ footer a {
   border: 0;
 }
 
+.sr-only-controls {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .wire-note {
   display: grid;
   gap: 0.4rem;

@@ -67,6 +67,7 @@
     updateReceipt(digest);
     setVisualText("Sound became code", "Your recording now has a digest and starter music code.");
     setStatus("Recording ready. Review the quality hint, starter code, or play it back.");
+    document.getElementById("record-heading")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function setRecording(active) {

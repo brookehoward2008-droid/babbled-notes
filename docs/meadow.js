@@ -96,7 +96,7 @@
     window.addEventListener("babbled-recording-stop", stopListening);
     window.addEventListener("babbled-recording-denied", () => {
       setText(elements.messageTitle, "Microphone permission is needed");
-      setText(elements.messageText, "Allow the mic, then try Start Listening again.");
+      setText(elements.messageText, "Allow the mic, then try Record one sound again.");
       setText(elements.activityState, "Mic blocked");
     });
   }
@@ -195,9 +195,9 @@
 
   function stopListening() {
     listening = false;
-    setText(elements.label, "Start Listening");
+    setText(elements.label, "Record one sound");
     setText(elements.messageTitle, "Start with one sound");
-    setText(elements.messageText, "Tap Start Listening, hum or tap, then watch Neural Bloom light up.");
+    setText(elements.messageText, "Tap Record one sound, hum or tap, then watch Neural Bloom light up.");
     setText(elements.activityState, "Waiting for sound");
     setText(elements.states.listening, "Off");
     addClass(elements.record, "is-active", false);
