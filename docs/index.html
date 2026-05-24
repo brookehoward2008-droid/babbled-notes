@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -6,25 +6,25 @@
   <title>Babbled Notes &middot; sound into music</title>
   <meta name="description" content="An accessibility-first composing tool that turns hums, taps, breath, and sound into editable music." />
   <meta name="theme-color" content="#b1380e" />
-  <link rel="stylesheet" href="styles.css?v=neural-cockpit-20260523" />
+  <link rel="stylesheet" href="styles.css?v=final-flow-20260524" />
 </head>
 <body>
   <canvas id="neural-backdrop" aria-hidden="true"></canvas>
 
-  <section class="meadow-app wire-app neural-bloom-app cockpit-app" aria-label="Babbled Notes Neural Bloom cockpit">
+  <section class="meadow-app wire-app neural-bloom-app cockpit-app" aria-label="Babbled Notes Neural Bloom interface">
     <aside class="meadow-left wire-left">
       <div>
         <div class="meadow-topline">
           <span class="live-dot"></span>
-          <span>Neural Bloom cockpit</span>
+          <span>Neural Bloom</span>
         </div>
         <h1>Babbled Notes</h1>
         <p class="meadow-subtitle">Neural Bloom</p>
-        <p class="meadow-copy">One sound becomes a music-code seed. The tech, space, and electricity brain blooms as timing, pitch, and rhythm arrive.</p>
+        <p class="meadow-copy">Make one sound. The tech, space, and electricity brain blooms, then Babbled Notes turns it into editable music.</p>
         <ol class="wire-steps">
           <li><strong>Record</strong> one hum, tap, breath, or rhythm.</li>
-          <li><strong>Watch</strong> Neural Bloom build pathways.</li>
-          <li><strong>Open</strong> the result as editable .lilt code.</li>
+          <li><strong>See</strong> the brain react.</li>
+          <li><strong>Use</strong> the music result below.</li>
         </ol>
       </div>
 
@@ -37,13 +37,10 @@
         <div id="world-waveform" class="world-waveform" aria-hidden="true"></div>
       </div>
 
-      <div class="world-activity-card">
-        <div>
-          <span>Voice response</span>
-          <strong id="world-activity">0%</strong>
-        </div>
+      <div class="world-activity-card compact-status" aria-live="polite">
+        <span id="world-activity-state">Waiting for sound</span>
+        <strong id="world-activity">0%</strong>
         <div class="activity-meter"><span id="world-activity-bar"></span></div>
-        <small id="world-activity-state">Waiting for sound</small>
       </div>
     </aside>
 
@@ -61,18 +58,18 @@
       </div>
 
       <div class="world-tip">
-        <span aria-hidden="true">Signal</span>
-        <p>Low tones settle at the base. High tones spark upward. Rhythm strengthens paths.</p>
+        <span aria-hidden="true">Now</span>
+        <p>Record once. Playback, starter code, and digest appear below.</p>
         <strong id="world-note-count">0 sounds</strong>
       </div>
     </section>
 
     <aside class="meadow-controls wire-controls" aria-label="Babbled Notes Neural Bloom controls">
       <div class="controls-title">
-        <span>Live State</span>
-        <span aria-hidden="true">Gemma</span>
+        <span>What happens</span>
+        <span aria-hidden="true">Flow</span>
       </div>
-      <fieldset class="wire-mode-picker">
+      <fieldset class="wire-mode-picker sr-only-controls">
         <legend>Reaction mode</legend>
         <button type="button" data-wire-mode="calm">Calm</button>
         <button type="button" data-wire-mode="balanced" aria-pressed="true">Balanced</button>
@@ -85,35 +82,33 @@
       <span id="animal-value" class="sr-only">65%</span>
       <span id="plant-value" class="sr-only">55%</span>
 
-      <div class="sound-sensitivity">
+      <div class="sound-sensitivity compact-status sr-only-controls">
         <span>Sound sensitivity</span>
         <div><span>Voice level</span><strong id="voice-level">42%</strong></div>
       </div>
 
-      <div class="cockpit-readout">
-        <span>Pipeline</span>
-        <strong>local digest -> Gemma path</strong>
-        <small>Public page stays keyless. Google AI Studio runs CLI/server-side.</small>
+      <div class="flow-readout">
+        <div><span>1</span><strong>Record one sound</strong><small>Hum, tap, breath, voice, or rhythm.</small></div>
+        <div><span>2</span><strong>Hear it back</strong><small>Playback proves the sound was captured.</small></div>
+        <div><span>3</span><strong>Edit the music</strong><small>Open the starter .lilt code below.</small></div>
       </div>
 
-      <div class="wire-note">
-        <strong>Creative activation.</strong>
+      <div class="wire-note sr-only-controls">
+        <strong>Clear boundary.</strong>
         <p>Neural Bloom is a symbolic music-reactive graphic, not a medical claim.</p>
         <a href="#record-heading">Open sound result</a>
       </div>
     </aside>
 
-    <footer class="creature-strip wire-strip" aria-label="Reactive Neural Bloom states">
-      <div><span>1</span><strong>Brain</strong><small id="bird-state">Empty</small></div>
-      <div><span>2</span><strong>Signals</strong><small id="wire-state">Still</small></div>
-      <div><span>3</span><strong>Melody</strong><small id="melody-state">Waiting</small></div>
-      <div><span>4</span><strong>Listening</strong><small id="listening-state">Off</small></div>
-    </footer>
+    <span id="bird-state" class="sr-only">Empty</span>
+    <span id="wire-state" class="sr-only">Still</span>
+    <span id="melody-state" class="sr-only">Waiting</span>
+    <span id="listening-state" class="sr-only">Off</span>
   </section>
 
   <header class="classic-header">
     <nav class="quick-nav" aria-label="Demo sections">
-      <a href="#record-heading">Sound result</a>
+      <a href="#record-heading">Result</a>
       <a href="#tap-heading">Tap</a>
       <a href="#composer-heading">Compose</a>
       <a href="#why-heading">Why</a>
@@ -124,7 +119,7 @@
 
   <main>
     <section aria-labelledby="record-heading" class="record-panel">
-      <h2 id="record-heading">Sound result</h2>
+      <h2 id="record-heading">Result</h2>
       <p class="helper-text">
         Use the big mic above to record one short sound. This area shows playback,
         starter music code, and the digest receipt after recording.
@@ -496,8 +491,8 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="https://unpkg.com/tone@15.0.4/build/Tone.js"></script>
   <script src="data.js"></script>
   <script src="player.js"></script>
-  <script src="meadow.js?v=neural-cockpit-20260523"></script>
-  <script src="recorder.js?v=neural-cockpit-20260523"></script>
+  <script src="meadow.js?v=final-flow-20260524"></script>
+  <script src="recorder.js?v=final-flow-20260524"></script>
   <script src="voice-control.js"></script>
   <script src="accessible.js"></script>
   <script src="composer.js"></script>

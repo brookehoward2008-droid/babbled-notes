@@ -2157,6 +2157,8 @@ footer a {
   padding: clamp(1rem, 1.6vw, 1.35rem);
   gap: 0.9rem;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .cockpit-app .controls-title {
@@ -2202,6 +2204,80 @@ footer a {
 
 .cockpit-app .wire-strip div {
   border-radius: 0.75rem;
+}
+
+.cockpit-app {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.cockpit-app .meadow-left {
+  justify-content: center;
+}
+
+.cockpit-app .meadow-controls {
+  justify-content: center;
+}
+
+.cockpit-app .world-message,
+.cockpit-app .world-tip,
+.cockpit-app .compact-status,
+.flow-readout div,
+.cockpit-app .wire-note {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.018)),
+    rgba(4, 10, 25, 0.72);
+  border: 1px solid rgba(0, 245, 255, 0.18);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
+}
+
+.flow-readout {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.flow-readout div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.75rem;
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+}
+
+.flow-readout span {
+  grid-row: 1 / span 2;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #07132d;
+  background: linear-gradient(135deg, #00f5ff, #ffdf20);
+  font-weight: 900;
+}
+
+.flow-readout strong {
+  color: #f8fbff;
+  font-size: 1.02rem;
+}
+
+.flow-readout small {
+  color: rgba(238, 246, 255, 0.66);
+  line-height: 1.4;
+}
+
+.cockpit-app .compact-status {
+  padding: 0.75rem 0.9rem;
+}
+
+.cockpit-app .compact-status > span,
+.cockpit-app .compact-status small {
+  color: rgba(238, 246, 255, 0.7);
+  font-size: 0.8rem;
+}
+
+.cockpit-app .wire-strip,
+.cockpit-app .cockpit-readout {
+  display: none;
 }
 
 .cockpit-app .cockpit-stage::before {
@@ -2411,12 +2487,12 @@ footer a {
 @media (min-width: 1081px) {
   .cockpit-app {
     grid-template-columns: minmax(18rem, 23rem) minmax(34rem, 1fr) minmax(17rem, 22rem);
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr);
   }
 
   .cockpit-app .meadow-left {
     grid-column: 1;
-    grid-row: 1 / span 2;
+    grid-row: 1;
   }
 
   .cockpit-app .cockpit-stage {
@@ -2429,10 +2505,6 @@ footer a {
     grid-row: 1;
   }
 
-  .cockpit-app .wire-strip {
-    grid-column: 2 / 4;
-    grid-row: 2;
-  }
 }
 
 @media (max-width: 1080px) {
@@ -2441,7 +2513,7 @@ footer a {
     height: auto;
     min-height: 0;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    grid-template-rows: auto minmax(34rem, 58vh) auto;
+    grid-template-rows: auto minmax(34rem, 58vh);
     overflow: visible;
   }
 
@@ -2461,11 +2533,6 @@ footer a {
     grid-row: 1;
   }
 
-  .cockpit-app .wire-strip {
-    grid-column: 1 / -1;
-    grid-row: 3;
-  }
-
   .cockpit-app .world-message {
     max-width: min(32rem, calc(100% - 2rem));
   }
@@ -2477,20 +2544,18 @@ footer a {
     margin: 0;
     border-radius: 0;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(28rem, 56vh) auto auto;
+    grid-template-rows: auto minmax(28rem, 56vh) auto;
   }
 
   .cockpit-app .meadow-left,
   .cockpit-app .cockpit-stage,
-  .cockpit-app .meadow-controls,
-  .cockpit-app .wire-strip {
+  .cockpit-app .meadow-controls {
     grid-column: 1;
   }
 
   .cockpit-app .meadow-left { grid-row: 1; }
   .cockpit-app .cockpit-stage { grid-row: 2; min-height: 28rem; margin: 0.5rem; }
   .cockpit-app .meadow-controls { grid-row: 3; }
-  .cockpit-app .wire-strip { grid-row: 4; }
 
   .cockpit-app .meadow-left h1 {
     font-size: clamp(2.7rem, 15vw, 4rem);
