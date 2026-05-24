@@ -1897,7 +1897,13 @@ footer a {
   }
 
   .wire-app .meadow-stage {
+    grid-row: auto;
     min-height: 27rem;
+  }
+
+  .wire-app .meadow-controls,
+  .wire-app .wire-strip {
+    grid-row: auto;
   }
 
   .record-receipt {
