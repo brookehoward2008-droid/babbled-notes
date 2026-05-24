@@ -307,10 +307,10 @@
   }
 
   function drawNeuralBloom(reaction, variety, resonance) {
-    const growth = clamp(0.13 + smoothLevel * 1.18 + resonance * 0.16, 0.14, 1);
+    const growth = clamp(0.1 + smoothLevel * 1.22 + resonance * 0.14, 0.12, 1);
     const centerX = width * 0.52;
-    const centerY = height * 0.56;
-    const scale = Math.min(width * 0.45, height * 0.46);
+    const centerY = height * 0.55;
+    const scale = Math.min(width * 0.52, height * 0.56);
 
     ctx.save();
     ctx.translate(centerX, centerY);
@@ -327,9 +327,10 @@
 
   function drawBrainShell(growth) {
     const shell = ctx.createRadialGradient(0, -0.05, 0.08, 0, 0.05, 1.05);
-    shell.addColorStop(0, `rgba(255, 61, 129, ${0.05 + growth * 0.08})`);
-    shell.addColorStop(0.42, `rgba(0, 245, 255, ${0.04 + growth * 0.08})`);
-    shell.addColorStop(1, "rgba(139, 92, 246, 0.02)");
+    shell.addColorStop(0, `rgba(255, 61, 129, ${0.06 + growth * 0.12})`);
+    shell.addColorStop(0.38, `rgba(0, 245, 255, ${0.05 + growth * 0.12})`);
+    shell.addColorStop(0.76, `rgba(139, 92, 246, ${0.04 + growth * 0.06})`);
+    shell.addColorStop(1, "rgba(139, 92, 246, 0.015)");
 
     ctx.fillStyle = shell;
     ctx.shadowColor = "#00f5ff";
@@ -337,39 +338,41 @@
     brainOutlinePath();
     ctx.fill();
 
-    ctx.lineWidth = 0.012;
-    ctx.strokeStyle = `rgba(219, 234, 254, ${0.58 + growth * 0.34})`;
+    ctx.lineWidth = 0.01;
+    ctx.strokeStyle = `rgba(219, 244, 255, ${0.68 + growth * 0.28})`;
     ctx.shadowColor = "#00f5ff";
     ctx.shadowBlur = 0.05 + growth * 0.16;
     brainOutlinePath();
     ctx.stroke();
 
-    ctx.lineWidth = 0.006;
-    ctx.strokeStyle = `rgba(255, 223, 32, ${0.28 + growth * 0.38})`;
+    ctx.lineWidth = 0.005;
+    ctx.strokeStyle = `rgba(255, 223, 32, ${0.38 + growth * 0.44})`;
     ctx.shadowColor = "#ffdf20";
-    ctx.shadowBlur = 0.025 + growth * 0.08;
+    ctx.shadowBlur = 0.03 + growth * 0.1;
     ctx.beginPath();
-    ctx.moveTo(0.02, -0.66);
-    ctx.bezierCurveTo(-0.05, -0.42, -0.04, -0.18, 0.01, 0.1);
-    ctx.bezierCurveTo(0.04, 0.3, 0.03, 0.48, -0.05, 0.64);
+    ctx.moveTo(0.02, -0.76);
+    ctx.bezierCurveTo(-0.04, -0.5, -0.03, -0.22, 0.0, 0.04);
+    ctx.bezierCurveTo(0.03, 0.28, 0.0, 0.48, -0.08, 0.68);
     ctx.stroke();
 
     drawBrainFolds(growth);
+    drawBrainStem(growth);
     ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
   }
 
   function brainOutlinePath() {
     ctx.beginPath();
-    ctx.moveTo(-0.78, 0.08);
-    ctx.bezierCurveTo(-0.94, -0.12, -0.88, -0.42, -0.62, -0.5);
-    ctx.bezierCurveTo(-0.58, -0.76, -0.27, -0.89, -0.03, -0.72);
-    ctx.bezierCurveTo(0.12, -0.94, 0.48, -0.87, 0.6, -0.6);
-    ctx.bezierCurveTo(0.86, -0.56, 0.99, -0.29, 0.84, -0.04);
-    ctx.bezierCurveTo(1.0, 0.2, 0.84, 0.5, 0.58, 0.51);
-    ctx.bezierCurveTo(0.48, 0.72, 0.17, 0.72, 0.03, 0.56);
-    ctx.bezierCurveTo(-0.18, 0.76, -0.5, 0.61, -0.55, 0.36);
-    ctx.bezierCurveTo(-0.72, 0.37, -0.9, 0.24, -0.78, 0.08);
+    ctx.moveTo(-0.86, 0.0);
+    ctx.bezierCurveTo(-0.94, -0.24, -0.78, -0.48, -0.52, -0.55);
+    ctx.bezierCurveTo(-0.48, -0.78, -0.18, -0.92, 0.04, -0.78);
+    ctx.bezierCurveTo(0.22, -0.98, 0.56, -0.86, 0.64, -0.58);
+    ctx.bezierCurveTo(0.86, -0.52, 0.98, -0.32, 0.9, -0.12);
+    ctx.bezierCurveTo(1.02, 0.04, 0.96, 0.28, 0.76, 0.38);
+    ctx.bezierCurveTo(0.74, 0.62, 0.46, 0.76, 0.2, 0.65);
+    ctx.bezierCurveTo(0.03, 0.78, -0.24, 0.72, -0.36, 0.52);
+    ctx.bezierCurveTo(-0.6, 0.54, -0.78, 0.42, -0.76, 0.24);
+    ctx.bezierCurveTo(-0.92, 0.2, -0.98, 0.1, -0.86, 0.0);
     ctx.closePath();
   }
 
@@ -382,13 +385,17 @@
     ctx.shadowBlur = 0.018 + growth * 0.05;
 
     const folds = [
-      [[-0.67, -0.23], [-0.42, -0.4], [-0.18, -0.34], [-0.08, -0.52]],
-      [[-0.7, 0.02], [-0.44, -0.14], [-0.18, -0.02], [0.05, -0.22]],
-      [[-0.59, 0.24], [-0.34, 0.11], [-0.09, 0.24], [0.04, 0.05]],
-      [[0.1, -0.5], [0.3, -0.35], [0.5, -0.5], [0.67, -0.28]],
-      [[0.08, -0.22], [0.3, -0.08], [0.56, -0.18], [0.73, 0.0]],
-      [[0.08, 0.08], [0.32, 0.2], [0.55, 0.08], [0.74, 0.26]],
-      [[-0.04, 0.34], [0.18, 0.45], [0.38, 0.35], [0.52, 0.48]],
+      [[-0.72, -0.3], [-0.5, -0.48], [-0.25, -0.42], [-0.08, -0.61]],
+      [[-0.78, -0.08], [-0.56, -0.24], [-0.27, -0.12], [-0.02, -0.34]],
+      [[-0.74, 0.12], [-0.5, -0.02], [-0.24, 0.13], [0.02, -0.08]],
+      [[-0.62, 0.34], [-0.34, 0.18], [-0.12, 0.38], [0.1, 0.18]],
+      [[0.05, -0.62], [0.28, -0.42], [0.45, -0.58], [0.68, -0.34]],
+      [[0.03, -0.38], [0.32, -0.22], [0.54, -0.34], [0.78, -0.1]],
+      [[0.04, -0.12], [0.32, 0.04], [0.58, -0.08], [0.79, 0.14]],
+      [[0.0, 0.16], [0.28, 0.32], [0.5, 0.2], [0.68, 0.42]],
+      [[-0.14, 0.46], [0.08, 0.58], [0.34, 0.48], [0.5, 0.62]],
+      [[-0.5, -0.48], [-0.38, -0.2], [-0.4, 0.12], [-0.26, 0.42]],
+      [[0.28, -0.7], [0.18, -0.38], [0.24, -0.04], [0.12, 0.32]],
     ];
 
     folds.forEach((fold, index) => {
@@ -400,6 +407,26 @@
     });
 
     ctx.globalAlpha = 1;
+  }
+
+  function drawBrainStem(growth) {
+    ctx.save();
+    ctx.globalAlpha = 0.34 + growth * 0.42;
+    ctx.lineWidth = 0.018;
+    ctx.strokeStyle = "#00f5ff";
+    ctx.shadowColor = "#00f5ff";
+    ctx.shadowBlur = 0.05 + growth * 0.12;
+    ctx.beginPath();
+    ctx.moveTo(-0.08, 0.56);
+    ctx.bezierCurveTo(-0.02, 0.72, 0.03, 0.88, 0.0, 1.05);
+    ctx.stroke();
+    ctx.lineWidth = 0.009;
+    ctx.strokeStyle = "#ff3d81";
+    ctx.beginPath();
+    ctx.moveTo(0.03, 0.52);
+    ctx.bezierCurveTo(0.16, 0.68, 0.24, 0.78, 0.36, 0.86);
+    ctx.stroke();
+    ctx.restore();
   }
 
   function drawElectricPathways(growth, reaction, variety) {
@@ -553,21 +580,21 @@
 
   function brainPoint(angle, radius) {
     const centerX = width * 0.52;
-    const centerY = height * 0.56;
-    const scaleX = width * 0.39;
-    const scaleY = height * 0.38;
+    const centerY = height * 0.55;
+    const scaleX = width * 0.43;
+    const scaleY = height * 0.45;
     const lobe = brainRadius(angle);
     return {
       x: centerX + Math.cos(angle) * radius * scaleX * lobe,
-      y: centerY + Math.sin(angle) * radius * scaleY * lobe * (0.84 + Math.cos(angle) * 0.06),
+      y: centerY + Math.sin(angle) * radius * scaleY * lobe * (0.82 + Math.cos(angle) * 0.08),
     };
   }
 
   function brainRadius(angle) {
-    return 0.82
-      + Math.sin(angle * 2.0 - 0.7) * 0.08
-      + Math.sin(angle * 3.0 + 0.8) * 0.09
-      + Math.cos(angle * 5.0 - 0.4) * 0.055;
+    return 0.84
+      + Math.sin(angle * 2.0 - 0.7) * 0.09
+      + Math.sin(angle * 3.2 + 0.8) * 0.08
+      + Math.cos(angle * 5.3 - 0.4) * 0.06;
   }
 
   function updateUi() {

@@ -6,27 +6,25 @@
   <title>Babbled Notes &middot; sound into music</title>
   <meta name="description" content="An accessibility-first composing tool that turns hums, taps, breath, and sound into editable music." />
   <meta name="theme-color" content="#b1380e" />
-  <link rel="stylesheet" href="styles.css?v=single-record-20260523" />
+  <link rel="stylesheet" href="styles.css?v=cockpit-20260523" />
 </head>
 <body>
   <canvas id="neural-backdrop" aria-hidden="true"></canvas>
 
-  <section class="meadow-app wire-app neural-bloom-app" aria-label="Babbled Notes Neural Bloom reactive scene">
+  <section class="meadow-app wire-app neural-bloom-app cockpit-app" aria-label="Babbled Notes Neural Bloom cockpit">
     <aside class="meadow-left wire-left">
       <div>
         <div class="meadow-topline">
           <span class="live-dot"></span>
-          <span>Neural Bloom demo</span>
+          <span>Neural Bloom cockpit</span>
         </div>
         <h1>Babbled Notes</h1>
         <p class="meadow-subtitle">Neural Bloom</p>
-        <p class="meadow-copy">Start with one sound. The tech, space, and electricity visual shows an empty brain filling as your music grows.</p>
+        <p class="meadow-copy">One sound becomes a music-code seed. The tech, space, and electricity brain blooms as timing, pitch, and rhythm arrive.</p>
         <ol class="wire-steps">
-          <li>Tap <strong>Record one sound</strong>.</li>
-          <li>Hum, sing, speak, tap, or make one short sound.</li>
-          <li>Watch electric pathways bloom through the brain.</li>
-          <li>Try Record, Tap, or Compose below.</li>
-          <li><a href="#feedback-heading">Leave one line of feedback</a>.</li>
+          <li><strong>Record</strong> one hum, tap, breath, or rhythm.</li>
+          <li><strong>Watch</strong> Neural Bloom build pathways.</li>
+          <li><strong>Open</strong> the result as editable .lilt code.</li>
         </ol>
       </div>
 
@@ -49,30 +47,30 @@
       </div>
     </aside>
 
-    <section class="meadow-stage" aria-labelledby="world-heading">
+    <section class="meadow-stage cockpit-stage" aria-labelledby="world-heading">
       <canvas id="meadow-world" aria-hidden="true"></canvas>
       <div class="stage-shade" aria-hidden="true"></div>
 
       <div class="world-message">
         <span aria-hidden="true">♪</span>
         <div>
-          <h2 id="world-heading">Start with one sound</h2>
+          <h2 id="world-heading">Neural Bloom</h2>
           <p id="world-message-text">Tap Record one sound, hum or tap, then watch Neural Bloom light up.</p>
         </div>
         <div class="stage-meter"><span id="world-voice-meter"></span></div>
       </div>
 
       <div class="world-tip">
-        <span aria-hidden="true">Tip</span>
-        <p>Short sounds spark quick signals. Longer sounds grow steady electric paths.</p>
+        <span aria-hidden="true">Signal</span>
+        <p>Low tones settle at the base. High tones spark upward. Rhythm strengthens paths.</p>
         <strong id="world-note-count">0 sounds</strong>
       </div>
     </section>
 
     <aside class="meadow-controls wire-controls" aria-label="Babbled Notes Neural Bloom controls">
       <div class="controls-title">
-        <span>Sound Controls</span>
-        <span aria-hidden="true">Tune</span>
+        <span>Live State</span>
+        <span aria-hidden="true">Gemma</span>
       </div>
       <fieldset class="wire-mode-picker">
         <legend>Reaction mode</legend>
@@ -92,10 +90,16 @@
         <div><span>Voice level</span><strong id="voice-level">42%</strong></div>
       </div>
 
+      <div class="cockpit-readout">
+        <span>Pipeline</span>
+        <strong>local digest -> Gemma path</strong>
+        <small>Public page stays keyless. Google AI Studio runs CLI/server-side.</small>
+      </div>
+
       <div class="wire-note">
         <strong>Creative activation.</strong>
         <p>Neural Bloom is a symbolic music-reactive graphic, not a medical claim.</p>
-        <a href="#record-heading">Go to Record</a>
+        <a href="#record-heading">Open sound result</a>
       </div>
     </aside>
 
@@ -492,8 +496,8 @@ python -m lilt.cli audio clip.wav --digest clip.digest.json --backend gemini</co
   <script src="https://unpkg.com/tone@15.0.4/build/Tone.js"></script>
   <script src="data.js"></script>
   <script src="player.js"></script>
-  <script src="meadow.js?v=single-record-20260523"></script>
-  <script src="recorder.js?v=single-record-20260523"></script>
+  <script src="meadow.js?v=cockpit-20260523"></script>
+  <script src="recorder.js?v=cockpit-20260523"></script>
   <script src="voice-control.js"></script>
   <script src="accessible.js"></script>
   <script src="composer.js"></script>
