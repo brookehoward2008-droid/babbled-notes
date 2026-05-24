@@ -2204,6 +2204,85 @@ footer a {
   border-radius: 0.75rem;
 }
 
+.cockpit-app .cockpit-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(0, 245, 255, 0.08), transparent 18%, transparent 82%, rgba(255, 61, 129, 0.08)),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 5px);
+  mix-blend-mode: screen;
+  opacity: 0.42;
+}
+
+.cockpit-app .cockpit-stage::after {
+  content: "";
+  position: absolute;
+  inset: 1.2rem;
+  z-index: 2;
+  pointer-events: none;
+  border: 1px solid rgba(0, 245, 255, 0.18);
+  border-radius: 0.7rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 61, 129, 0.08) inset,
+    0 0 52px rgba(0, 245, 255, 0.08) inset;
+}
+
+.cockpit-app .meadow-left::before,
+.cockpit-app .meadow-controls::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(0, 245, 255, 0.18), transparent 1px) 0 0 / 100% 1px no-repeat,
+    radial-gradient(circle at 12% 8%, rgba(0, 245, 255, 0.12), transparent 9rem);
+  opacity: 0.8;
+}
+
+.cockpit-app .world-activity-card {
+  border: 1px solid rgba(255, 223, 32, 0.2);
+  background:
+    linear-gradient(135deg, rgba(255, 223, 32, 0.08), transparent),
+    rgba(4, 10, 25, 0.68);
+  box-shadow: 0 0 28px rgba(255, 223, 32, 0.08);
+}
+
+.cockpit-app .world-waveform span {
+  background: linear-gradient(180deg, #00f5ff, #ffdf20);
+  opacity: 0.52;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.34);
+}
+
+.cockpit-app .world-waveform.is-active span {
+  animation-duration: 0.82s;
+  opacity: 0.95;
+}
+
+.cockpit-app .mic-icon {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cockpit-app .wire-note a,
+.cockpit-app .wire-note a:visited {
+  color: #ffdf20;
+}
+
+.cockpit-app .stage-meter {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cockpit-app .stage-meter span,
+.cockpit-app .activity-meter span {
+  background: linear-gradient(90deg, #00f5ff, #ffdf20, #ff3d81);
+  box-shadow: 0 0 18px rgba(0, 245, 255, 0.35);
+}
+
 @media (min-width: 1081px) and (max-height: 820px) {
   .meadow-app {
     height: 100vh;

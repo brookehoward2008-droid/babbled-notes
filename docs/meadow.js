@@ -315,9 +315,11 @@
     ctx.save();
     ctx.translate(centerX, centerY);
     ctx.scale(scale, scale);
+    drawBrainDepthMesh(growth);
     drawBrainShell(growth);
     ctx.restore();
 
+    drawOrbitRings(growth, resonance);
     drawElectricPathways(growth, reaction, variety);
     drawFrequencyBloom(growth);
     drawSpatialGlow(growth, resonance);
@@ -359,6 +361,53 @@
     drawBrainStem(growth);
     ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
+  }
+
+  function drawBrainDepthMesh(growth) {
+    ctx.save();
+    ctx.globalAlpha = 0.18 + growth * 0.26;
+    ctx.lineWidth = 0.004;
+    ctx.strokeStyle = "#8b5cf6";
+    ctx.shadowColor = "#8b5cf6";
+    ctx.shadowBlur = 0.025 + growth * 0.06;
+    for (let index = 0; index < 9; index += 1) {
+      const offset = -0.44 + index * 0.11;
+      const wobble = Math.sin(time * 1.4 + index) * 0.018;
+      ctx.beginPath();
+      ctx.moveTo(-0.7 + Math.abs(offset) * 0.25, offset + wobble);
+      ctx.bezierCurveTo(-0.36, offset - 0.1, 0.22, offset + 0.1, 0.74 - Math.abs(offset) * 0.2, offset - wobble);
+      ctx.stroke();
+    }
+    for (let index = 0; index < 7; index += 1) {
+      const offset = -0.5 + index * 0.16;
+      ctx.beginPath();
+      ctx.moveTo(offset, -0.58 + Math.abs(offset) * 0.12);
+      ctx.bezierCurveTo(offset + 0.1, -0.18, offset - 0.08, 0.2, offset + 0.03, 0.58);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawOrbitRings(growth, resonance) {
+    const centerX = width * 0.52;
+    const centerY = height * 0.55;
+    const base = Math.min(width, height) * (0.32 + growth * 0.11);
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(Math.sin(time * 0.28) * 0.05);
+    for (let index = 0; index < 3; index += 1) {
+      const alpha = 0.08 + growth * 0.08 + index * 0.025;
+      ctx.strokeStyle = index === 1
+        ? `rgba(255, 61, 129, ${alpha})`
+        : `rgba(0, 245, 255, ${alpha})`;
+      ctx.lineWidth = 1 + index * 0.45 + smoothLevel * 1.6;
+      ctx.shadowColor = index === 1 ? "#ff3d81" : "#00f5ff";
+      ctx.shadowBlur = 10 + resonance * 18;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, base * (1 + index * 0.12), base * (0.38 + index * 0.04), -0.18 + index * 0.22, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
   }
 
   function brainOutlinePath() {
@@ -434,6 +483,9 @@
     const maxLinks = Math.min(activeNodes.length - 1, Math.round(18 + variety * 34));
     const motifStrength = clamp((sounds % 12) / 12 + smoothLevel * 0.45, 0, 1);
 
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+
     for (let index = 0; index < maxLinks; index += 1) {
       const from = activeNodes[index % activeNodes.length];
       const to = activeNodes[(index * 7 + sounds + 5) % activeNodes.length];
@@ -454,7 +506,19 @@
       const midY = (from.y + to.y) / 2 + Math.cos(time * 2.4 + index) * height * 0.025;
       ctx.quadraticCurveTo(midX, midY, to.x, to.y);
       ctx.stroke();
+
+      if (index % 5 === 0) {
+        const head = (time * (0.35 + reaction * 0.55) + index * 0.11) % 1;
+        const hx = from.x + (to.x - from.x) * head;
+        const hy = from.y + (to.y - from.y) * head;
+        ctx.fillStyle = index % 2 ? "#ffdf20" : "#ffffff";
+        ctx.shadowBlur = 18 + smoothLevel * 20;
+        ctx.beginPath();
+        ctx.arc(hx, hy, 2.2 + smoothLevel * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
+    ctx.restore();
     ctx.shadowBlur = 0;
   }
 
