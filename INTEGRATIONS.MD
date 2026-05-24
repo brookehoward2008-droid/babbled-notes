@@ -56,6 +56,10 @@ Run the full pipeline through a backend:
 python -m lilt.cli audio path\to\clip.wav --digest examples\three_note_hum.digest.json --backend gemini
 ```
 
+For Google AI Studio keys, set either `GEMINI_API_KEY` or `GOOGLE_API_KEY` in
+the local shell or deployment secret store. The public browser demo stays
+keyless; model calls belong in CLI/server execution.
+
 Offline/quota-out demo path:
 
 ```powershell

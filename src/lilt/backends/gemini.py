@@ -1,7 +1,8 @@
 """Gemini API backend for hosted Gemma 4.
 
 This backend is optional. Install with `pip install -e .[gemini]` and provide
-`GOOGLE_API_KEY` or the SDK's configured credentials before using it.
+`GEMINI_API_KEY`, `GOOGLE_API_KEY`, or the SDK's configured credentials before
+using it.
 """
 
 from __future__ import annotations

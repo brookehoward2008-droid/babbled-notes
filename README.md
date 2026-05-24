@@ -15,6 +15,8 @@ Paste-ready DEV post: [DEV_POST.md](DEV_POST.md)
 
 Presentation runbook: [PRESENTATION.md](PRESENTATION.md)
 
+Google AI Studio runbook: [GEMMA_STUDIO_RUNBOOK.md](GEMMA_STUDIO_RUNBOOK.md)
+
 ```text
 one sound
   -> timing, pitch, quality, and gesture facts
@@ -263,7 +265,7 @@ Run the hosted Gemma path:
 
 ```powershell
 pip install -e .[gemini]
-# Set GOOGLE_API_KEY in your local shell before running this.
+# Set GEMINI_API_KEY or GOOGLE_API_KEY in your local shell before running this.
 $env:PYTHONPATH = "src"
 python -m lilt.cli audio path\to\clip.wav --digest examples\three_note_hum.digest.json --backend gemini
 ```

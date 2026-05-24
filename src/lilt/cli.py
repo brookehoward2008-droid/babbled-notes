@@ -261,7 +261,7 @@ def _cmd_audio(
     backend = (
         FakeBackend(default=response_payload)
         if backend_name == "fake"
-        else GeminiBackend()
+        else GeminiBackend(audio_mime_type=_audio_mime_type(audio_file))
     )
 
     try:
@@ -373,6 +373,21 @@ def _cmd_digest(input_path: str, output_path: str | None) -> int:
     )
     print(f"wrote {out}")
     return 0
+
+
+def _audio_mime_type(path: Path) -> str:
+    """Infer the MIME type sent with audio bytes to the hosted model."""
+    suffix = path.suffix.lower()
+    return {
+        ".wav": "audio/wav",
+        ".wave": "audio/wav",
+        ".webm": "audio/webm",
+        ".ogg": "audio/ogg",
+        ".oga": "audio/ogg",
+        ".mp3": "audio/mpeg",
+        ".m4a": "audio/mp4",
+        ".mp4": "audio/mp4",
+    }.get(suffix, "application/octet-stream")
 
 
 def _cmd_tonejs(input_path: str, output_path: str | None) -> int:

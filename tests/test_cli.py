@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import math
+from pathlib import Path
 import wave
 
 from lilt import cli
@@ -131,6 +132,14 @@ def test_audio_fake_backend_requires_response(tmp_path, capsys):
 
     assert code != 0
     assert "fake-response" in capsys.readouterr().err
+
+
+def test_audio_mime_type_matches_browser_recording_formats():
+    assert cli._audio_mime_type(Path("clip.wav")) == "audio/wav"
+    assert cli._audio_mime_type(Path("clip.webm")) == "audio/webm"
+    assert cli._audio_mime_type(Path("clip.ogg")) == "audio/ogg"
+    assert cli._audio_mime_type(Path("clip.m4a")) == "audio/mp4"
+    assert cli._audio_mime_type(Path("clip.unknown")) == "application/octet-stream"
 
 
 def test_seed_writes_json_lilt_and_midi_from_digest(tmp_path):
